@@ -1,5 +1,4 @@
-<?php
-echo '<div class="container">
+<div class="container">
         <div class="page-header">
             <div style="display: flex;">
                 <a href="./index.html"><img src="./iitp_logo.png" height="80"></a>
@@ -9,7 +8,7 @@ echo '<div class="container">
                 </div>
             </div>
         </div>
-    </div>
+</div>
 <div class="container">
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -21,7 +20,7 @@ echo '<div class="container">
         <span class="icon-bar"></span>
         </button>
     </div>
- 
+
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
@@ -45,5 +44,4 @@ echo '<div class="container">
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-</div>';
-?>
+</div>

@@ -12,7 +12,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <?php
-      echo '<title>' . $page_title . '</title>';
+      echo '<title>' . $page_title . ' - T&amp;P IIT Patna</title>';
     ?>
 </head>
 <body>
