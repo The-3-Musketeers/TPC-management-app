@@ -1,8 +1,8 @@
 <?php
-    $page_title = 'Dashboard - T&amp;P IIT Patna';
-    include 'templates/header.php';
-    include 'templates/navbar.php';?>
+    $page_title = 'Dashboard';
+    require_once('templates/header.php');
+    require_once('templates/navbar.php');?>
 
     // To be done later
 
-<?php include 'templates/footer.php';?>
+<?php require_once('templates/footer.php');?>
