@@ -37,9 +37,22 @@
           </ul>
         </li>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Recruiter Login</a></li>
-            <li><a href="./studentLogin.php">Student Login</a></li>
+        <?php if(!isset($_SESSION['user_id'])){ ?>
+          <li><a href="#">Recruiter Login</a></li>
+          <li><a href="./studentLogin.php">Student Login</a></li>
+        <?php
+          } else{
+        ?>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $_SESSION['username']; ?><span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Profile</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="./logout.php">Logout</a></li>
+            </ul>
+          </li>
         </ul>
+        <?php } ?>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
