@@ -30,20 +30,25 @@
             mysqli_query($dbc, $query);
 
             //Confirm success with the user
-            echo '<p>You have been registered successfully. You can now log in '.
-              '<a href="studentLogin.php">here</a>.</p>';
+            echo '<div class="container"><div class="alert alert-success">' .
+              'You have been registered successfully. You can now log in <a href="studentLogin.php">here</a>.'.
+              '</div></div>';
             mysqli_close($dbc);
             exit();
           }
           else{
             // Webmail ID already exists
-            echo '<p class="error">This webmail ID is taken. If you are '.
-            'already registered you can <a href="studentLogin.php">Login here</a></p>';
+            echo '<div class="container"><div class="alert alert-warning alert-dismissible fade in">' .
+            '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' .
+            'This webmail ID is taken. If you are '.
+            'already registered you can <a href="studentLogin.php">Login here</a></div></div>';
             $webmail_ID = "";
           }
         }
         else{
-          echo '<p class="error">Please enter all fields and make sure to enter same password twice</p>';
+          echo '<div class="container"><div class="alert alert-warning alert-dismissible fade in">' .
+          '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' .
+          'Please enter all fields and make sure to enter same password twice</div></div>';
         }
     }
 
