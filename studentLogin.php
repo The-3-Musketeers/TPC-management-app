@@ -18,10 +18,12 @@
             $row = mysqli_fetch_array($data);
             $_SESSION['user_id'] = $row['user_id'];
             $_SESSION['username'] = $row['username'];
-            setcookie('user_id', $row['user_id'], time() + (60*60*24*30));
-            setcookie('username', $row['username'], time() + (60*60*24*30));
-            $home_url = 'http://'. $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']).'/index.php';
-            header('Location: ', $home_url);
+            $_SESSION['roll_number'] = $user_roll_number;
+            if(!empty($_POST['remember']) && $_POST['remember']=='on'){
+              setcookie('user_id', $row['user_id'], time() + (60*60*24*30));
+              setcookie('username', $row['username'], time() + (60*60*24*30));
+              setcookie('roll_number', $user_roll_number, time() + (60*60*24*30));
+            }
           }
           else{
             $error_msg = "Roll number or password is incorrect!";
@@ -63,7 +65,7 @@
           <div class="col-sm-10">
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="gridCheck1">
-              <label class="form-check-label" for="gridCheck1">
+              <label class="form-check-label" for="gridCheck1" name="remember">
                 Remember me
               </label>
             </div>
