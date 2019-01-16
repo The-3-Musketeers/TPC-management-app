@@ -37,44 +37,52 @@
     $page_title = 'Login';
     require_once('templates/header.php');
     require_once('templates/navbar.php');
-
+    if($error_msg != ""){
+      echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+      $error_msg . '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+      '<span aria-hidden="true">&times;</span></button></div></div>';
+    }
     if(empty($_SESSION['user_id'])){
-      echo '<p class="error">' . $error_msg . '</p>';
     ?>
-    <form class="form-horizontal" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="roll-number">Roll Number:</label>
-            <div class="col-sm-6">
-            <input type="text" class="form-control" id="roll-number" name="roll-number" placeholder="Enter roll number">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="pwd">Password:</label>
-            <div class="col-sm-6">
-            <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Enter password">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-            <div class="checkbox">
-                <label><input type="checkbox"> Remember me</label>
-            </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default" name="submit">Log In</button>
-            </div>
-        </div>
 
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
+    <div class="container" style="max-width: 60%; padding: 20px;">
+    <form class="form-horizontal" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-default">Roll Number:</span>
+        </div>
+        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="roll-number" name="roll-number" placeholder="Enter roll number">
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-default">Password:</span>
+        </div>
+        <input type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="pwd" name="pwd" placeholder="Enter password">
+      </div>
+        <div class="form-group row">
+          <div class="col-sm-10">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="gridCheck1">
+              <label class="form-check-label" for="gridCheck1">
+                Remember me
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary" name="submit">Log in</button>
+          </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
             <div>
                 <label>New user? Signup <a href="./studentSignup.php">here</a></label>
             </div>
             </div>
         </div>
     </form>
+    </div>
     <?php
       }
       else{
