@@ -49,53 +49,21 @@
           } else{
         ?>
         <li class="nav-item dropdown active">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <?php echo $_SESSION['username']; ?>
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Profile</a>
+            <a class="dropdown-item" href="./studentProfile.php">Profile</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="./logout.php">Logout</a>
           </div>
         </li>
+        <?php
+          }
+        ?>
       </ul>
     </span>
   </div>
-</nav>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li><a href="./index.php">Home</a></li>
-        <li><a href="#">Why IIT Patna?</a></li>
-        <li><a href="#">Departments</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#"></a></li>
-            <li><a href="#">Phone</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Set Appointment</a></li>
-          </ul>
-        </li>
-        <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="#">Recruiter Login</a></li>
-          <li><a href="./studentLogin.php">Student Login</a></li>
-        
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $_SESSION['username']; ?><span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="./studentProfile.php">Profile</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="./logout.php">Logout</a></li>
-            </ul>
-          </li>
-        </ul>
-        <?php } ?>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
 </nav>
 </div>
 <br />
