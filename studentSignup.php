@@ -23,84 +23,87 @@
           // Check if webmail_ID is available
           $query = "SELECT * FROM students WHERE webmail_ID = '$webmail_ID'";
           $data = mysqli_query($dbc, $query);
-          if(mysqli_num_rows($data) == 0){
-            // webmail_ID is available
+          // Check if roll_number is available
+          $query = "SELECT * FROM students WHERE roll_number = '$roll_number'";
+          $dataR = mysqli_query($dbc, $query);
+          if(mysqli_num_rows($data) == 0 && mysqli_num_rows($dataR) == 0){
+            // webmail_ID and roll_number is available
             $query = "INSERT INTO students (roll_number, username, webmail_id, password, join_date) VALUES ".
               "('$roll_number', '$username', '$webmail_ID', SHA('$password'), NOW())";
             mysqli_query($dbc, $query);
 
             //Confirm success with the user
-            echo '<div class="container"><div class="alert alert-success">' .
-              'You have been registered successfully. You can now log in <a href="studentLogin.php">here</a>.'.
-              '</div></div>';
+            echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+                'You have been registered successfully. You can now log in <a href="studentLogin.php">here</a>.' . 
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+                '<span aria-hidden="true">&times;</span></button></div></div>';
             mysqli_close($dbc);
             exit();
+          }else{
+            // Webmail ID or Roll number already exists
+            if(mysqli_num_rows($data) != 0){
+              echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+              'This webmail ID is taken. If you are already registered you can <a href="studentLogin.php">Login here</a>' . 
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+              '<span aria-hidden="true">&times;</span></button></div></div>';
+              $webmail_ID = "";
+            }elseif(mysqli_num_rows($dataR) != 0){
+              echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+              'This roll number is taken. If you are already registered you can <a href="studentLogin.php">Login here</a>' . 
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+              '<span aria-hidden="true">&times;</span></button></div></div>';
+              $roll_number = "";
+            }
           }
-          else{
-            // Webmail ID already exists
-            echo '<div class="container"><div class="alert alert-warning alert-dismissible fade in">' .
-            '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' .
-            'This webmail ID is taken. If you are '.
-            'already registered you can <a href="studentLogin.php">Login here</a></div></div>';
-            $webmail_ID = "";
-          }
-        }
-        else{
-          echo '<div class="container"><div class="alert alert-warning alert-dismissible fade in">' .
-          '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' .
-          'Please enter all fields and make sure to enter same password twice</div></div>';
+        }else{
+          echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+          'Please enter all fields and make sure to enter same password twice&#33;<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+          '<span aria-hidden="true">&times;</span></button></div></div>';
         }
     }
 
     mysqli_close($dbc);
     ?>
 
-    <br>
-
-    <script>
-
-    </script>
-
+    <div class="container" style="max-width: 60%; padding: 20px;">
     <form class="form-horizontal" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="roll-number">Roll Number:</label>
-            <div class="col-sm-6">
-            <input type="text" class="form-control" id="roll-number" name="roll-number"
-              value="<?php if(!empty($roll_number)) echo $roll_number; ?>" placeholder="Enter roll number">
-            </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-default">Roll Number:</span>
         </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="username">Full Name:</label>
-            <div class="col-sm-6">
-            <input type="username" class="form-control" id="username" name="username"
-              value="<?php if(!empty($username)) echo $username; ?>" placeholder="Enter full name">
-            </div>
+        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="roll-number" name="roll-number" placeholder="Enter roll number" value="<?php if(!empty($roll_number)) echo $roll_number; ?>">
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-default">Full Name:</span>
         </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="email">Webmail ID:</label>
-            <div class="col-sm-6">
-            <input type="email" class="form-control" id="email" name="email"
-              value="<?php if(!empty($webmail_ID)) echo $webmail_ID; ?>" placeholder="Enter webmail id">
-            </div>
+        <input type="username" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="username" name="username" value="<?php if(!empty($username)) echo $username; ?>" placeholder="Enter full name">
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-default">Webmail ID:</span>
         </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="pwd">Password:</label>
-            <div class="col-sm-6">
-            <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Enter password">
-            </div>
+        <input type="email" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="email" name="email" value="<?php if(!empty($webmail_ID)) echo $webmail_ID; ?>" placeholder="Enter webmail id">
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-default">Password:</span>
         </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="confirm-pwd">Comfirm Password:</label>
-            <div class="col-sm-6">
-            <input type="password" class="form-control" id="pwd" name="confirm-pwd" placeholder="Re-Enter password">
-            </div>
+        <input type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="pwd" name="pwd" placeholder="Enter password">
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-default">Confirm Password:</span>
         </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default" name="submit">Sign Up</button>
-            </div>
+        <input type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="pwd" name="confirm-pwd" placeholder="Re-Enter password">
+      </div>
+        <div class="form-group row">
+          <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary" name="submit">Sign Up</button>
+          </div>
         </div>
     </form>
+    </div>
 <?php
   // Insert the footer
   require_once('templates/footer.php');
