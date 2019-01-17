@@ -31,7 +31,12 @@
             $query = "INSERT INTO students (roll_number, username, webmail_id, password, join_date) VALUES ".
               "('$roll_number', '$username', '$webmail_ID', SHA('$password'), NOW())";
             mysqli_query($dbc, $query);
-
+              
+              //Insert into students_data
+              $query = "INSERT INTO students_data (roll_number) VALUES ".
+              "('$roll_number')";
+            mysqli_query($dbc, $query);
+              
             //Confirm success with the user
             echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
                 'You have been registered successfully. You can now log in <a href="studentLogin.php">here</a>.' . 
