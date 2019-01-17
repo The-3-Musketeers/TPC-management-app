@@ -4,6 +4,11 @@
     // Database connection variables
     require_once('connectVars.php');
 
+    if (!isset($_SESSION['user_id'])) {
+      echo '<p class="login">Please <a href="studentLogin.php">log in</a> to access this page.</p>';
+      exit();
+    }
+    
     //Connect to the database
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     $user_id=$_SESSION['user_id'];
@@ -27,8 +32,8 @@
     $resume_url=$row['resume_url'];
 
     ?>
-    
-<?php 
+
+<?php
 //Updating Profile
 if(isset($_POST['update']))
 {
@@ -37,7 +42,7 @@ $course=mysqli_real_escape_string($dbc,trim($_POST['course']));
 $department=mysqli_real_escape_string($dbc,trim($_POST['department']));
 $cpi=mysqli_real_escape_string($dbc,trim($_POST['cpi']));
 $resume_url=mysqli_real_escape_string($dbc,trim($_POST['resume']));
-    
+
 $profile_img_name=$_FILES['profile_img']['name'];
 $profile_img_tmp_name=$_FILES['profile_img']['tmp_name'];
 if($profile_img_name !=='')
@@ -51,14 +56,14 @@ move_uploaded_file($profile_img_tmp_name,"./images/$profile_img_name");
 //$resume_link_name=$resume_link_name."_".time();
 //move_uploaded_file($resume_link_tmp_name,"./resume/$resume_link_name");
 if($profile_img_name !=='')
-{     
+{
 $query="UPDATE students_data SET course='$course', department='$department', current_cpi=$cpi,profile_pic='$profile_img_name',resume_url='$resume_url' WHERE data_id=$data_id";
 }
 else
 {
-$query="UPDATE students_data SET course='$course', department='$department', current_cpi=$cpi,resume_url='$resume_url' WHERE data_id=$data_id";  
+$query="UPDATE students_data SET course='$course', department='$department', current_cpi=$cpi,resume_url='$resume_url' WHERE data_id=$data_id";
 }
-    
+
 $update_query=mysqli_query($dbc,$query);
 if(!$update_query)
 {

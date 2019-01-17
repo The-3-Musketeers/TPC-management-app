@@ -13,7 +13,7 @@ CREATE TABLE `students_data` (
   `roll_number` VARCHAR(8),
   `current_cpi` FLOAT(4),
   `department` VARCHAR(8),
-  `course of study` VARCHAR(8),
+  `course` VARCHAR(8),
   `profile_pic` VARCHAR(256),
   `resume_url` VARCHAR(256),
   PRIMARY KEY (`data_id`)
