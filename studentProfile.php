@@ -13,19 +13,22 @@
     //Fetching info from student_data table
     $query="SELECT * FROM students_data WHERE roll_number='{$roll_number}'";
     $select_from_student_data_query=mysqli_query($dbc,$query);
-    if(!$select_from_student_data_query)
-    {
+    if(!$select_from_student_data_query){
         die("QUERY FAILED ".mysqli_error($dbc));
     }
-
+    
     $row=mysqli_fetch_assoc($select_from_student_data_query);
     $data_id=$row['data_id'];
     $current_cpi=$row['current_cpi'];
     $department=$row['department'];
     $course=$row['course'];
-    $profie_pic=$row['profile_pic'];
     $resume_url=$row['resume_url'];
-
+    if($row['profile_pic']!==null && $row['profile_pic']!==''){
+        $profile_pic_url='./images/'.$row['profile_pic'];
+    }
+    else{
+        $profile_pic_url='./pictures/user_icon.png';
+    }
     ?>
     
 <?php 
@@ -37,33 +40,30 @@ $course=mysqli_real_escape_string($dbc,trim($_POST['course']));
 $department=mysqli_real_escape_string($dbc,trim($_POST['department']));
 $cpi=mysqli_real_escape_string($dbc,trim($_POST['cpi']));
 $resume_url=mysqli_real_escape_string($dbc,trim($_POST['resume']));
-    
+
+if($resume_url==null){
+    $resume_url='';
+}
+
 $profile_img_name=$_FILES['profile_img']['name'];
 $profile_img_tmp_name=$_FILES['profile_img']['tmp_name'];
-if($profile_img_name !=='')
-{
+if($profile_img_name !=='' && $profile_img_name !==null){
 $profile_img_name=time()."_".$profile_img_name;
 move_uploaded_file($profile_img_tmp_name,"./images/$profile_img_name");
 }
 
-//$resume_link_name=$_FILES['resume']['name'];
-//$resume_link_tmp_name=$_FILES['resume']['tmp_name'];
-//$resume_link_name=$resume_link_name."_".time();
-//move_uploaded_file($resume_link_tmp_name,"./resume/$resume_link_name");
-if($profile_img_name !=='')
-{     
+if($profile_img_name !== null && $profile_img_name !== ''){
 $query="UPDATE students_data SET course='$course', department='$department', current_cpi=$cpi,profile_pic='$profile_img_name',resume_url='$resume_url' WHERE data_id=$data_id";
 }
-else
-{
+else{
 $query="UPDATE students_data SET course='$course', department='$department', current_cpi=$cpi,resume_url='$resume_url' WHERE data_id=$data_id";  
 }
     
 $update_query=mysqli_query($dbc,$query);
-if(!$update_query)
-{
+if(!$update_query){
 die("QUERY FAILED db".mysqli_error($dbc));
 }
+
 $profile_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/studentProfile.php';
 header('Location: ' . $profile_url);
 }
@@ -76,7 +76,7 @@ $page_title = 'Dashboard';
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
 <div class="row">
  <div class="col-sm-3">
-    <img src="./images/<?php echo $profie_pic; ?>" width="250px" height="250px" alt="...">
+    <img src="<?php echo $profile_pic_url; ?>" width="250px" height="250px" alt="...">
     <input type="file" name="profile_img" value="">
 </div>
  <div class="col-sm-9">
@@ -108,11 +108,11 @@ $page_title = 'Dashboard';
   </div>
   <div class="form-group">
     <label for="cpi">CPI</label>
-    <input type="text" class="form-control" id="" name="cpi" value="<?php echo $current_cpi; ?>">
+    <input type="text" class="form-control" id="" name="cpi" value="<?php echo $current_cpi; ?>" required>
   </div>
   <div class="form-group">
     <label for="resume">Resume</label>
-    <input type="text" class="form-control" name="resume" value="<?php echo $resume_url; ?>">
+    <input type="text" class="form-control" name="resume" value="<?php echo $resume_url; ?>" required>
   </div>
   <button type="submit" name="update" class="btn btn-primary">Update</button>
     </div>
