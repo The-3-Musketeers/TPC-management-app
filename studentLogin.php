@@ -5,22 +5,28 @@
 
     $error_msg = "";
 
-    if(!isset($_SESSION['user_id'])){
+    if(!isset($_SESSION['access_token'])){
       if(isset($_POST['submit'])){
         $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
         $user_roll_number = mysqli_real_escape_string($dbc, trim($_POST['roll-number']));
         $user_password = mysqli_real_escape_string($dbc, trim($_POST['pwd']));
 
         if(!empty($user_roll_number) && !empty($user_password)){
-          $query = "SELECT user_id, username FROM students WHERE roll_number='$user_roll_number' AND password=SHA('$user_password')";
+          $query = "SELECT username FROM students WHERE roll_number='$user_roll_number' AND password=SHA('$user_password')";
           $data = mysqli_query($dbc, $query);
           if(mysqli_num_rows($data) == 1){
             $row = mysqli_fetch_array($data);
-            $_SESSION['user_id'] = $row['user_id'];
+            $token = bin2hex(random_bytes(32));
+            $_SESSION['access_token'] = $token;
             $_SESSION['username'] = $row['username'];
             $_SESSION['roll_number'] = $user_roll_number;
+            $update_token_query="UPDATE students SET access_token='$token' WHERE roll_number='$user_roll_number'";
+            $update_token=mysqli_query($dbc, $update_token_query);
+            if(!$update_token){
+                die("QUERY FAILED ".mysqli_error($dbc));
+            }
             if(!empty($_POST['remember']) && $_POST['remember']=='on'){
-              setcookie('user_id', $row['user_id'], time() + (60*60*24*30));
+              setcookie('access_token', $token, time() + (60*60*24*30));
               setcookie('username', $row['username'], time() + (60*60*24*30));
               setcookie('roll_number', $user_roll_number, time() + (60*60*24*30));
             }
@@ -44,7 +50,7 @@
       $error_msg . '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
       '<span aria-hidden="true">&times;</span></button></div></div>';
     }
-    if(empty($_SESSION['user_id'])){
+    if(empty($_SESSION['access_token'])){
     ?>
 
     <div class="container" style="max-width: 60%; padding: 20px;">

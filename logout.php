@@ -1,6 +1,6 @@
 <?php
   session_start();
-  if(isset($_SESSION['user_id'])){
+  if(isset($_SESSION['access_token'])){
     $_SESSION = array();
     if(isset($_COOKIE[session_name()])){
       setcookie(session_name(),'', time() - 3600);
@@ -8,7 +8,7 @@
     session_destroy();
   }
 
-  setcookie('user_id', '', time() - 3600);
+  setcookie('access_token', '', time() - 3600);
   setcookie('username', '', time() - 3600);
   setcookie('roll_number', '', time() - 3600);
 

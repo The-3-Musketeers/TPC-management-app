@@ -1,11 +1,10 @@
 <?php
     // Start the session
     require_once('templates/startSession.php');
-
-    if (!isset($_SESSION['user_id'])) {
-      echo '<p class="login">Please <a href="studentLogin.php">log in</a> to access this page.</p>';
-      exit();
-    }
+    require_once('connectVars.php');
+    
+    // Authenticate user
+    require_once('templates/auth.php');
 
     $page_title = 'Dashboard';
     require_once('templates/header.php');

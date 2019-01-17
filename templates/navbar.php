@@ -39,7 +39,7 @@
     </ul>
     <span class="navbar-text">
       <ul class="navbar-nav mr-auto">
-        <?php if(!isset($_SESSION['user_id'])){ ?>
+        <?php if(!isset($_SESSION['access_token'])){ ?>
           <li class="nav-item active">
             <a class="nav-link" href="#">Recruiter Login</a>
           </li>
