@@ -25,6 +25,12 @@
     $department=$row['department'];
     $course=$row['course'];
     $resume_url=$row['resume_url'];
+    if($course==null){
+        $course="Select your course";
+    }
+    if($department==null){
+        $department="Select your department";
+    }
     if($row['profile_pic']!==null && $row['profile_pic']!==''){
         $profile_pic_url='./images/'.$row['profile_pic'];
     }
@@ -92,29 +98,43 @@ $page_title = 'Dashboard';
   </div>
   <div class="form-group">
     <label for="course">Course</label>
-    <select name="course" id="">
-        <option value="Btech">Btech</option>
-        <option value="Mtech">Mtech</option>
-        <option value="PHD">PHD</option>
+    <select name="course" id="course">
+        <?php 
+        echo "<option value='{$course}'>{$course}</option>";
+        if($course=='Btech'){
+         echo '<option value="Mtech">Mtech</option>';
+         echo '<option value="PHD">PHD</option>';   
+        }
+        else if($course=='Mtech'){
+         echo '<option value="Btech">Btech</option>';
+         echo '<option value="PHD">PHD</option>';   
+        }
+        else if($course=='PHD'){
+        echo '<option value="Btech">Btech</option>';
+        echo '<option value="Mtech">Mtech</option>';
+        }
+        else{
+        echo '<option value="Btech">Btech</option>';
+        echo '<option value="Mtech">Mtech</option>';
+        echo '<option value="PHD">PHD</option>';   
+        }
+        ?>
     </select>
   </div>
   <div class="form-group">
     <label for="department">Department</label>
-    <select name="department" id="">
-        <option value="CS">CS</option>
-        <option value="EE">EE</option>
-        <option value="ME">ME</option>
-        <option value="CE">CE</option>
-        <option value="CB">CB</option>
+    <select name="department" id="department">
+        <option value="<?php echo $department?>"> <?php echo $department;?></option>
     </select>
   </div>
+
   <div class="form-group">
     <label for="cpi">CPI</label>
     <input type="text" class="form-control" id="" name="cpi" value="<?php echo $current_cpi; ?>" required>
   </div>
   <div class="form-group">
     <label for="resume">Resume</label>
-    <input type="text" class="form-control" name="resume" value="<?php echo $resume_url; ?>" required>
+    <input type="text" class="form-control" name="resume" value="<?php echo $resume_url; ?>">
   </div>
   <button type="submit" name="update" class="btn btn-primary">Update</button>
     </div>
