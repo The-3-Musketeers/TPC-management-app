@@ -4,9 +4,11 @@
     // Database connection variables
     require_once('connectVars.php');
 
+    // Authenticate user
+    require_once('templates/auth.php');
+    
     //Connect to the database
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-    $user_id=$_SESSION['user_id'];
     $roll_number=$_SESSION['roll_number'];
     $username=$_SESSION['username'];
 
@@ -16,7 +18,7 @@
     if(!$select_from_student_data_query){
         die("QUERY FAILED ".mysqli_error($dbc));
     }
-    
+
     $row=mysqli_fetch_assoc($select_from_student_data_query);
     $data_id=$row['data_id'];
     $current_cpi=$row['current_cpi'];
@@ -30,8 +32,8 @@
         $profile_pic_url='./pictures/user_icon.png';
     }
     ?>
-    
-<?php 
+
+<?php
 //Updating Profile
 if(isset($_POST['update']))
 {
@@ -56,9 +58,9 @@ if($profile_img_name !== null && $profile_img_name !== ''){
 $query="UPDATE students_data SET course='$course', department='$department', current_cpi=$cpi,profile_pic='$profile_img_name',resume_url='$resume_url' WHERE data_id=$data_id";
 }
 else{
-$query="UPDATE students_data SET course='$course', department='$department', current_cpi=$cpi,resume_url='$resume_url' WHERE data_id=$data_id";  
+$query="UPDATE students_data SET course='$course', department='$department', current_cpi=$cpi,resume_url='$resume_url' WHERE data_id=$data_id";
 }
-    
+
 $update_query=mysqli_query($dbc,$query);
 if(!$update_query){
 die("QUERY FAILED db".mysqli_error($dbc));
