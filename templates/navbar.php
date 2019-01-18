@@ -1,7 +1,7 @@
 <div class="container bloc-sm">
   <div class="page-header" style="padding-top: 10px; padding-bottom: 10px;">
     <div style="display: flex;">
-      <a href="./index.html"><img src="./pictures/iitp_logo.png" height="80"></a>
+      <a href="./index.php"><img src="./pictures/iitp_logo.png" height="80"></a>
         <div style="padding-bottom: 5px; padding-left: 20px; padding-top: 5px;">
           <h3>Training &amp; Placement Cell</h3>
           <h5><strong>Indian Institute of Technology Patna</strong></h5>
