@@ -42,7 +42,7 @@
     }
 
     // Insert the page header and navbar
-    $page_title = 'Login';
+    $page_title = 'Student Login';
     require_once('templates/header.php');
     require_once('templates/navbar.php');
     if($error_msg != ""){
@@ -92,8 +92,7 @@
     </form>
     </div>
     <?php
-      }
-      else{
+      }else{
         echo('<p class="login">You are logged in as '. $_SESSION['username'] .'.</p>');
         $home_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/studentDashboard.php';
         header('Location: ' . $home_url);

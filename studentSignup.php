@@ -3,7 +3,7 @@
     require_once('connectVars.php');
 
     // Insert the page header and navbar
-    $page_title = 'Signup';
+    $page_title = 'Student Signup';
     require_once('templates/header.php');
     require_once('templates/navbar.php');
 
