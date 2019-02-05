@@ -1,7 +1,7 @@
 <div class="container bloc-sm">
   <div class="page-header" style="padding-top: 10px; padding-bottom: 10px;">
     <div style="display: flex;">
-      <a href="./index.php"><img src="./pictures/iitp_logo.png" height="80"></a>
+      <a href="../index.php"><img src="../pictures/iitp_logo.png" height="80"></a>
         <div style="padding-bottom: 5px; padding-left: 20px; padding-top: 5px;">
           <h3>Training &amp; Placement Cell</h3>
           <h5><strong>Indian Institute of Technology Patna</strong></h5>
@@ -12,7 +12,7 @@
 <div class="container">
 
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-  <a class="navbar-brand" href="./index.php" style="font-size: inherit;">Home</a>
+  <a class="navbar-brand" href="../index.php" style="font-size: inherit;">Home</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -41,10 +41,10 @@
       <ul class="navbar-nav mr-auto">
         <?php if(!isset($_SESSION['access_token'])){ ?>
           <li class="nav-item active">
-            <a class="nav-link" href="./recruiter/recruiterLogin.php">Recruiter Login</a>
+            <a class="nav-link" href="../recruiter/recruiterLogin.php">Recruiter Login</a>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="./studentLogin.php">Student Login</a>
+            <a class="nav-link" href="../studentLogin.php">Student Login</a>
           </li>
         <?php
           } else{
@@ -54,9 +54,9 @@
           <?php echo $_SESSION['username']; ?>
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="./studentProfile.php">Profile</a>
+            <a class="dropdown-item" href="../recruiter/recruiterProfile.php">Profile</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="./logout.php">Logout</a>
+            <a class="dropdown-item" href="../logout.php">Logout</a>
           </div>
         </li>
         <?php
