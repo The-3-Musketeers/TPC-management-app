@@ -30,12 +30,10 @@
               setcookie('username', $row['username'], time() + (60*60*24*30));
               setcookie('roll_number', $user_roll_number, time() + (60*60*24*30));
             }
-          }
-          else{
+          }else{
             $error_msg = "Roll number or password is incorrect!";
           }
-        }
-        else{
+        }else{
           $error_msg = "Enter both roll number and password!";
         }
       }

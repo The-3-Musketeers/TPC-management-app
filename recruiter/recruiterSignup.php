@@ -28,6 +28,13 @@
           $data = mysqli_query($dbc, $query);
           if(mysqli_num_rows($data) == 0){
             // company_id is available
+            if($company_category == "1"){
+              $company_category = "A1";
+            }elseif($company_category == "2"){
+              $company_category = "B1";
+            }elseif($company_category == "3"){
+              $company_category = "B2";
+            }
             $query = "INSERT INTO recruiters (company_id, company_name, company_category, hr_name, hr_email, password, join_date) VALUES ".
               "('$company_id', '$company_name', '$company_category', '$hr_name', '$hr_email', SHA('$password'), NOW())";
             mysqli_query($dbc, $query);

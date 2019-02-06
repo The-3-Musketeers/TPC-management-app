@@ -6,12 +6,10 @@
     // Authenticate user
     require_once('templates/auth.php');
 
-    $page_title = 'Dashboard';
+    $page_title = 'Student Dashboard';
     require_once('templates/header.php');
     require_once('templates/navbar.php');
     echo '<p>You are logged in as ' . $_SESSION['username'] . '</p>';
     ?>
-
-
 
 <?php require_once('templates/footer.php');?>
