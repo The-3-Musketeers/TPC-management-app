@@ -5,6 +5,40 @@
 
   $error_msg = "";
 
+  if(!isset($_SESSION['access_token'])){
+    if(isset($_POST['submit'])){
+      $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+      $company_id = mysqli_real_escape_string($dbc, trim($_POST['company-id']));
+      $company_password = mysqli_real_escape_string($dbc, trim($_POST['pwd']));
+
+      if(!empty($company_id) && !empty($company_password)){
+        $query = "SELECT company_name FROM recruiters WHERE company_id='$company_id' AND password=SHA('$company_password')";
+        $data = mysqli_query($dbc, $query);
+        if(mysqli_num_rows($data) == 1){
+          $row = mysqli_fetch_array($data);
+          $token = bin2hex(random_bytes(32));
+          $_SESSION['access_token'] = $token;
+          $_SESSION['company_name'] = $row['company_name'];
+          $_SESSION['company_id'] = $company_id;
+          $update_token_query="UPDATE recruiters SET access_token='$token' WHERE company_id='$company_id'";
+          $update_token=mysqli_query($dbc, $update_token_query);
+          if(!$update_token){
+            die("QUERY FAILED ".mysqli_error($dbc));
+          }
+          if(!empty($_POST['remember']) && $_POST['remember']=='on'){
+            setcookie('access_token', $token, time() + (60*60*24*30));
+            setcookie('company_name', $row['company_name'], time() + (60*60*24*30));
+            setcookie('company_id', $company_id, time() + (60*60*24*30));
+          }
+        }else{
+          $error_msg = "Company ID or password is incorrect!";
+        }
+      }else{
+        $error_msg = "Enter both Company ID and Password!";
+      }
+    }
+  }
+
   // Insert the page header and navbar
   $page_title = 'Recruiter Login';
   require_once('../templates/header.php');
@@ -24,7 +58,7 @@
     <div class="input-group-prepend">
       <span class="input-group-text" id="inputGroup-sizing-default">Company ID:</span>
     </div>
-  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="roll-number" name="roll-number" placeholder="Enter Company ID">
+  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="company-id" name="company-id" placeholder="Enter Company ID">
       </div>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
@@ -58,9 +92,9 @@
     </div>
     <?php
       } else {
-        echo('<p class="login">You are logged in as '. $_SESSION['username'] .'.</p>');
-        $home_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/studentDashboard.php';
-        header('Location: ' . $home_url);
+        echo('<p class="login">You are logged in as '. $_SESSION['company_name'] .'.</p>');
+        $home_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/recruiterDashboard.php';
+        // header('Location: ' . $home_url);
       }
 
   // Insert the footer
