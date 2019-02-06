@@ -1,11 +1,11 @@
 <?php
     // Database connection variables
-    require_once('connectVars.php');
+    require_once('../connectVars.php');
 
     // Insert the page header and navbar
     $page_title = 'Student Signup';
-    require_once('templates/header.php');
-    require_once('templates/navbar.php');
+    require_once('../templates/header.php');
+    require_once('../templates/navbar.php');
 
     //Connect to the database
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
@@ -31,15 +31,15 @@
             $query = "INSERT INTO students (roll_number, username, webmail_id, password, join_date) VALUES ".
               "('$roll_number', '$username', '$webmail_ID', SHA('$password'), NOW())";
             mysqli_query($dbc, $query);
-              
+
               //Insert into students_data
               $query = "INSERT INTO students_data (roll_number) VALUES ".
               "('$roll_number')";
             mysqli_query($dbc, $query);
-              
+
             //Confirm success with the user
             echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
-                'You have been registered successfully. You can now log in <a href="studentLogin.php">here</a>.' . 
+                'You have been registered successfully. You can now log in <a href="studentLogin.php">here</a>.' .
                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
                 '<span aria-hidden="true">&times;</span></button></div></div>';
             mysqli_close($dbc);
@@ -48,13 +48,13 @@
             // Webmail ID or Roll number already exists
             if(mysqli_num_rows($data) != 0){
               echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
-              'This webmail ID is taken. If you are already registered you can <a href="studentLogin.php">Login here</a>' . 
+              'This webmail ID is taken. If you are already registered you can <a href="studentLogin.php">Login here</a>' .
               '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
               '<span aria-hidden="true">&times;</span></button></div></div>';
               $webmail_ID = "";
             }elseif(mysqli_num_rows($dataR) != 0){
               echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
-              'This roll number is taken. If you are already registered you can <a href="studentLogin.php">Login here</a>' . 
+              'This roll number is taken. If you are already registered you can <a href="studentLogin.php">Login here</a>' .
               '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
               '<span aria-hidden="true">&times;</span></button></div></div>';
               $roll_number = "";
@@ -111,5 +111,5 @@
     </div>
 <?php
   // Insert the footer
-  require_once('templates/footer.php');
+  require_once('../templates/footer.php');
   ?>

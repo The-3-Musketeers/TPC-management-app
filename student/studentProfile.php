@@ -1,12 +1,12 @@
 <?php
     // Start the session
-    require_once('templates/startSession.php');
+    require_once('../templates/startSession.php');
     // Database connection variables
-    require_once('connectVars.php');
+    require_once('../connectVars.php');
 
     // Authenticate user
-    require_once('templates/auth.php');
-    
+    require_once('../templates/auth.php');
+
     //Connect to the database
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     $roll_number=$_SESSION['roll_number'];
@@ -32,10 +32,10 @@
         $department="Select your department";
     }
     if($row['profile_pic']!==null && $row['profile_pic']!==''){
-        $profile_pic_url='./images/'.$row['profile_pic'];
+        $profile_pic_url='../images/'.$row['profile_pic'];
     }
     else{
-        $profile_pic_url='./pictures/user_icon.png';
+        $profile_pic_url='../pictures/user_icon.png';
     }
     ?>
 
@@ -57,7 +57,7 @@ $profile_img_name=$_FILES['profile_img']['name'];
 $profile_img_tmp_name=$_FILES['profile_img']['tmp_name'];
 if($profile_img_name !=='' && $profile_img_name !==null){
 $profile_img_name=time()."_".$profile_img_name;
-move_uploaded_file($profile_img_tmp_name,"./images/$profile_img_name");
+move_uploaded_file($profile_img_tmp_name,"../images/$profile_img_name");
 }
 
 if($profile_img_name !== null && $profile_img_name !== ''){
@@ -78,8 +78,8 @@ header('Location: ' . $profile_url);
 ?>
 <?php
 $page_title = 'Dashboard';
-    require_once('templates/header.php');
-    require_once('templates/navbar.php'); ?>
+    require_once('../templates/header.php');
+    require_once('../templates/navbar.php'); ?>
 <div class="container">
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
 <div class="row">
@@ -99,15 +99,15 @@ $page_title = 'Dashboard';
   <div class="form-group">
     <label for="course">Course</label>
     <select name="course" id="course">
-        <?php 
+        <?php
         echo "<option value='{$course}'>{$course}</option>";
         if($course=='Btech'){
          echo '<option value="Mtech">Mtech</option>';
-         echo '<option value="PHD">PHD</option>';   
+         echo '<option value="PHD">PHD</option>';
         }
         else if($course=='Mtech'){
          echo '<option value="Btech">Btech</option>';
-         echo '<option value="PHD">PHD</option>';   
+         echo '<option value="PHD">PHD</option>';
         }
         else if($course=='PHD'){
         echo '<option value="Btech">Btech</option>';
@@ -116,7 +116,7 @@ $page_title = 'Dashboard';
         else{
         echo '<option value="Btech">Btech</option>';
         echo '<option value="Mtech">Mtech</option>';
-        echo '<option value="PHD">PHD</option>';   
+        echo '<option value="PHD">PHD</option>';
         }
         ?>
     </select>
@@ -141,4 +141,4 @@ $page_title = 'Dashboard';
     </div>
 </form>
 </div>
-<?php require_once('templates/footer.php');?>
+<?php require_once('../templates/footer.php');?>
