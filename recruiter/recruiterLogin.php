@@ -7,8 +7,8 @@
 
   // Insert the page header and navbar
   $page_title = 'Recruiter Login';
-  require_once('./templates/header.php');
-  require_once('./templates/navbar.php');
+  require_once('../templates/header.php');
+  require_once('../templates/navbar.php');
 
   if($error_msg != ""){
     echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
@@ -64,5 +64,5 @@
       }
 
   // Insert the footer
-  require_once('templates/footer.php');
+  require_once('../templates/footer.php');
 ?>
