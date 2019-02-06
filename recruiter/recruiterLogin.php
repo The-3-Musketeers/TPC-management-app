@@ -24,7 +24,7 @@
     <div class="input-group-prepend">
       <span class="input-group-text" id="inputGroup-sizing-default">Company ID:</span>
     </div>
-  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="roll-number" name="roll-number" placeholder="Enter roll number">
+  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="roll-number" name="roll-number" placeholder="Enter Company ID">
       </div>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
@@ -50,7 +50,7 @@
         <div class="form-group row">
             <div class="col-sm-10">
             <div>
-                <label>New user? Signup <a href="./recruiterSignup.php">here</a></label>
+                <label>First time recruiting from IIT Patna? Signup <a href="./recruiterSignup.php">here</a></label>
             </div>
             </div>
         </div>
