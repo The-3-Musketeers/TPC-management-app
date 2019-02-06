@@ -1,12 +1,12 @@
 <?php
     // Start the session
-    require_once('templates/startSession.php');
-    require_once('connectVars.php');
+    require_once('../templates/startSession.php');
+    require_once('../connectVars.php');
 
     $error_msg = "";
 
     if(!isset($_SESSION['access_token'])){
-      if(isset($_POST['submit'])){
+      if(isset($_POST['submit'])  && $_POST['login-type'] == '0'){
         $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
         $user_roll_number = mysqli_real_escape_string($dbc, trim($_POST['roll-number']));
         $user_password = mysqli_real_escape_string($dbc, trim($_POST['pwd']));
@@ -30,19 +30,22 @@
               setcookie('username', $row['username'], time() + (60*60*24*30));
               setcookie('roll_number', $user_roll_number, time() + (60*60*24*30));
             }
-          }else{
+          }
+          else{
             $error_msg = "Roll number or password is incorrect!";
           }
-        }else{
+        }
+        else{
           $error_msg = "Enter both roll number and password!";
         }
+        mysqli_close($dbc);
       }
     }
 
     // Insert the page header and navbar
     $page_title = 'Student Login';
-    require_once('templates/header.php');
-    require_once('templates/navbar.php');
+    require_once('../templates/header.php');
+    require_once('../templates/navbar.php');
     if($error_msg != ""){
       echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
       $error_msg . '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
@@ -55,6 +58,15 @@
     <form class="form-horizontal" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
       <div class="input-group mb-3">
         <div class="input-group-prepend">
+          <label class="input-group-text" for="company-category">Login Type</label>
+        </div>
+        <select class="custom-select" id="login-type" name="login-type">
+          <option value="0" selected>Student</option>
+          <option value="1">Admin</option>
+        </select>
+      </div>
+      <div class="input-group mb-3" id="roll-number-div">
+        <div class="input-group-prepend">
           <span class="input-group-text" id="inputGroup-sizing-default">Roll Number:</span>
         </div>
         <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="roll-number" name="roll-number" placeholder="Enter roll number">
@@ -65,7 +77,7 @@
         </div>
         <input type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="pwd" name="pwd" placeholder="Enter password">
       </div>
-        <div class="form-group row">
+        <div class="form-group row" id="remember-div">
           <div class="col-sm-10">
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="gridCheck1">
@@ -80,7 +92,7 @@
             <button type="submit" class="btn btn-primary" name="submit">Log in</button>
           </div>
         </div>
-        <div class="form-group row">
+        <div class="form-group row" id="signup-div">
             <div class="col-sm-10">
             <div>
                 <label>New user? Signup <a href="./studentSignup.php">here</a></label>
@@ -97,4 +109,4 @@
       }
     ?>
 
-<?php require_once('templates/footer.php');?>
+<?php require_once('../templates/footer.php');?>

@@ -44,7 +44,7 @@
             <a class="nav-link" href="/TPC-management-app/recruiter/recruiterLogin.php">Recruiter Login</a>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="/TPC-management-app/studentLogin.php">Student Login</a>
+            <a class="nav-link" href="/TPC-management-app/student/studentLogin.php">Student Login</a>
           </li>
         <?php
           } else{
@@ -54,7 +54,7 @@
           <?php echo $_SESSION['username']; ?>
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/TPC-management-app/studentProfile.php">Profile</a>
+            <a class="dropdown-item" href="/TPC-management-app/student/studentProfile.php">Profile</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="/TPC-management-app/logout.php">Logout</a>
           </div>
