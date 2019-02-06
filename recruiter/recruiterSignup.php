@@ -4,12 +4,12 @@
 
   // Insert the page header and navbar
   $page_title = 'Recruiter Signup';
-  require_once('./templates/header.php');
-  require_once('./templates/navbar.php');
+  require_once('../templates/header.php');
+  require_once('../templates/navbar.php');
 
   //Connect to the database
   $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-  
+
     if(isset($_POST['submit'])){
       // Grab the sign in data from the post
       $company_id = mysqli_real_escape_string($dbc, trim($_POST['company-id']));
@@ -20,7 +20,7 @@
       $password = mysqli_real_escape_string($dbc, trim($_POST['pwd']));
       $verify_password = mysqli_real_escape_string($dbc, trim($_POST['confirm-pwd']));
       if(!empty($company_id) && !empty($company_name) && $company_category!="0" &&
-        !empty($hr_name) && !empty($hr_email) && 
+        !empty($hr_name) && !empty($hr_email) &&
         !empty($password) && !empty($verify_password) &&
         ($verify_password == $password)){
           // Check if company_id is available
@@ -31,10 +31,10 @@
             $query = "INSERT INTO recruiters (company_id, company_name, company_category, hr_name, hr_email, password, join_date) VALUES ".
               "('$company_id', '$company_name', '$company_category', '$hr_name', '$hr_email', SHA('$password'), NOW())";
             mysqli_query($dbc, $query);
-              
+
             //Confirm success with the recruiter
             echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
-                'You have been registered successfully. You can now log in <a href="./recruiterLogin.php">here</a>.' . 
+                'You have been registered successfully. You can now log in <a href="./recruiterLogin.php">here</a>.' .
                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
                 '<span aria-hidden="true">&times;</span></button></div></div>';
             mysqli_close($dbc);
@@ -43,7 +43,7 @@
             // company_id already exists
             if(mysqli_num_rows($data) != 0){
               echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
-              'This webmail ID is taken. If you are already registered you can <a href="recruiterLogin.php">Login here</a>' . 
+              'This webmail ID is taken. If you are already registered you can <a href="recruiterLogin.php">Login here</a>' .
               '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
               '<span aria-hidden="true">&times;</span></button></div></div>';
               $company_id = "";
@@ -113,5 +113,5 @@
     </div>
 <?php
   // Insert the footer
-  require_once('templates/footer.php');
+  require_once('../templates/footer.php');
 ?>
