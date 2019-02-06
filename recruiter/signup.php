@@ -41,7 +41,7 @@
 
             //Confirm success with the recruiter
             echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
-                'You have been registered successfully. You can now log in <a href="./recruiterLogin.php">here</a>.' .
+                'You have been registered successfully. You can now log in <a href="./login.php">here</a>.' .
                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
                 '<span aria-hidden="true">&times;</span></button></div></div>';
             mysqli_close($dbc);
@@ -50,7 +50,7 @@
             // company_id already exists
             if(mysqli_num_rows($data) != 0){
               echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
-              'This webmail ID is taken. If you are already registered you can <a href="recruiterLogin.php">Login here</a>' .
+              'This webmail ID is taken. If you are already registered you can <a href="login.php">Login here</a>' .
               '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
               '<span aria-hidden="true">&times;</span></button></div></div>';
               $company_id = "";

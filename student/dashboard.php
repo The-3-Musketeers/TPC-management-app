@@ -5,6 +5,7 @@
 
     // Authenticate user
     require_once('../templates/auth.php');
+    checkUserRole('student', $auth_error);
 
     $page_title = 'Student Dashboard';
     require_once('../templates/header.php');

@@ -84,7 +84,7 @@
         <div class="form-group row">
             <div class="col-sm-10">
             <div>
-                <label>First time recruiting from IIT Patna? Signup <a href="./recruiterSignup.php">here</a></label>
+                <label>First time recruiting from IIT Patna? Signup <a href="./signup.php">here</a></label>
             </div>
             </div>
         </div>
@@ -93,7 +93,7 @@
     <?php
       } else {
         echo('<p class="login">You are logged in as '. $_SESSION['company_name'] .'.</p>');
-        $home_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/recruiterDashboard.php';
+        $home_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/dashboard.php';
         // header('Location: ' . $home_url);
       }
 
