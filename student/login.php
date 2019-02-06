@@ -40,6 +40,31 @@
         }
         mysqli_close($dbc);
       }
+      if(isset($_POST['submit'])  && $_POST['login-type'] == '1'){
+        $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+        $user_password = mysqli_real_escape_string($dbc, trim($_POST['pwd']));
+        if(!empty($user_password)){
+          $query = "SELECT username FROM students WHERE user_role='admin' AND password='$user_password'";
+          $data = mysqli_query($dbc, $query);
+          if(mysqli_num_rows($data) == 1){
+            $row = mysqli_fetch_array($data);
+            $token = bin2hex(random_bytes(32));
+            $_SESSION['access_token'] = $token;
+            $_SESSION['username'] = $row['username'];
+            $update_token_query="UPDATE students SET access_token='$token' WHERE user_role='admin' AND password='$user_password'";
+            $update_token=mysqli_query($dbc, $update_token_query);
+            if(!$update_token){
+                die("QUERY FAILED ".mysqli_error($dbc));
+            }
+          }
+          else{
+            $error_msg = "Password is incorrect!";
+          }
+        } else{
+          $error_msg = "Enter the password!";
+        }
+        mysqli_close($dbc);
+      }
     }
 
     // Insert the page header and navbar
@@ -95,7 +120,7 @@
         <div class="form-group row" id="signup-div">
             <div class="col-sm-10">
             <div>
-                <label>New user? Signup <a href="./studentSignup.php">here</a></label>
+                <label>New user? Signup <a href="./signup.php">here</a></label>
             </div>
             </div>
         </div>
@@ -104,7 +129,11 @@
     <?php
       }else{
         echo('<p class="login">You are logged in as '. $_SESSION['username'] .'.</p>');
-        $home_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/studentDashboard.php';
+        if($_POST['login-type'] == '0'){
+          $home_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/dashboard.php';
+        }else{
+          $home_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/../admin/dashboard.php';
+        }
         header('Location: ' . $home_url);
       }
     ?>

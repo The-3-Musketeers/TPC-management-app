@@ -72,7 +72,7 @@ if(!$update_query){
 die("QUERY FAILED db".mysqli_error($dbc));
 }
 
-$profile_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/studentProfile.php';
+$profile_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/profile.php';
 header('Location: ' . $profile_url);
 }
 ?>
