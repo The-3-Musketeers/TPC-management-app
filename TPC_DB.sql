@@ -3,6 +3,7 @@ CREATE TABLE `students` (
   `join_date` DATETIME,
   `roll_number` VARCHAR(8),
   `username` VARCHAR(64),
+  `user_role` VARCHAR(8),
   `webmail_id` VARCHAR(32),
   `password` VARCHAR(40),
   `access_token` VARCHAR(64),
@@ -17,6 +18,7 @@ CREATE TABLE `students_data` (
   `course` VARCHAR(8),
   `profile_pic` VARCHAR(256),
   `resume_url` VARCHAR(256),
+  `mobile_number` VARCHAR(16),
   PRIMARY KEY (`data_id`)
 );
 
@@ -25,9 +27,9 @@ CREATE TABLE `recruiters` (
   `join_date` DATETIME,
   `company_id` VARCHAR(8),
   `company_name` VARCHAR(64),
-  `company_category` VARCHAR(8),
-  `hr_name` VARCHAR(64),
-  `hr_email` VARCHAR(32),
+  `company_category` VARCHAR(2),
+  `hr_name` VARCHAR(32),
+  `hr_email` VARCHAR(64),
   `access_token` VARCHAR(64),
   `password` VARCHAR(40),
   PRIMARY KEY (`user_id`)
