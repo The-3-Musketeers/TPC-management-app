@@ -4,5 +4,6 @@
   <script src="/TPC-management-app/scripts/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
   <script src="/TPC-management-app/scripts/studentProfile.js"></script>
   <script src="/TPC-management-app/scripts/studentLogin.js"></script>
+  <script src="/TPC-management-app/scripts/createPosition.js"></script>
 </body>
 </html>
