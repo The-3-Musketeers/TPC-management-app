@@ -57,7 +57,17 @@
             ?>
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/TPC-management-app/student/profile.php">Profile</a>
+            <?php
+              if($_SESSION['user_role']=='student'){
+              ?>
+                <a class="dropdown-item" href="/TPC-management-app/student/profile.php">Profile</a>
+            <?php
+              } else{
+              ?>
+                <a class="dropdown-item" href="/TPC-management-app/admin/dashboard.php">dashboard</a>
+              <?php
+              }
+              ?>
           <?php
             } else if(isset($_SESSION['company_name'])){
               echo $_SESSION['company_name'];

@@ -10,6 +10,9 @@
 
   setcookie('access_token', '', time() - 3600);
   setcookie('username', '', time() - 3600);
+  setcookie('user_role', '', time() - 3600);
+  setcookie('company_name', '', time() - 3600);
+  setcookie('company_id', '', time() - 3600);
   setcookie('roll_number', '', time() - 3600);
 
   $home_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/index.php';

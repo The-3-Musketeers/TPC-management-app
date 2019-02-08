@@ -28,8 +28,8 @@
           $dataR = mysqli_query($dbc, $query);
           if(mysqli_num_rows($data) == 0 && mysqli_num_rows($dataR) == 0){
             // webmail_ID and roll_number is available
-            $query = "INSERT INTO students (roll_number, username, webmail_id, password, join_date) VALUES ".
-              "('$roll_number', '$username', '$webmail_ID', SHA('$password'), NOW())";
+            $query = "INSERT INTO students (roll_number, username, user_role, webmail_id, password, join_date) VALUES ".
+              "('$roll_number', '$username', 'student', '$webmail_ID', SHA('$password'), NOW())";
             mysqli_query($dbc, $query);
 
               //Insert into students_data

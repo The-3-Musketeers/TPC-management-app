@@ -18,6 +18,7 @@
           $row = mysqli_fetch_array($data);
           $token = bin2hex(random_bytes(32));
           $_SESSION['access_token'] = $token;
+          $_SESSION['user_role'] = 'recruiter';
           $_SESSION['company_name'] = $row['company_name'];
           $_SESSION['company_id'] = $company_id;
           $update_token_query="UPDATE recruiters SET access_token='$token' WHERE company_id='$company_id'";
@@ -27,6 +28,7 @@
           }
           if(!empty($_POST['remember']) && $_POST['remember']=='on'){
             setcookie('access_token', $token, time() + (60*60*24*30));
+            setcookie('user_role', $_SESSION['user_role'], time() + (60*60*24*30));
             setcookie('company_name', $row['company_name'], time() + (60*60*24*30));
             setcookie('company_id', $company_id, time() + (60*60*24*30));
           }
@@ -94,7 +96,7 @@
       } else {
         echo('<p class="login">You are logged in as '. $_SESSION['company_name'] .'.</p>');
         $home_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/dashboard.php';
-        // header('Location: ' . $home_url);
+        header('Location: ' . $home_url);
       }
 
   // Insert the footer
