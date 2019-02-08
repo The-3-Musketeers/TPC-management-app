@@ -32,3 +32,18 @@ CREATE TABLE `recruiters` (
   `password` VARCHAR(40),
   PRIMARY KEY (`user_id`)
 );
+
+CREATE TABLE `positions` (
+ `job_id` int(10) NOT NULL AUTO_INCREMENT,
+ `job_position` varchar(256) NOT NULL,
+ `course` varchar(256) DEFAULT NULL,
+ `branch` varchar(256) DEFAULT NULL,
+ `min_cpi` float DEFAULT NULL,
+ `stipend` int(10) DEFAULT NULL,
+ `ctc` int(10) DEFAULT NULL,
+ `test_date` date DEFAULT NULL,
+ `job_desc` varchar(256) DEFAULT NULL,
+ `company_id` int(10) NOT NULL,
+ `status` varchar(10) NOT NULL DEFAULT 'pending',
+ PRIMARY KEY (`job_id`)
+);
