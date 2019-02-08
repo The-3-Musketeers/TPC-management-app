@@ -12,13 +12,14 @@
         $user_password = mysqli_real_escape_string($dbc, trim($_POST['pwd']));
 
         if(!empty($user_roll_number) && !empty($user_password)){
-          $query = "SELECT username FROM students WHERE roll_number='$user_roll_number' AND password=SHA('$user_password')";
+          $query = "SELECT username, user_role FROM students WHERE roll_number='$user_roll_number' AND password=SHA('$user_password')";
           $data = mysqli_query($dbc, $query);
           if(mysqli_num_rows($data) == 1){
             $row = mysqli_fetch_array($data);
             $token = bin2hex(random_bytes(32));
             $_SESSION['access_token'] = $token;
             $_SESSION['username'] = $row['username'];
+            $_SESSION['user_role'] = $row['user_role'];
             $_SESSION['roll_number'] = $user_roll_number;
             $update_token_query="UPDATE students SET access_token='$token' WHERE roll_number='$user_roll_number'";
             $update_token=mysqli_query($dbc, $update_token_query);
@@ -28,6 +29,7 @@
             if(!empty($_POST['remember']) && $_POST['remember']=='on'){
               setcookie('access_token', $token, time() + (60*60*24*30));
               setcookie('username', $row['username'], time() + (60*60*24*30));
+              setcookie('user_role', $row['user_role'], time() + (60*60*24*30));
               setcookie('roll_number', $user_roll_number, time() + (60*60*24*30));
             }
           }

@@ -6,6 +6,7 @@
 
     // Authenticate user
     require_once('../templates/auth.php');
+    checkUserRole('student', $auth_error);
 
     //Connect to the database
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
