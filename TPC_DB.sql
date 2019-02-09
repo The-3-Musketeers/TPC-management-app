@@ -31,6 +31,7 @@ CREATE TABLE `recruiters` (
   `company_id` VARCHAR(8),
   `company_name` VARCHAR(64),
   `company_category` VARCHAR(2),
+  `company_status` VARCHAR(10),
   `hr_name` VARCHAR(32),
   `hr_email` VARCHAR(64),
   `access_token` VARCHAR(64),
