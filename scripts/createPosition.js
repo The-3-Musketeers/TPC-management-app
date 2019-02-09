@@ -1,25 +1,18 @@
-$(document).ready(function() {
-  var btech = $("#btech");
-  var mtech = $("#mtech");
-  add_btech();
-  btech.on("click", function() {
-    add_btech();
-  });
-  mtech.on("click", function() {
-    add_mtech();
-  });
+$(document).ready(() => {
+  let btech = $("#btech");
+  let mtech = $("#mtech");
 
-  function warn() {
+  let warn = () => {
     $("#btech_branch").text("Please Select a Course");
-  }
+  };
 
-  function add_btech() {
+  let add_btech = () => {
     if (btech[0].checked) {
       if ($("#btech_branch").text() == "Please Select a Course") {
         $("#btech_branch").empty();
       }
-      var $department = ["CS", "EE", "ME", "CE", "CB"];
-      $department.forEach(function($D) {
+      const $department = ["CS", "EE", "ME", "CE", "CB"];
+      $department.forEach(($D) => {
         $r = $(
           "<div class='form-check form-check-inline'><input class='form-check-input' name='branch[]' type='checkbox' value=" +
             $D +
@@ -35,13 +28,14 @@ $(document).ready(function() {
         warn();
       }
     }
-  }
-  function add_mtech() {
+  };
+
+  let add_mtech = () => {
     if (mtech[0].checked) {
       if ($("#btech_branch").text() == "Please Select a Course") {
         $("#btech_branch").empty();
       }
-      var $department = [
+      const $department = [
         "Mechatronics",
         "Mathematics & Computing",
         "Nano Science & Technology",
@@ -52,7 +46,7 @@ $(document).ready(function() {
         "Materials Science & Engineering",
         "VLSI & Embedded Systems"
       ];
-      var $dept_value = [
+      const $dept_value = [
         "mech",
         "mnc",
         "nano",
@@ -63,8 +57,8 @@ $(document).ready(function() {
         "mse",
         "vlsi"
       ];
-      var $i = 0;
-      $department.forEach(function($D) {
+      let $i = 0;
+      $department.forEach(($D) => {
         $r = $(
           "<div class='form-check form-check-inline'><input class='form-check-input' name='branch[]' type='checkbox' value=" +
             $dept_value[$i] +
@@ -81,5 +75,14 @@ $(document).ready(function() {
         warn();
       }
     }
-  }
+  };
+
+  add_btech();
+  btech.on("click",() => {
+    add_btech();
+  });
+  mtech.on("click",() => {
+    add_mtech();
+  });
+
 });
