@@ -35,8 +35,8 @@
             }elseif($company_category == "3"){
               $company_category = "B2";
             }
-            $query = "INSERT INTO recruiters (company_id, company_name, company_category, hr_name, hr_email, password, join_date) VALUES ".
-              "('$company_id', '$company_name', '$company_category', '$hr_name', '$hr_email', SHA('$password'), NOW())";
+            $query = "INSERT INTO recruiters (company_id, company_name, company_category, company_status, hr_name, hr_email, password, join_date) VALUES ".
+              "('$company_id', '$company_name', '$company_category', 'pending', '$hr_name', '$hr_email', SHA('$password'), NOW())";
             mysqli_query($dbc, $query);
 
             //Confirm success with the recruiter
