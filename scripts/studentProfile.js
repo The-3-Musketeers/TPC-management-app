@@ -1,15 +1,11 @@
-$(document).ready(function() {
-  add_departemnt();
-  $("#course").on("change", function() {
-    add_departemnt();
-  });
-  function add_departemnt() {
-    var course = $("#course").val();
-    if (course == "Btech") {
-      var dept = $("#department").val();
+$(document).ready(() => {
+  let add_departemnt = () => {
+    let course = $("#course").val();
+    if (course === "Btech") {
+      let dept = $("#department").val();
       $("#department").empty();
-      var $r;
-      var $department = ["CS", "EE", "ME", "CE", "CB"];
+      let $r;
+      const $department = ["CS", "EE", "ME", "CE", "CB"];
       if ($department.indexOf(dept) > -1) {
         $r = $("<option value=" + dept + ">" + dept + "</option>");
         $("#department").append($r);
@@ -17,15 +13,15 @@ $(document).ready(function() {
         $r = $("<option value=" + null + ">Select your department</option>");
         $("#department").append($r);
       }
-      $department.forEach(function($D) {
+      $department.forEach(($D) => {
         if (dept != $D) $r = $("<option value=" + $D + ">" + $D + "</option>");
         $("#department").append($r);
       });
     } else if (course == "Mtech") {
-      var dept = $("#department").val();
+      let dept = $("#department").val();
       $("#department").empty();
-      var $r;
-      var $department = [
+      let $r;
+      const $department = [
         "Mechatronics",
         "Mathematics & Computing",
         "Nano Science & Technology",
@@ -36,7 +32,7 @@ $(document).ready(function() {
         "Materials Science & Engineering",
         "VLSI & Embedded Systems"
       ];
-      var $dept_value = [
+      const $dept_value = [
         "mech",
         "mnc",
         "nano",
@@ -48,20 +44,25 @@ $(document).ready(function() {
         "vlsi"
       ];
       if ($dept_value.indexOf(dept) > -1) {
-        var $ind = $dept_value.indexOf(dept);
+        let $ind = $dept_value.indexOf(dept);
         $r = $("<option value=" + dept + ">" + $department[$ind] + "</option>");
         $("#department").append($r);
       } else {
         $r = $("<option value=" + null + ">Select your department</option>");
         $("#department").append($r);
       }
-      var $i = 0;
-      $department.forEach(function($D) {
+      let $i = 0;
+      $department.forEach(($D) => {
         if (dept != $dept_value[$i])
           $r = $("<option value=" + $dept_value[$i] + ">" + $D + "</option>");
         $("#department").append($r);
         $i++;
       });
     }
-  }
+  };
+
+  add_departemnt();
+  $("#course").on("change", () => {
+    add_departemnt();
+  });
 });

@@ -1,12 +1,6 @@
-$(document).ready(function() {
-  var loginType="0";
-  $('#login-type').on('change',function() {
-    loginType=$(this).val();
-    login_type();
-  });
-  function login_type() {
+$(document).ready(() => {
+  let login_type = (loginType) => {
     if(loginType == "1"){
-      console.log('admin');
       $("#roll-number-div").hide();
       $("#remember-div").hide();
       $("#signup-div").hide();
@@ -15,5 +9,9 @@ $(document).ready(function() {
       $("#remember-div").show();
       $("#signup-div").show();
     }
-  }
+  };
+  $('#login-type').on('change', () => {
+    let loginType = $('#login-type').val();
+    login_type(loginType);
+  }); 
 });
