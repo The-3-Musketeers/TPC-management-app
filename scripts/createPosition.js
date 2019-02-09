@@ -19,16 +19,16 @@ $(document).ready(function() {
         $("#btech_branch").empty();
       }
       var $department = ["CS", "EE", "ME", "CE", "CB"];
-      for (var $i = 0; $i < $department.length; $i++) {
+      $department.forEach(function($D) {
         $r = $(
           "<div class='form-check form-check-inline'><input class='form-check-input' name='branch[]' type='checkbox' value=" +
-            $department[$i] +
+            $D +
             "><label class='form-check-label'>" +
-            $department[$i] +
+            $D +
             "</label></div>"
         );
         $("#btech_branch").append($r);
-      }
+      });
     } else {
       $("#btech_branch").empty();
       if (!mtech[0].checked) {
@@ -63,16 +63,18 @@ $(document).ready(function() {
         "mse",
         "vlsi"
       ];
-      for (var $i = 0; $i < $department.length; $i++) {
+      var $i = 0;
+      $department.forEach(function($D) {
         $r = $(
           "<div class='form-check form-check-inline'><input class='form-check-input' name='branch[]' type='checkbox' value=" +
             $dept_value[$i] +
             "><label class='form-check-label'>" +
-            $department[$i] +
+            $D +
             "</label></div>"
         );
         $("#mtech_branch").append($r);
-      }
+        $i++;
+      });
     } else {
       $("#mtech_branch").empty();
       if (!btech[0].checked) {

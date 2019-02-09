@@ -18,6 +18,7 @@ CREATE TABLE `students_data` (
   `course` VARCHAR(8),
   `profile_pic` VARCHAR(256),
   `resume_url` VARCHAR(256),
+  `resume_file` VARCHAR(256),
   `mobile_number` VARCHAR(16),
   PRIMARY KEY (`data_id`)
 );
