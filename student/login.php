@@ -56,7 +56,7 @@
             $update_token_query="UPDATE students SET access_token='$token' WHERE user_role='admin' AND password='$user_password'";
             $update_token=mysqli_query($dbc, $update_token_query);
             if(!$update_token){
-                die("QUERY FAILED ".mysqli_error($dbc));
+              die("QUERY FAILED ".mysqli_error($dbc));
             }
           }
           else{

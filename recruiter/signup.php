@@ -109,7 +109,7 @@
         <div class="input-group-prepend">
           <span class="input-group-text" id="inputGroup-sizing-default">Confirm Password:</span>
         </div>
-        <input type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="pwd" name="confirm-pwd" placeholder="Re-Enter password">
+        <input type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="confirm-pwd" name="confirm-pwd" placeholder="Re-Enter password">
       </div>
         <div class="form-group row">
           <div class="col-sm-10">

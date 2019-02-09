@@ -1,6 +1,6 @@
 $(document).ready(function() {
   var loginType="0";
-  $('#login-type').on('click',function() {
+  $('#login-type').on('change',function() {
     loginType=$(this).val();
     login_type();
   });
