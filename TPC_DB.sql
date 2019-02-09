@@ -1,3 +1,5 @@
+/* Create tables */
+
 CREATE TABLE `students` (
   `user_id` INT AUTO_INCREMENT,
   `join_date` DATETIME,
@@ -50,3 +52,7 @@ CREATE TABLE `positions` (
  `status` varchar(10) NOT NULL DEFAULT 'pending',
  PRIMARY KEY (`job_id`)
 );
+
+/* Add admin to students table */
+
+INSERT INTO students (username, user_role, password, join_date) VALUES ('admin', 'admin', 'admin', NOW());

@@ -64,7 +64,7 @@
             <?php
               } else{
               ?>
-                <a class="dropdown-item" href="/TPC-management-app/admin/dashboard.php">dashboard</a>
+                <a class="dropdown-item" href="/TPC-management-app/admin/dashboard.php">Dashboard</a>
               <?php
               }
               ?>
