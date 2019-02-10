@@ -48,7 +48,7 @@
       <?php } ?>
       <?php if(isset($_SESSION['company_id'])){ ?>
       <li class="nav-item active">
-        <a class="nav-link" href="../recruiter/jobsCreated.php">Jobs Created</a>
+        <a class="nav-link" href="/TPC-management-app/recruiter/jobsCreated.php">Jobs Created</a>
       </li>
       <?php } ?>
     </ul>

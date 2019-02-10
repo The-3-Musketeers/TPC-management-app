@@ -23,7 +23,7 @@
     </ul>
     <div class="tab-content" id="myTabContent">
     <div class="tab-pane active" id="current_pos1" role="tabpanel" aria-labelledby="current_pos"><?php include "viewCurrentPositions.php" ?></div>
-    <div class="tab-pane" id="expired_pos1" role="tabpanel" aria-labelledby="expired_pos">...</div>
+    <div class="tab-pane" id="expired_pos1" role="tabpanel" aria-labelledby="expired_pos">NO DATA</div>
     </div>
 </div>
 <?php require_once('../templates/footer.php');?>
