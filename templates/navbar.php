@@ -43,7 +43,7 @@
         <a class="nav-link" href="/TPC-management-app/admin/viewCompanies.php">Companies</a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="/TPC-management-app/admin/jobs.php">Jobs</a>
+        <a class="nav-link" href="/TPC-management-app/admin/viewJobs.php">Jobs</a>
       </li>
       <?php } ?>
     </ul>

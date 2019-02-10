@@ -42,6 +42,7 @@ CREATE TABLE `recruiters` (
 CREATE TABLE `positions` (
  `job_id` int(10) NOT NULL AUTO_INCREMENT,
  `job_position` varchar(256) NOT NULL,
+ `job_status` VARCHAR(10) NOT NULL DEFAULT 'pending',
  `course` varchar(256) DEFAULT NULL,
  `branch` varchar(256) DEFAULT NULL,
  `min_cpi` float DEFAULT NULL,
@@ -50,7 +51,6 @@ CREATE TABLE `positions` (
  `test_date` date DEFAULT NULL,
  `job_desc` varchar(256) DEFAULT NULL,
  `company_id` int(10) NOT NULL,
- `status` varchar(10) NOT NULL DEFAULT 'pending',
  PRIMARY KEY (`job_id`)
 );
 
