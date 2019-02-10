@@ -5,6 +5,5 @@
   <script src="/TPC-management-app/scripts/studentProfile.js"></script>
   <script src="/TPC-management-app/scripts/studentLogin.js"></script>
   <script src="/TPC-management-app/scripts/createPosition.js"></script>
-  <script src="/TPC-management-app/scripts/viewCompanies.js"></script>
 </body>
 </html>
