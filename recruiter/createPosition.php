@@ -26,11 +26,11 @@
     $job_desc=mysqli_real_escape_string($dbc,trim($_POST['job_desc']));
     $company_id=$_SESSION['company_id'];
     if($course!='' && $branch!=''){
-      $query1 = "INSERT INTO positions (job_position, course, branch, min_cpi, job_desc, company_id ";
-      $query2 = "('$job_position', '$course', '$branch', $min_cpi, '$job_desc', $company_id ";
+      $query1 = "INSERT INTO positions (job_position, course, branch, min_cpi, job_desc, company_id,created_on ";
+      $query2 = "('$job_position', '$course', '$branch', $min_cpi, '$job_desc', $company_id, NOW() ";
       if(!empty($test_date)){
         $query1 = $query1.", test_date";
-        $query2 = $query2.", $test_date";
+        $query2 = $query2.", '$test_date'";
       }
       if(!empty($stipend)){
         $query1 = $query1.", stipend";
@@ -42,6 +42,9 @@
       }
       $query=$query1.") VALUES ".$query2.")";
       $create_job_query=mysqli_query($dbc,$query);
+      if(!$create_job_query){
+        die("QUERY FAILED ".mysqli_error($dbc));
+      }
       echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
                 'Job Position Created' .
                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .

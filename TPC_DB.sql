@@ -48,8 +48,9 @@ CREATE TABLE `positions` (
  `min_cpi` float DEFAULT NULL,
  `stipend` int(10) DEFAULT NULL,
  `ctc` int(10) DEFAULT NULL,
- `test_date` date DEFAULT NULL,
+ `test_date` varchar(20) DEFAULT NULL,
  `job_desc` varchar(256) DEFAULT NULL,
+ `created_on` date DEFAULT NULL,
  `company_id` int(10) NOT NULL,
  PRIMARY KEY (`job_id`)
 );

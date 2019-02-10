@@ -46,6 +46,11 @@
         <a class="nav-link" href="/TPC-management-app/admin/viewJobs.php">Jobs</a>
       </li>
       <?php } ?>
+      <?php if(isset($_SESSION['company_id'])){ ?>
+      <li class="nav-item active">
+        <a class="nav-link" href="../recruiter/jobsCreated.php">Jobs Created</a>
+      </li>
+      <?php } ?>
     </ul>
     <span class="navbar-text">
       <ul class="navbar-nav mr-auto">
