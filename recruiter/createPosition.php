@@ -20,6 +20,8 @@
     $multiple_branch = implode(",",$_POST["branch"]);
     $branch=mysqli_real_escape_string($dbc,trim($multiple_branch));
     $min_cpi=mysqli_real_escape_string($dbc,trim($_POST['min_cpi']));
+    $no_of_opening=mysqli_real_escape_string($dbc,trim($_POST['no_of_opening']));
+    $apply_by=mysqli_real_escape_string($dbc,trim($_POST['apply_by']));
     $stipend=mysqli_real_escape_string($dbc,trim($_POST['stipend']));
     $ctc=mysqli_real_escape_string($dbc,trim($_POST['ctc']));
     $test_date=mysqli_real_escape_string($dbc,trim($_POST['test_date']));
@@ -27,10 +29,18 @@
     $company_id=$_SESSION['company_id'];
     if($course!='' && $branch!=''){
       $query1 = "INSERT INTO positions (job_position, course, branch, min_cpi, job_desc, company_id,created_on ";
-      $query2 = "('$job_position', '$course', '$branch', $min_cpi, '$job_desc', $company_id, NOW() ";
+      $query2 = "('$job_position', '$course', '$branch', $min_cpi, '$job_desc', '$company_id', NOW() ";
       if(!empty($test_date)){
         $query1 = $query1.", test_date";
         $query2 = $query2.", '$test_date'";
+      }
+      if(!empty($apply_by)){
+        $query1 = $query1.", apply_by";
+        $query2 = $query2.", '$apply_by'";
+      }
+      if(!empty($no_of_opening)){
+        $query1 = $query1.", no_of_opening";
+        $query2 = $query2.", $no_of_opening";
       }
       if(!empty($stipend)){
         $query1 = $query1.", stipend";
@@ -41,6 +51,18 @@
         $query2 = $query2.", $ctc";
       }
       $query=$query1.") VALUES ".$query2.")";
+      $today=date('Y-m-d');
+      if(!empty($apply_by) && $today > $apply_by){
+        echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+              'Incorrect Apply Date' .
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+              '<span aria-hidden="true">&times;</span></button></div></div>';
+      } else if(!empty($test_date) && $today > $test_date){
+          echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+                'Incorrect Test Date' .
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+                '<span aria-hidden="true">&times;</span></button></div></div>';
+      } else {
       $create_job_query=mysqli_query($dbc,$query);
       if(!$create_job_query){
         die("QUERY FAILED ".mysqli_error($dbc));
@@ -49,6 +71,8 @@
                 'Job Position Created' .
                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
                 '<span aria-hidden="true">&times;</span></button></div></div>';
+      }
+
     }
     else{
       echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
@@ -89,6 +113,14 @@
   <div class="form-group row">
     <label for="min_cpi" class="col-sm-2 col-form-label">Minimum CPI<span style="color:red;">*</span></label>
     <input type="text" class="col-sm-10 form-control" name="min_cpi" value="" required>
+  </div>
+  <div class="form-group row">
+    <label for="no_of_opening" class="col-sm-2 col-form-label">No. of Openings</label>
+    <input type="text" class="col-sm-10 form-control" id="no_of_opening" name="no_of_opening" value="">
+  </div>
+  <div class="form-group row">
+    <label for="apply_by" class="col-sm-2 col-form-label">Apply By</label>
+    <input type="date" class="col-sm-10 form-control" id="apply_by" name="apply_by" value="">
   </div>
   <div class="form-group row">
     <label for="stipend" class="col-sm-2 col-form-label">Stipend</label>

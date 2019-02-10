@@ -46,12 +46,14 @@ CREATE TABLE `positions` (
  `course` varchar(256) DEFAULT NULL,
  `branch` varchar(256) DEFAULT NULL,
  `min_cpi` float DEFAULT NULL,
+ `no_of_opening` int(5) DEFAULT NULL,
+ `apply_by` varchar(20) DEFAULT NULL,
  `stipend` int(10) DEFAULT NULL,
  `ctc` int(10) DEFAULT NULL,
  `test_date` varchar(20) DEFAULT NULL,
  `job_desc` varchar(256) DEFAULT NULL,
  `created_on` date DEFAULT NULL,
- `company_id` int(10) NOT NULL,
+ `company_id` VARCHAR(8) NOT NULL,
  PRIMARY KEY (`job_id`)
 );
 
