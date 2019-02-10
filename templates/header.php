@@ -11,9 +11,9 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/TPC-management-app/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-
     <?php if(isset($_SESSION['username']) && $_SESSION['user_role']=='admin'){ ?>
       <link rel="stylesheet" href="/TPC-management-app/css/viewJobs.css">
+      <link rel="stylesheet" href="/TPC-management-app/css/viewCompanies.css">
     <?php } ?>
     
     <?php
