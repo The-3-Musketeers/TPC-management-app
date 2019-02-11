@@ -46,11 +46,6 @@
         <a class="nav-link" href="/TPC-management-app/admin/viewJobs.php">Jobs</a>
       </li>
       <?php } ?>
-      <?php if(isset($_SESSION['company_id'])){ ?>
-      <li class="nav-item active">
-        <a class="nav-link" href="/TPC-management-app/recruiter/jobsCreated.php">Jobs Created</a>
-      </li>
-      <?php } ?>
     </ul>
     <span class="navbar-text">
       <ul class="navbar-nav mr-auto">
@@ -76,6 +71,7 @@
               if($_SESSION['user_role']=='student'){
               ?>
                 <a class="dropdown-item" href="/TPC-management-app/student/profile.php">Profile</a>
+                <a class="dropdown-item" href="/TPC-management-app/student/jobs.php">Jobs</a>
             <?php
               } else{
               ?>
@@ -90,6 +86,7 @@
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="/TPC-management-app/recruiter/createPosition.php">New Position</a>
+            <a class="dropdown-item" href="/TPC-management-app/recruiter/jobsCreated.php">Created Jobs</a>
           <?php } ?>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="/TPC-management-app/logout.php">Logout</a>

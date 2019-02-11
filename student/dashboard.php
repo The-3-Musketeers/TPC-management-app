@@ -13,6 +13,4 @@
     echo '<p>You are logged in as ' . $_SESSION['username'] . '</p>';
     ?>
 
-
-
 <?php require_once('../templates/footer.php');?>
