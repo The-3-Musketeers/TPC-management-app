@@ -3,6 +3,7 @@
 require_once('../templates/auth.php');
 checkUserRole('recruiter', $auth_error);
 $company_id=$_SESSION['company_id'];
+// Fetch data from positions table
 $query="SELECT * FROM positions WHERE company_id='$company_id'";
 $get_all_positions_query=mysqli_query($dbc,$query);
 $num=mysqli_num_rows($get_all_positions_query);

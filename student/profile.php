@@ -100,7 +100,7 @@ if($department!='null' && $department!=null){
     if(!$update_query){
     die("QUERY FAILED db".mysqli_error($dbc));
     }
-
+    // Alert Success : Profile Updated
     echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
                     'Profile Updated' .
                     '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
@@ -108,6 +108,7 @@ if($department!='null' && $department!=null){
     display();
 }
 else{
+    // Alert error : when branch or course not selected
     echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
     'Please Select Course and Branch' .
     '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
@@ -126,15 +127,15 @@ else{
 </div>
  <div class="col-sm-9">
   <div class="form-group">
-    <label for="roll-number">Roll No.<span style="color:red;">*</span></label>
+    <label for="roll-number">Roll No.<span class="red">*</span></label>
     <input type="text" class="form-control" id="" name="roll_number" value="<?php echo $roll_number; ?>" readonly>
   </div>
   <div class="form-group">
-    <label for="username">Full Name<span style="color:red;">*</span></label>
+    <label for="username">Full Name<span class="red">*</span></label>
     <input type="text" class="form-control" id="" name="username" value="<?php echo $username; ?>" required>
   </div>
   <div class="form-group">
-    <label for="course">Course<span style="color:red;">*</span></label>
+    <label for="course">Course<span class="red">*</span></label>
     <select name="course" id="course">
         <?php
         echo "<option value='{$course}'>{$course}</option>";
@@ -152,14 +153,14 @@ else{
     </select>
   </div>
   <div class="form-group">
-    <label for="department">Department<span style="color:red;">*</span></label>
+    <label for="department">Department<span class="red">*</span></label>
     <select name="department" id="department">
         <option value="<?php echo $department?>"> <?php echo $department;?></option>
     </select>
   </div>
 
   <div class="form-group">
-    <label for="cpi">CPI<span style="color:red;">*</span></label>
+    <label for="cpi">CPI<span class="red">*</span></label>
     <input type="text" class="form-control" id="" name="cpi" value="<?php echo $current_cpi; ?>" required>
   </div>
   <div class="form-group">
@@ -177,4 +178,8 @@ else{
     </div>
 </form>
 </div>
-<?php require_once('../templates/footer.php');?>
+
+<?php 
+// Insert the footer
+require_once('../templates/footer.php');
+?>

@@ -10,6 +10,8 @@
     $page_title = 'Recruiter Dashboard';
     require_once('../templates/header.php');
     require_once('../templates/navbar.php');
+
+    // Connect to Database
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     ?>
 <div class="container">
@@ -26,4 +28,7 @@
     <div class="tab-pane" id="expired_pos1" role="tabpanel" aria-labelledby="expired_pos">NO DATA</div>
     </div>
 </div>
-<?php require_once('../templates/footer.php');?>
+<?php 
+// Insert footer
+require_once('../templates/footer.php');
+?>
