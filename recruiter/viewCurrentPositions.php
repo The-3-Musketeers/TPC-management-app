@@ -35,13 +35,13 @@ if($num!=0){
 ?>
     <br>
     <div class="card">
-    <div class="card-header">
-    <div style="display:inline-block">
-    <h5 class="card-title" ><?php echo $job_position; ?></h5>
-    <h6 class="card-subtitle mb-2 text-muted">Created on <?php echo $created_on;?></h6>
-    </div>
-    <button class="btn btn-primary" style="float:right;margin-top:10px;">View Details</button>
-    </div>
+      <div class="card-header">
+        <div style="display:inline-block">
+          <h5 class="card-title" ><?php echo $job_position; ?></h5>
+          <h6 class="card-subtitle mb-2 text-muted">Created on <?php echo $created_on;?></h6>
+        </div>
+        <button class="btn btn-primary" style="float:right;margin-top:10px;">View Details</button>
+      </div>
       <div class="card-body table-responsive">
         <table class="table table-borderless">
         <thead>
