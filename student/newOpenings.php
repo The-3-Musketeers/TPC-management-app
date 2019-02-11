@@ -40,16 +40,21 @@ if($num!=0){
     if($num1==1){
       $row1=mysqli_fetch_assoc($get_company_name_query);
       $company_name=$row1['company_name'];
+      $job_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/../job.php';
 ?>
       <br>
       <div class="card">
-      <div class="card-header">
-      <div style="display:inline-block">
-      <h5 class="card-title" ><?php echo $job_position; ?></h5>
-      <h6 class="card-subtitle mb-2 text-muted"><?php echo $company_name;?></h6>
-      </div>
-      <button class="btn btn-primary" style="float:right;margin-top:10px;">View Details</button>
-      </div>
+        <div class="card-header">
+          <div style="display:inline-block">
+            <h5 class="card-title" ><?php echo $job_position; ?></h5>
+            <h6 class="card-subtitle mb-2 text-muted"><?php echo $company_name;?></h6>
+          </div>
+          <a href="<?php echo $job_url . '?id=' . $job_id; ?>">
+            <button class="btn btn-primary" style="float:right;margin-top:10px;">
+              View Details
+            </button>
+          </a>
+        </div>
         <div class="card-body table-responsive">
           <table class="table table-borderless">
           <thead>
