@@ -13,6 +13,7 @@
   //Connect to the database
   $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
   
+  // Insert New Position
   if(isset($_POST['submit'])){
     $job_position=mysqli_real_escape_string($dbc,trim($_POST['job_position']));
     $multiple_course = implode(",",$_POST["course"]);
@@ -27,9 +28,11 @@
     $test_date=mysqli_real_escape_string($dbc,trim($_POST['test_date']));
     $job_desc=mysqli_real_escape_string($dbc,trim($_POST['job_desc']));
     $company_id=$_SESSION['company_id'];
+
     if($course!='' && $branch!=''){
       $query1 = "INSERT INTO positions (job_position, course, branch, min_cpi, job_desc, company_id,created_on ";
       $query2 = "('$job_position', '$course', '$branch', $min_cpi, '$job_desc', '$company_id', NOW() ";
+      // Append to insert query is the fields are not empty
       if(!empty($test_date)){
         $query1 = $query1.", test_date";
         $query2 = $query2.", '$test_date'";
@@ -53,11 +56,13 @@
       $query=$query1.") VALUES ".$query2.")";
       $today=date('Y-m-d');
       if(!empty($apply_by) && $today > $apply_by){
+        // Alert Error if apply by is less than today
         echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
               'Incorrect Apply Date' .
               '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
               '<span aria-hidden="true">&times;</span></button></div></div>';
       } else if(!empty($test_date) && $today > $test_date){
+        // Alert Error if test date is less than today
           echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
                 'Incorrect Test Date' .
                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
@@ -67,6 +72,7 @@
       if(!$create_job_query){
         die("QUERY FAILED ".mysqli_error($dbc));
       }
+      // Alert Success : Profile Updated
       echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
                 'Job Position Created' .
                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
@@ -75,6 +81,7 @@
 
     }
     else{
+      // Alert error : when branch or course not selected
       echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
                 'Please Select Course and Branch' .
                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
@@ -87,11 +94,11 @@
 <div class="container" style="max-width: 60%; padding: 20px;">
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
   <div class="form-group row">
-    <label for="job_position" class="col-sm-2 col-form-label">Job Position<span style="color:red;">*</span></label>
+    <label for="job_position" class="col-sm-2 col-form-label">Job Position<span class="red">*</span></label>
     <input type="text" class="col-sm-10 form-control" id="job_position" name="job_position" value="" required>
   </div>
   <div class="form-group row">
-  <label class="col-sm-2 col-form-label">Course<span style="color:red;">*</span></label>
+  <label class="col-sm-2 col-form-label">Course<span class="red">*</span></label>
   <div class="col-sm-10">
     <div class="form-check form-check-inline">
     <input class="form-check-input" type="checkbox" id="btech" value="btech" name="course[]" checked>
@@ -104,14 +111,14 @@
   </div>  
   </div>
   <div class="form-group row">
-  <label class="col-sm-2 col-form-label">Branch<span style="color:red;">*</span></label>
+  <label class="col-sm-2 col-form-label">Branch<span class="red">*</span></label>
   <div class="col-sm-10">
     <div id="btech_branch"></div>
     <div id="mtech_branch"></div>
   </div>  
   </div>
   <div class="form-group row">
-    <label for="min_cpi" class="col-sm-2 col-form-label">Minimum CPI<span style="color:red;">*</span></label>
+    <label for="min_cpi" class="col-sm-2 col-form-label">Minimum CPI<span class="red">*</span></label>
     <input type="text" class="col-sm-10 form-control" name="min_cpi" value="" required>
   </div>
   <div class="form-group row">
@@ -135,7 +142,7 @@
     <input type="date" class="col-sm-10 form-control" name="test_date" value="" id="test_date">
   </div>
   <div class="form-group row">
-    <label for="job_desc" class="col-sm-2 col-form-label">Job Description<span style="color:red;">*</span></label>
+    <label for="job_desc" class="col-sm-2 col-form-label">Job Description<span class="red">*</span></label>
     <textarea class="col-sm-10 form-control" id="job_desc" rows="3" name="job_desc" value="" required></textarea>
   </div>
   <div class="form-group row">
