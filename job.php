@@ -59,9 +59,48 @@
         $company_url=$row1['company_url'];
         $company_desc=$row1['company_desc'];
         $page_title = $job_position;
+        $job_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/job.php';
         require_once('templates/header.php');
         require_once('templates/navbar.php');
+        if(isset($_GET['apply']) && $_GET['apply']=='true'){
+          $apply_error='';
+          $apply_query="SELECT application_id FROM applications WHERE job_id='" . $job_id . "' AND student_roll_number='". $_SESSION['roll_number'] ."'";
+          $query3=mysqli_query($dbc,$apply_query);
+          $num3=mysqli_num_rows($query3);
+          if($num3==0){
+            $apply_query="INSERT INTO applications (job_id, student_roll_number, applied_on) VALUES ".
+              "('" . $job_id . "', '" . $_SESSION['roll_number'] . "', NOW())";
+            $query3=mysqli_query($dbc,$apply_query);
+            if(!$query3){
+                die("QUERY FAILED ".mysqli_error($dbc));
+                $apply_error='Unable to apply for this job. Try again!';
+            }
+            // Alert Success : Application successful
+            echo '<div class="container">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">' .
+                        'You have successfully applied for this job!' .
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+                          '<span aria-hidden="true">&times;</span>' .
+                        '</button>' .
+                    '</div>
+                  </div>';
+          } else{
+            $apply_error='You have already applied for this job!';
+          }
+          if($apply_error){
+            // Alert error
+            echo '<div class="container">
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+                      $apply_error .
+                      '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+                        '<span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                  </div>';
+          }
+        }
     ?>
+
         <div class="container" style="max-width: 60%; padding: 20px;">
           <div class="card">
             <div class="card-header">
@@ -110,7 +149,7 @@
               <div style="float:left;margin-top:5px;">
                 Posted on <?php echo $created_on;?>
               </div>
-              <a href="<?php echo $job_url . '?id=' . $job_id; ?>">
+              <a href="<?php echo $job_url . '?id=' . $job_id . '&apply=true'; ?>">
                 <button class="btn btn-primary" style="float:right;">
                   Apply
                 </button>

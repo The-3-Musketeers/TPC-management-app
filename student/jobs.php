@@ -15,15 +15,15 @@
     <div class="container">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="current_pos" data-toggle="tab" href="#current_pos1" role="tab" aria-controls="current_pos1" aria-selected="true">New Openings</a>
+            <a class="nav-link active" id="new_openings" data-toggle="tab" href="#new_openings1" role="tab" aria-controls="new_openings1" aria-selected="true">New Openings</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="expired_pos" data-toggle="tab" href="#expired_pos1" role="tab" aria-controls="profile1" aria-selected="false">My Applications</a>
+            <a class="nav-link" id="my_applications" data-toggle="tab" href="#my_applications1" role="tab" aria-controls="profile1" aria-selected="false">My Applications</a>
         </li>
         </ul>
         <div class="tab-content" id="myTabContent">
-        <div class="tab-pane active" id="current_pos1" role="tabpanel" aria-labelledby="current_pos"><?php include "newOpenings.php" ?></div>
-        <div class="tab-pane" id="expired_pos1" role="tabpanel" aria-labelledby="expired_pos">NO DATA</div>
+        <div class="tab-pane active" id="new_openings1" role="tabpanel" aria-labelledby="new_openings"><?php include "newOpenings.php" ?></div>
+        <div class="tab-pane" id="my_applications1" role="tabpanel" aria-labelledby="my_applications"><?php include "myApplications.php" ?></div>
         </div>
     </div>
 

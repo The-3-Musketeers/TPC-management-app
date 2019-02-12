@@ -25,6 +25,15 @@ CREATE TABLE `students_data` (
   PRIMARY KEY (`data_id`)
 );
 
+CREATE TABLE `applications` (
+  `application_id` INT AUTO_INCREMENT,
+  `job_id` int(10) NOT NULL,
+  `student_roll_number` VARCHAR(8),
+  `application_status` VARCHAR(10) NOT NULL DEFAULT 'pending',
+  `applied_on` DATETIME,
+  PRIMARY KEY (`application_id`)
+);
+
 CREATE TABLE `recruiters` (
   `user_id` INT AUTO_INCREMENT,
   `join_date` DATETIME,
