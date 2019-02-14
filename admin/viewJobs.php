@@ -97,16 +97,19 @@
               $data_recruiters = mysqli_query($dbc, $query_recruiters);
               $row_recruiters = mysqli_fetch_array($data_recruiters);
               if($row_recruiters["company_status"] == "accepted"){
-                echo '<tr><th scope="row">' . $curr . '</th>' .
-                        '<td>' . $row_recruiters["company_name"] . '</td>' .
-                        '<td>' . $row["job_position"] . '</td>' .
-                        '<td>' . $row["course"] . '</td>' .
-                        '<td>' . $row["branch"] . '</td>' .
-                        '<td>' . $row["min_cpi"] . '</td>' .
-                        '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=1" method="post">' .
-                        '<button type="hide" class="btn btn-danger" name="hide">Hide</button></form></td>' .
-                    '</tr>';
-                $curr = $curr + 1;
+                $job_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/../job.php';
+            ?>
+                <tr>
+                  <th scope="row"><?php echo $curr;?></th>
+                    <td><?php echo $row_recruiters["company_name"];?></td>
+                    <td><a href="<?php echo $job_url.'?id='.$row["job_id"]; ?>"><?php echo $row["job_position"]; ?> </a></td>
+                    <td><?php echo $row["course"];?></td>
+                    <td> <?php echo $row["branch"]; ?> </td>
+                    <td><?php echo $row["min_cpi"]; ?>  </td>
+                    <td><form action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . $row['job_id'] . '&tab=1';?>" method="post">
+                    <button type="hide" class="btn btn-danger" name="hide">Hide</button></form></td>
+                </tr>
+                <?php $curr = $curr + 1;
               }
             }
           ?>

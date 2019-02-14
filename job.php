@@ -62,7 +62,7 @@
         $job_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/job.php';
         require_once('templates/header.php');
         require_once('templates/navbar.php');
-        if(isset($_GET['apply']) && $_GET['apply']=='true'){
+        if(isset($_GET['apply']) && $_GET['apply']=='true' && $_SESSION['user_role']=='student'){
           $apply_error='';
           $apply_query="SELECT application_id FROM applications WHERE job_id='" . $job_id . "' AND student_roll_number='". $_SESSION['roll_number'] ."'";
           $query3=mysqli_query($dbc,$apply_query);
@@ -149,15 +149,79 @@
               <div style="float:left;margin-top:5px;">
                 Posted on <?php echo $created_on;?>
               </div>
-              <a href="<?php echo $job_url . '?id=' . $job_id . '&apply=true'; ?>">
-                <button class="btn btn-primary" style="float:right;">
-                  Apply
-                </button>
-              </a>
+              <?php if($_SESSION['user_role']=='student'){ ?>
+                <a href="<?php echo $job_url . '?id=' . $job_id . '&apply=true'; ?>">
+                  <button class="btn btn-primary" style="float:right;">
+                    Apply
+                  </button>
+                </a>
+              <?php } ?>
             </div>
           </div>
-        </div>
+
 <?php
+        if($_SESSION['user_role']=='admin'){
+          $applicant_query="SELECT * FROM applications WHERE job_id='" . $job_id ."'";
+          $applicant_data=mysqli_query($dbc,$applicant_query);
+          $applicant_num=mysqli_num_rows($applicant_data);
+          $sno=1;
+          if($applicant_num!=0){
+  ?>
+            <br/>
+            <h5>List of applicants</h5>
+            <table class="table">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">S.No.</th>
+                  <th scope="col">Roll Number</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Applied on</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+
+<?php
+            while($applicant_row=mysqli_fetch_assoc($applicant_data)){
+              $app_roll_no=$applicant_row['student_roll_number'];
+              $student_query="SELECT * FROM students WHERE roll_number='" . $app_roll_no ."'";
+              $student_data=mysqli_query($dbc,$student_query);
+              $student_num=mysqli_num_rows($student_data);
+              if($student_num==1){
+                $student_row=mysqli_fetch_assoc($student_data);
+                $student_name=$student_row['username'];
+                $student_email=$student_row['webmail_id'];
+
+                $applied_on=$applicant_row['applied_on'];
+                $app_status=$applicant_row['application_status'];
+
+  ?>
+                <tr>
+                <td><?php echo $sno; ?></td>
+                <td><?php echo $app_roll_no; ?></td>
+                <td><?php echo $student_name; ?></td>
+                <td><?php echo $student_email; ?></td>
+                <td><?php echo $applied_on; ?></td>
+                <td><?php echo $app_status; ?></td>
+                </tr>
+                <?php $sno+=1; ?>
+
+<?php
+              }
+            }
+?>
+              </tbody>
+            </table>
+          </div>
+<?php
+          } else{
+  ?>
+          <br/>
+          <h5>No one has applied for this job yet!</h5>
+<?php
+          }
+        }
       }
     } else {
 ?>
