@@ -101,7 +101,7 @@
         }
     ?>
 
-        <div class="container" style="max-width: 60%; padding: 20px;">
+        <div class="container" style="max-width: 80%; padding: 20px;">
           <div class="card">
             <div class="card-header">
               <div style="display:inline-block">
@@ -200,7 +200,7 @@
                 <tr>
                 <td><?php echo $sno; ?></td>
                 <td><?php echo $app_roll_no; ?></td>
-                <td><?php echo $student_name; ?></td>
+                <td><a href="./admin/student.php?roll=<?php echo $app_roll_no; ?>" target="_blank"><?php echo $student_name; ?></a></td>
                 <td><?php echo $student_email; ?></td>
                 <td><?php echo $applied_on; ?></td>
                 <td><?php echo $app_status; ?></td>
