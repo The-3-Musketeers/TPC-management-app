@@ -120,24 +120,26 @@
     <input type="text" class="col-sm-10 form-control" id="job_position" name="job_position" value="<?php echo $job_position; ?>" required>
   </div>
   <div class="form-group row">
-  <label class="col-sm-2 col-form-label">Course<span class="red">*</span></label>
-  <div class="col-sm-10">
-    <div class="form-check form-check-inline">
-    <input class="form-check-input" type="checkbox" id="btech" value="btech" name="course[]" checked>
-    <label class="form-check-label" for="btech">BTech</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="checkbox" id="mtech" name="course[]" value="mtech">
-      <label class="form-check-label" for="mtech">MTech</label>
-    </div>
-  </div>  
+    <label class="col-sm-2 col-form-label">Course<span class="red">*</span></label>
+    <div class="col-sm-10">
+      <div class="form-check form-check-inline">
+        <input type="hidden" id="course" value="<?php echo $course;?>">
+        <input class="form-check-input" type="checkbox" id="update_btech" name="course[]" value="btech">
+        <label class="form-check-label" for="btech">BTech</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="update_mtech" name="course[]" value="mtech">
+        <label class="form-check-label" for="mtech">MTech</label>
+      </div>
+    </div>  
   </div>
   <div class="form-group row">
-  <label class="col-sm-2 col-form-label">Branch<span class="red">*</span></label>
-  <div class="col-sm-10">
-    <div id="btech_branch"></div>
-    <div id="mtech_branch"></div>
-  </div>  
+    <label class="col-sm-2 col-form-label">Branch<span class="red">*</span></label>
+    <div class="col-sm-10">
+      <input type="hidden" id="branch" value="<?php echo $branch;?>">
+      <div id="update_btech_branch"></div>
+      <div id="update_mtech_branch"></div>
+    </div>  
   </div>
   <div class="form-group row">
     <label for="min_cpi" class="col-sm-2 col-form-label">Minimum CPI<span class="red">*</span></label>
@@ -149,7 +151,7 @@
   </div>
   <div class="form-group row">
     <label for="apply_by" class="col-sm-2 col-form-label">Apply By</label>
-    <input type="date" class="col-sm-10 form-control" id="apply_by" name="apply_by" value="">
+    <input type="date" class="col-sm-10 form-control" id="apply_by" name="apply_by" value="<?php echo $apply_by;?>">
   </div>
   <div class="form-group row">
     <label for="stipend" class="col-sm-2 col-form-label">Stipend</label>
@@ -161,7 +163,7 @@
   </div>
   <div class="form-group row">
     <label for="test_date" class="col-sm-2 col-form-label">Test Date</label>
-    <input type="date" class="col-sm-10 form-control" name="test_date" value="" id="test_date">
+    <input type="date" class="col-sm-10 form-control" name="test_date" value="<?php echo $test_date;?>" id="test_date">
   </div>
   <div class="form-group row">
     <label for="job_desc" class="col-sm-2 col-form-label">Job Description<span class="red">*</span></label>
