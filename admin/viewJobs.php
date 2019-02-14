@@ -102,7 +102,8 @@
                 <tr>
                   <th scope="row"><?php echo $curr;?></th>
                     <td><?php echo $row_recruiters["company_name"];?></td>
-                    <td><a href="<?php echo $job_url.'?id='.$row["job_id"]; ?>"><?php echo $row["job_position"]; ?> </a></td>
+                    <td><a href="<?php echo './company.php?id=' . $id;?>" target="_blank"><?php echo $row_recruiters["company_name"]; ?></a></td>
+                    <td><a href="<?php echo $job_url.'?id='.$row["job_id"]; ?>"><?php echo $row["job_position"]; ?></a></td>
                     <td><?php echo $row["course"];?></td>
                     <td> <?php echo $row["branch"]; ?> </td>
                     <td><?php echo $row["min_cpi"]; ?>  </td>
@@ -153,7 +154,7 @@
               $row_recruiters = mysqli_fetch_array($data_recruiters);
               if($row_recruiters["company_status"] == "accepted"){
                 echo '<tr><th scope="row">' . $curr . '</th>' .
-                        '<td>' . $row_recruiters["company_name"] . '</td>' .
+                        '<td><a href="./company.php?id=' . $id . '" target="_blank">' . $row_recruiters["company_name"] . '</a></td>' .
                         '<td>' . $row["job_position"] . '</td>' .
                         '<td>' . $row["course"] . '</td>' .
                         '<td>' . $row["branch"] . '</td>' .
@@ -207,7 +208,7 @@
               $row_recruiters = mysqli_fetch_array($data_recruiters);
               if($row_recruiters["company_status"] == "accepted"){
                 echo '<tr><th scope="row">' . $curr . '</th>' .
-                        '<td>' . $row_recruiters["company_name"] . '</td>' .
+                        '<td><a href="./company.php?id=' . $id . '" target="_blank">' . $row_recruiters["company_name"] . '</a></td>' .
                         '<td>' . $row["job_position"] . '</td>' .
                         '<td>' . $row["course"] . '</td>' .
                         '<td>' . $row["branch"] . '</td>' .
