@@ -40,7 +40,7 @@ if($num!=0){
           <h5 class="card-title" ><?php echo $job_position; ?></h5>
           <h6 class="card-subtitle mb-2 text-muted">Created on <?php echo $created_on;?></h6>
         </div>
-        <button class="btn btn-primary" style="float:right;margin-top:10px;">View Details</button>
+        <a class="btn btn-primary" style="float:right;margin-top:10px;" href="/TPC-management-app/recruiter/editJob.php?job_id=<?php echo $job_id?>">View Details</a>
       </div>
       <div class="card-body table-responsive">
         <table class="table table-borderless">

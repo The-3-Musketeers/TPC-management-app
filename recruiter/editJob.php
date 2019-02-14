@@ -3,7 +3,7 @@
   require_once('../templates/startSession.php');
   require_once('../connectVars.php');
 
-  $page_title = 'Create Job';
+  $page_title = 'View Position';
   require_once('../templates/header.php');
   require_once('../templates/navbar.php');
 
@@ -13,9 +13,26 @@
 
   //Connect to the database
   $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-  
-  // Insert New Position
-  if(isset($_POST['submit'])){
+
+  //Select Job Info from  Position Table 
+  $job_id=$_GET['job_id'];
+  $query="SELECT * FROM positions WHERE job_id=$job_id";
+  $select_job_query=mysqli_query($dbc,$query);
+  $row=mysqli_fetch_assoc($select_job_query);
+  $job_position=$row['job_position'];
+  $course=$row['course'];
+  $branch=$row['branch'];
+  $min_cpi=$row['min_cpi'];
+  $no_of_opening=$row['no_of_opening'];
+  $apply_by=$row['apply_by'];
+  $stipend=$row['stipend'];
+  $ctc=$row['ctc'];
+  $test_date=$row['test_date'];
+  $job_desc=$row['job_desc'];
+
+  // Update Position
+  if(isset($_POST['update'])){
+    $job_id=$_GET['job_id'];
     $job_position=mysqli_real_escape_string($dbc,trim($_POST['job_position']));
     $multiple_course = implode(",",$_POST["course"]);
     $course=mysqli_real_escape_string($dbc,trim($multiple_course));
@@ -31,30 +48,34 @@
     $company_id=$_SESSION['company_id'];
 
     if($course!='' && $branch!=''){
-      $query1 = "INSERT INTO positions (job_position, course, branch, min_cpi, job_desc, company_id,created_on ";
-      $query2 = "('$job_position', '$course', '$branch', $min_cpi, '$job_desc', '$company_id', NOW() ";
+      $query1 = "UPDATE positions SET job_position='$job_position',course='$course',branch='$branch',min_cpi=$min_cpi,job_desc='$job_desc'";
       // Append to insert query is the fields are not empty
-      if(!empty($test_date)){
-        $query1 = $query1.", test_date";
-        $query2 = $query2.", '$test_date'";
+      if($test_date!=null){
+        $query1 = $query1.",test_date='$test_date'";
+      }else{
+        $query1 = $query1.",test_date=NULL";
       }
-      if(!empty($apply_by)){
-        $query1 = $query1.", apply_by";
-        $query2 = $query2.", '$apply_by'";
+      if($apply_by!=null){
+        $query1 = $query1.",apply_by='$apply_by'";
+      }else{
+        $query1 = $query1.",apply_by=NULL";
       }
-      if(!empty($no_of_opening)){
-        $query1 = $query1.", no_of_opening";
-        $query2 = $query2.", $no_of_opening";
+      if($no_of_opening!=null){
+        $query1 = $query1.",no_of_opening=$no_of_opening";
+      }else{
+        $query1 = $query1.",no_of_opening=NULL";
       }
-      if(!empty($stipend)){
-        $query1 = $query1.", stipend";
-        $query2 = $query2.", $stipend";
+      if($stipend!=null){
+        $query1 = $query1.",stipend=$stipend";
+      }else{
+        $query1 = $query1.",stipend=NULL";
       }
-      if(!empty($ctc)){
-        $query1 = $query1.", ctc";
-        $query2 = $query2.", $ctc";
+      if($ctc!=null){
+        $query1 = $query1.",ctc=$ctc";
+      }else{
+        $query1 = $query1.",ctc=NULL";
       }
-      $query=$query1.") VALUES ".$query2.")";
+      $query=$query1." WHERE job_id={$job_id}";
       $today=date('Y-m-d');
       if(!empty($apply_by) && $today > $apply_by){
         // Alert Error if apply by is less than today
@@ -75,7 +96,7 @@
       }
       // Alert Success : Profile Updated
       echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
-                'Job Position Created' .
+                'Job Position Updated' .
                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
                 '<span aria-hidden="true">&times;</span></button></div></div>';
       }
@@ -93,10 +114,10 @@
 ?>
 
 <div class="container" style="max-width: 60%; padding: 20px;">
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF'] . '?job_id=' . $job_id ?>">
   <div class="form-group row">
     <label for="job_position" class="col-sm-2 col-form-label">Job Position<span class="red">*</span></label>
-    <input type="text" class="col-sm-10 form-control" id="job_position" name="job_position" value="" required>
+    <input type="text" class="col-sm-10 form-control" id="job_position" name="job_position" value="<?php echo $job_position; ?>" required>
   </div>
   <div class="form-group row">
   <label class="col-sm-2 col-form-label">Course<span class="red">*</span></label>
@@ -120,11 +141,11 @@
   </div>
   <div class="form-group row">
     <label for="min_cpi" class="col-sm-2 col-form-label">Minimum CPI<span class="red">*</span></label>
-    <input type="text" class="col-sm-10 form-control" name="min_cpi" value="" required>
+    <input type="text" class="col-sm-10 form-control" name="min_cpi" value="<?php echo $min_cpi; ?>" required>
   </div>
   <div class="form-group row">
     <label for="no_of_opening" class="col-sm-2 col-form-label">No. of Openings</label>
-    <input type="text" class="col-sm-10 form-control" id="no_of_opening" name="no_of_opening" value="">
+    <input type="text" class="col-sm-10 form-control" id="no_of_opening" name="no_of_opening" value="<?php echo $no_of_opening; ?>">
   </div>
   <div class="form-group row">
     <label for="apply_by" class="col-sm-2 col-form-label">Apply By</label>
@@ -132,11 +153,11 @@
   </div>
   <div class="form-group row">
     <label for="stipend" class="col-sm-2 col-form-label">Stipend</label>
-    <input type="text" class="col-sm-10 form-control" id="stipend" name="stipend" value="">
+    <input type="text" class="col-sm-10 form-control" id="stipend" name="stipend" value="<?php echo $stipend; ?>">
   </div>
   <div class="form-group row">
     <label for="ctc" class="col-sm-2 col-form-label">CTC</label>
-    <input type="text" class="col-sm-10 form-control" id="ctc" name="ctc" value="">
+    <input type="text" class="col-sm-10 form-control" id="ctc" name="ctc" value="<?php echo $ctc; ?>">
   </div>
   <div class="form-group row">
     <label for="test_date" class="col-sm-2 col-form-label">Test Date</label>
@@ -144,11 +165,11 @@
   </div>
   <div class="form-group row">
     <label for="job_desc" class="col-sm-2 col-form-label">Job Description<span class="red">*</span></label>
-    <textarea class="col-sm-10 form-control" id="job_desc" rows="3" name="job_desc" value="" required></textarea>
+    <textarea class="col-sm-10 form-control" id="job_desc" rows="3" name="job_desc" required><?php echo $job_desc; ?></textarea>
   </div>
   <div class="form-group row">
     <div class="col-sm-2">
-      <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" name="update" class="btn btn-primary">Update</button>
     </div>
   </div>
 </form>
@@ -158,4 +179,3 @@
   // Insert the footer
   require_once('../templates/footer.php');
 ?>
-
