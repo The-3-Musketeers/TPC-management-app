@@ -98,7 +98,7 @@
               $row_recruiters = mysqli_fetch_array($data_recruiters);
               if($row_recruiters["company_status"] == "accepted"){
                 echo '<tr><th scope="row">' . $curr . '</th>' .
-                        '<td>' . $row_recruiters["company_name"] . '</td>' .
+                        '<td><a href="./company.php?id=' . $id . '" target="_blank">' . $row_recruiters["company_name"] . '</a></td>' .
                         '<td>' . $row["job_position"] . '</td>' .
                         '<td>' . $row["course"] . '</td>' .
                         '<td>' . $row["branch"] . '</td>' .
@@ -150,7 +150,7 @@
               $row_recruiters = mysqli_fetch_array($data_recruiters);
               if($row_recruiters["company_status"] == "accepted"){
                 echo '<tr><th scope="row">' . $curr . '</th>' .
-                        '<td>' . $row_recruiters["company_name"] . '</td>' .
+                        '<td><a href="./company.php?id=' . $id . '" target="_blank">' . $row_recruiters["company_name"] . '</a></td>' .
                         '<td>' . $row["job_position"] . '</td>' .
                         '<td>' . $row["course"] . '</td>' .
                         '<td>' . $row["branch"] . '</td>' .
@@ -204,7 +204,7 @@
               $row_recruiters = mysqli_fetch_array($data_recruiters);
               if($row_recruiters["company_status"] == "accepted"){
                 echo '<tr><th scope="row">' . $curr . '</th>' .
-                        '<td>' . $row_recruiters["company_name"] . '</td>' .
+                        '<td><a href="./company.php?id=' . $id . '" target="_blank">' . $row_recruiters["company_name"] . '</a></td>' .
                         '<td>' . $row["job_position"] . '</td>' .
                         '<td>' . $row["course"] . '</td>' .
                         '<td>' . $row["branch"] . '</td>' .

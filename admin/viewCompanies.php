@@ -88,7 +88,7 @@
             $curr = 1;
             while($row = mysqli_fetch_array($data)){
               echo '<tr><th scope="row">' . $curr . '</th>' .
-                        '<td>' . $row["company_name"] . '</td>' .
+                        '<td><a href="./company.php?id=' . $row["company_id"] . '" target="_blank">' . $row["company_name"] . '</a></td>' .
                         '<td>' . $row["company_category"] . '</td>' .
                         '<td>' . $row["hr_name"] . '</td>' .
                         '<td>' . $row["hr_email"] . '</td>' .
@@ -129,7 +129,7 @@
             $curr = 1;
             while($row = mysqli_fetch_array($data)){
               echo '<tr><th scope="row">' . $curr . '</th>' .
-                        '<td>' . $row["company_name"] . '</td>' .
+                        '<td><a href="./company.php?id=' . $row["company_id"] . '" target="_blank">' . $row["company_name"] . '</a></td>' .
                         '<td>' . $row["company_category"] . '</td>' .
                         '<td>' . $row["hr_name"] . '</td>' .
                         '<td>' . $row["hr_email"] . '</td>' .
@@ -171,7 +171,7 @@
             $curr = 1;
             while($row = mysqli_fetch_array($data)){
               echo '<tr><th scope="row">' . $curr . '</th>' .
-                        '<td>' . $row["company_name"] . '</td>' .
+                        '<td><a href="./company.php?id=' . $row["company_id"] . '" target="_blank">' . $row["company_name"] . '</a></td>' .
                         '<td>' . $row["company_category"] . '</td>' .
                         '<td>' . $row["hr_name"] . '</td>' .
                         '<td>' . $row["hr_email"] . '</td>' .
