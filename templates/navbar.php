@@ -86,7 +86,7 @@
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="/TPC-management-app/recruiter/createPosition.php">New Position</a>
-            <a class="dropdown-item" href="/TPC-management-app/recruiter/jobsCreated.php">Created Jobs</a>
+            <a class="dropdown-item" href="/TPC-management-app/recruiter/jobs.php">Created Jobs</a>
           <?php } ?>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="/TPC-management-app/logout.php">Logout</a>
