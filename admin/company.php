@@ -35,6 +35,7 @@
     $hr_email = $row["hr_email"];
     $company_desc = $row["company_desc"];
     $company_status = $row["company_status"];
+    $company_url = $row["company_url"];
     ?>
     <div class="container" style="max-width: 80%; padding: 20px;">
       <div class="card">
