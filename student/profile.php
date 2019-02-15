@@ -18,7 +18,7 @@
     require_once('../templates/navbar.php'); 
 
     //Fetching info from student_data table
-    $data_id;$current_cpi;$department;$course;$resume_url;$profile_pic_url;$resume_file;$mobile_number;
+    $data_id;$cpi;$department;$course;$resume_url;$profile_pic_url;$resume_file;$mobile_number;
     function display(){
         $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
         global $roll_number;
@@ -28,10 +28,10 @@
             die("QUERY FAILED ".mysqli_error($dbc));
         }
 
-        global $data_id,$current_cpi,$department,$course,$resume_url,$profile_pic_url;
+        global $data_id,$cpi,$department,$course,$resume_url,$profile_pic_url;
         $row=mysqli_fetch_assoc($select_from_student_data_query);
         $data_id=$row['data_id'];
-        $current_cpi=$row['current_cpi'];
+        $cpi=$row['current_cpi'];
         $department=$row['department'];
         $course=$row['course'];
         $resume_url=$row['resume_url'];
@@ -95,7 +95,7 @@ $query=$query.",mobile_number=$mobile_number ";
 }
 
 $query=$query." WHERE data_id=$data_id";
-if($department!='null' && $department!=null){
+if($department!='null' && $department!=null && $department!='Select your department'){
     $update_query=mysqli_query($dbc,$query);
     if(!$update_query){
     die("QUERY FAILED db".mysqli_error($dbc));
@@ -155,13 +155,13 @@ else{
   <div class="form-group">
     <label for="department">Department<span class="red">*</span></label>
     <select name="department" id="department">
-        <option value="<?php echo $department?>"> <?php echo $department;?></option>
+        <option value="<?php echo $department?>"><?php echo $department;?></option>
     </select>
   </div>
 
   <div class="form-group">
     <label for="cpi">CPI<span class="red">*</span></label>
-    <input type="text" class="form-control" id="" name="cpi" value="<?php echo $current_cpi; ?>" required>
+    <input type="text" class="form-control" id="" name="cpi" value="<?php echo $cpi; ?>" required>
   </div>
   <div class="form-group">
     <label for="mobile_number">Mobile No.</label>

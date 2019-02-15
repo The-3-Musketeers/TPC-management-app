@@ -153,17 +153,19 @@
               $row_recruiters = mysqli_fetch_array($data_recruiters);
               if($row_recruiters["company_status"] == "accepted"){
                 $job_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/../job.php';
-                echo '<tr><th scope="row">' . $curr . '</th>' .
-                        '<td><a href="./company.php?id=' . $id . '" target="_blank">' . $row_recruiters["company_name"] . '</a></td>' .
-                        '<td><a href="' . $job_url . '?id=' . $row["job_id"] . '" target="_blank">' . $row["job_position"] . '</a></td>' .
-                        '<td>' . $row["course"] . '</td>' .
-                        '<td>' . $row["branch"] . '</td>' .
-                        '<td>' . $row["min_cpi"] . '</td>' .
-                        '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=2" method="post">' .
-                        '<button type="show" class="btn btn-success" name="show">Show</button> ' .
-                        '<button type="hide" class="btn btn-danger" name="hide">Hide</button></form></td>' .
-                    '</tr>';
-                $curr = $curr + 1;
+            ?>
+                <tr>
+                  <th scope="row"><?php  echo $curr; ?></th>
+                  <td><a href="<?php echo './company.php?id=' . $id;?>" target="_blank"><?php echo $row_recruiters["company_name"];?></a></td>
+                  <td><a href="<?php echo $job_url . '?id=' . $row["job_id"];?>" target="_blank"><?php echo $row["job_position"];?></a></td>
+                  <td><?php echo $row["course"];?></td>
+                  <td><?php echo $row["branch"];?></td>
+                  <td><?php echo $row["min_cpi"];?></td>
+                  <td><form action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=2';?>" method="post">
+                  <button type="show" class="btn btn-success" name="show">Show</button>
+                  <button type="hide" class="btn btn-danger" name="hide">Hide</button></form></td>
+                </tr>
+                <?php $curr = $curr + 1;
               }
             }
           ?>
@@ -208,19 +210,21 @@
               $row_recruiters = mysqli_fetch_array($data_recruiters);
               if($row_recruiters["company_status"] == "accepted"){
                 $job_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/../job.php';
-                echo '<tr><th scope="row">' . $curr . '</th>' .
-                        '<td><a href="./company.php?id=' . $id . '" target="_blank">' . $row_recruiters["company_name"] . '</a></td>' .
-                        '<td><a href="' . $job_url . '?id=' . $row["job_id"] . '" target="_blank">' . $row["job_position"] . '</a></td>' .
-                        '<td>' . $row["course"] . '</td>' .
-                        '<td>' . $row["branch"] . '</td>' .
-                        '<td>' . $row["min_cpi"] . '</td>' .
-                        '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=3" method="post">' .
-                        '<button type="show" class="btn btn-success" name="show">Show</button></form></td>' .
-                      '</tr>';
-                $curr = $curr + 1;
-              }
+            ?>
+                <tr>
+                  <th scope="row"><?php echo $curr;?></th>
+                  <td><a href="<?php echo './company.php?id=' . $id;?>" target="_blank"><?php echo $row_recruiters["company_name"]; ?></a></td>
+                  <td><a href="<?php echo $job_url . '?id=' . $row["job_id"];?>" target="_blank"><?php echo $row["job_position"];?></a></td>
+                  <td><?php echo $row["course"];?></td>
+                  <td><?php echo $row["branch"];?></td>
+                  <td><?php echo $row["min_cpi"];?></td>
+                  <td><form action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=3';?>" method="post">
+                  <button type="show" class="btn btn-success" name="show">Show</button></form></td>
+                </tr>
+            <?php $curr = $curr + 1;
             }
-          ?>
+          }
+        ?>
         </tbody>
         <?php } else { ?>
           <tr>
