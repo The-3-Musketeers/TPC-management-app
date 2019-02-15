@@ -44,7 +44,7 @@
             $department="Select your department";
         }
         if($row['profile_pic']!==null && $row['profile_pic']!==''){
-            $profile_pic_url='../images/'.$row['profile_pic'];
+            $profile_pic_url='../images/students/'.$row['profile_pic'];
         }
         else{
             $profile_pic_url='../pictures/user_icon.png';
@@ -72,7 +72,7 @@ $resume_tmp_name=$_FILES['resume_file']['tmp_name'];
 
 if($profile_img_name !=='' && $profile_img_name !==null){
 $profile_img_name=time()."_".$profile_img_name;
-move_uploaded_file($profile_img_tmp_name,"../images/$profile_img_name");
+move_uploaded_file($profile_img_tmp_name,"../images/students/$profile_img_name");
 }
 
 if($resume_name !=='' && $resume_tmp_name !==null){

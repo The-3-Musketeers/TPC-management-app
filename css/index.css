@@ -2,3 +2,6 @@
 .red {
   color: red;
 }
+.container {
+  max-width: 80%;
+}
