@@ -43,6 +43,7 @@ CREATE TABLE `recruiters` (
   `company_category` VARCHAR(2),
   `company_url` VARCHAR(256),
   `company_status` VARCHAR(10),
+  `company_img` varchar(256) DEFAULT NULL,
   `hr_name` VARCHAR(32),
   `hr_email` VARCHAR(64),
   `access_token` VARCHAR(64),
