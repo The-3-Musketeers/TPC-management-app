@@ -10,5 +10,6 @@
   <script src="/TPC-management-app/scripts/editJob.js"></script>
   <script src="/TPC-management-app/scripts/index.js"></script>
   <script src="/TPC-management-app/scripts/stats/job.js"></script>
+  <script src="/TPC-management-app/scripts/stats/dashboard.js"></script>
 </body>
 </html>
