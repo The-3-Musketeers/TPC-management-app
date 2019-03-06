@@ -10,7 +10,31 @@
     $page_title = 'Dashboard';
     require_once('../templates/header.php');
     require_once('../templates/navbar.php');
-    echo '<p>You are logged in as ' . $_SESSION['username'] . '</p>';
     ?>
-
+    <div class="container" style="max-width: 80%; padding: 20px;">
+      <div id="stats" class="card">
+        <div class="card-header">
+          <div style="display:inline-block; margin-bottom: -10px;">
+            <h5 class="card-title">Student Statistics</h5>
+          </div>
+        </div>
+        <div class="card-body table-responsive">
+          <div id="bar-chart-container">
+            <canvas id="students"></canvas>
+          </div>
+        </div>
+      </div>
+      <div id="stats" class="card">
+        <div class="card-header">
+          <div style="display:inline-block; margin-bottom: -10px;">
+            <h5 class="card-title">Company Statistics</h5>
+          </div>
+        </div>
+        <div class="card-body table-responsive">
+          <div class="pie-chart-container">
+            <canvas id="company-category"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
 <?php require_once('../templates/footer.php');?>
