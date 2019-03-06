@@ -213,6 +213,15 @@
 ?>
               </tbody>
             </table>
+            <div class="chart-container">
+              <div class="pie-chart-container">
+                <canvas id="btech"></canvas>
+              </div>
+
+              <div class="pie-chart-container">
+                <canvas id="mtech"></canvas>
+              </div>
+            </div>
           </div>
 <?php
           } else{
