@@ -168,19 +168,43 @@
           if($applicant_num!=0){
   ?>
             <br/>
-            <h5>List of applicants</h5>
-            <table class="table">
-              <thead class="thead-light">
-                <tr>
-                  <th scope="col">S.No.</th>
-                  <th scope="col">Roll Number</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Applied on</th>
-                  <th scope="col">Status</th>
-                </tr>
-              </thead>
-              <tbody>
+            <div class="card">
+              <div class="card-header">
+                <div style="display:inline-block">
+                  <h5 class="card-title" >Application Distribution</h5>
+                </div>
+              </div>
+              <div class="card-body table-responsive">
+                <div class="chart-container" style="height: auto; margin: auto;">
+                  <div class="pie-chart-container">
+                    <canvas id="btech"></canvas>
+                  </div>
+                  <div class="pie-chart-container">
+                    <canvas id="mtech"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br />
+            <div class="card">
+              <div class="card-header">
+                <div style="display:inline-block">
+                  <h5 class="card-title" >List of applicants</h5>
+                </div>
+              </div>
+              <div class="card-body table-responsive">
+                <table class="table">
+                  <thead class="thead-light">
+                    <tr>
+                      <th scope="col">S.No.</th>
+                      <th scope="col">Roll Number</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Applied on</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
 
 <?php
             while($applicant_row=mysqli_fetch_assoc($applicant_data)){
@@ -197,29 +221,30 @@
                 $app_status=$applicant_row['application_status'];
 
   ?>
-                <tr>
-                <td><?php echo $sno; ?></td>
-                <td><?php echo $app_roll_no; ?></td>
-                <td><a href="./admin/student.php?roll=<?php echo $app_roll_no; ?>" target="_blank"><?php echo $student_name; ?></a></td>
-                <td><?php echo $student_email; ?></td>
-                <td><?php echo $applied_on; ?></td>
-                <td><?php echo $app_status; ?></td>
-                </tr>
+                  <tr>
+                  <td><?php echo $sno; ?></td>
+                  <td><?php echo $app_roll_no; ?></td>
+                  <td><a href="./admin/student.php?roll=<?php echo $app_roll_no; ?>" target="_blank"><?php echo $student_name; ?></a></td>
+                  <td><?php echo $student_email; ?></td>
+                  <td><?php echo $applied_on; ?></td>
+                  <td>
+                    <?php if ($app_status == "accepted"){ ?>
+                    <span class="badge badge-success">Accepted</span>
+                    <?php } elseif ($app_status == "pending") { ?>
+                    <span class="badge badge-warning">Pending</span>
+                    <?php } elseif ($app_status == "rejected") { ?>
+                    <span class="badge badge-danger">Rejected</span>
+                    <?php } ?>
+                  </td>
+                  </tr>
                 <?php $sno+=1; ?>
 
 <?php
               }
             }
 ?>
-              </tbody>
-            </table>
-            <div class="chart-container">
-              <div class="pie-chart-container">
-                <canvas id="btech"></canvas>
-              </div>
-
-              <div class="pie-chart-container">
-                <canvas id="mtech"></canvas>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

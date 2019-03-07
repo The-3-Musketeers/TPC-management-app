@@ -64,14 +64,74 @@
             <?php } elseif ($company_status == "rejected") { ?>
             <span class="badge badge-danger">Rejected</span>
             <?php } ?>
-            </div>
           </div>
         </div>
       </div>
+      <br/>
+      <?php
+        $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+        $query = "SELECT job_id, job_position, job_status, course, branch, min_cpi  FROM positions WHERE company_id=$company_id";
+        $data = mysqli_query($dbc, $query);
+        if(mysqli_num_rows($data) != 0){
+      ?>
+      <div class="card">
+        <div class="card-header">
+          <div style="display:inline-block">
+            <h4 class="card-title" >Jobs Posted</h4>
+          </div>
+        </div>
+        <div class="card-body table-responsive">
+        <table class="table">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">S.No.</th>
+              <th scope="col">Job Name</th>
+              <th scope="col">Course</th>
+              <th scope="col">Branch</th>
+              <th scope="col">Min. CPI</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+          <?php
+            $curr = 1;
+            while($row = mysqli_fetch_array($data)){
+              $id = $row['job_id'];
+              $job_name = $row['job_position'];
+              $job_status = $row['job_status'];
+              $course = $row['course'];
+              $branch = $row['branch'];
+              $min_cpi = $row['min_cpi'];
+              $job_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/../job.php';
+            ?>
+                <tr>
+                  <th scope="row"><?php  echo $curr; ?></th>
+                  <td><a href="<?php echo $job_url . '?id=' . $row["job_id"];?>" target="_blank"><?php echo $row["job_position"];?></a></td>
+                  <td><?php echo $row["course"];?></td>
+                  <td><?php echo $row["branch"];?></td>
+                  <td><?php echo $row["min_cpi"];?></td>
+                  <td>
+                    <?php if ($job_status == "shown"){ ?>
+                    <span class="badge badge-success">Shown</span>
+                    <?php } elseif ($job_status == "pending") { ?>
+                    <span class="badge badge-warning">Pending</span>
+                    <?php } elseif ($job_status == "hidden") { ?>
+                    <span class="badge badge-danger">Hidden</span>
+                    <?php } ?>
+                  </td>
+                </tr>
+                <?php $curr = $curr + 1;
+            }
+          ?>
+          </tbody>
+        </table>
+      </div>
+      <?php } else { ?>
+        <br/>
+        <h5>This company has not posted any jobs yet!</h5>
+      <?php } ?>
     </div>
 
-<?php  }
-
-?>
+<?php  } ?>
 
 <?php require_once('../templates/footer.php');?>
