@@ -7,12 +7,15 @@
   require_once('../templates/auth.php');
   checkUserRole('admin', $auth_error);
 
+  if(!isset($_GET['search']) && !isset($_GET['id']))
+  {
+    $_SESSION["keyword"]=null;
+  }
+
   $page_title = 'Jobs';
   require_once('../templates/header.php');
   require_once('../templates/navbar.php');
-
   $activeTab = "1";
-
   if(isset($_POST['show'])){
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     if (!$dbc) {
@@ -54,14 +57,17 @@
     }
     $activeTab = $_GET['tab'];
   }
+  if(!isset($_POST['search'])){
+    $keyword='';
+  }else {
+    $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+    $_SESSION["keyword"]=mysqli_real_escape_string($dbc, trim($_POST['keyword']));
+  }
 ?>
-
-
-
 <div class="container">
-  <form action="" method="post">
+  <form action="<?php echo $_SERVER['PHP_SELF'] . '?search=""';?>" method="post">
     <div class="input-group mb-3">
-      <input type="text" class="form-control" name="keyword" placeholder="Type Keyword" value=<?php echo $keyword; ?>>
+      <input type="text" class="form-control" name="keyword" placeholder="Type Keyword" value="<?php if(isset($_SESSION["keyword"])) echo $_SESSION["keyword"] ?>">
       <div class="input-group-append">
         <button name="search" class="btn btn-primary" type="submit">Search</button>
       </div>
@@ -69,8 +75,9 @@
   </form>
     <?php 
     // Search Bar 
-    if(isset($_POST['search'])){
-      echo '<table class="table">
+    if(isset($_POST['search']) || isset($_SESSION['keyword'])){ 
+      ?>
+      <table class="table">
       <thead class="thead-light">
         <tr>
           <th scope="col">S.No.</th>
@@ -78,12 +85,15 @@
           <th scope="col">Job Name</th>
           <th scope="col">Course</th>
           <th scope="col">Branch</th>
-          <th scope="col">Status</th>
+          <th scope="col">Action</th>
         </tr>
       </thead>
-      <tbody>';
+      <tbody>
+      <?php
       $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-      $keyword=mysqli_real_escape_string($dbc, trim($_POST['keyword']));
+      // $keyword=mysqli_real_escape_string($dbc, trim($_POST['keyword']));
+      $keyword=$_SESSION['keyword'];
+      $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
       $keywords=explode(" ",$keyword);
       $branches=["cs", "ee", "me", "ce", "cb"];
       $branch=[];// storing the branches in the keyword
@@ -129,10 +139,10 @@
         $search_query=mysqli_query($dbc,$query);
         add_row($search_query,$branch);
       }
-    }
-    echo '</tbody>
-    </table>';
-  ?>
+    ?>
+     </tbody>
+    </table>
+  <?php }?>
   <?php  
   function add_row($search_query,$B){
     $i=1;
@@ -154,14 +164,18 @@
             <td><a href="<?php echo $job_url.'?id='.$row["job_id"]; ?>" target="_blank"><?php echo $row["job_position"]; ?></a></td>
             <td><?php echo $course;?></td>
             <td> <?php echo $branch; ?> </td>
-            <td><?php 
-              if($status=='pending')
-                echo '<span class="badge badge-warning">'.$status.'</span>';
-              else if($status=='shown') 
-                echo '<span class="badge badge-success">'.$status.'</span>';
-              else 
-                echo '<span class="badge badge-danger">'.$status.'</span>';
-            ?></td>
+            <?php 
+            if($status=='shown')
+              echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=1 method="post">'.
+              '<button type="hide" class="btn btn-danger" name="hide">Hide</button></form></td>';
+            else if($status=='pending')
+            echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=2 method="post">'.
+            '<button type="show" class="btn btn-success" name="show">Show</button>'.
+            '<button type="hide" class="btn btn-danger" name="hide">Hide</button></form></td>';
+            else 
+            echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=3 method="post">'.
+            '<button type="show" class="btn btn-success" name="show">Show</button></form></td>';
+            ?>
           </tr>
         <?php
           $i++;
@@ -173,14 +187,18 @@
           <td><a href="<?php echo $job_url.'?id='.$row["job_id"]; ?>" target="_blank"><?php echo $row["job_position"]; ?></a></td>
           <td><?php echo $course;?></td>
           <td> <?php echo $branch; ?> </td>
-          <td><?php 
-            if($status=='pending')
-              echo '<span class="badge badge-warning">'.$status.'</span>';
-            else if($status=='shown') 
-              echo '<span class="badge badge-success">'.$status.'</span>';
-            else 
-              echo '<span class="badge badge-danger">'.$status.'</span>';
-          ?></td>
+          <?php 
+          if($status=='shown')
+            echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=1 method="post">'.
+            '<button type="hide" class="btn btn-danger" name="hide">Hide</button></form></td>';
+          else if($status=='pending')
+           echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=2 method="post">'.
+           '<button type="show" class="btn btn-success" name="show">Show</button>'.
+           '<button type="hide" class="btn btn-danger" name="hide">Hide</button></form></td>';
+          else 
+           echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=3 method="post">'.
+           '<button type="show" class="btn btn-success" name="show">Show</button></form></td>';
+          ?>
         </tr>
       <?php
         $i++;
@@ -188,7 +206,7 @@
     }
   }
   ?>
-  <?php if(!isset($_POST['search'])) { ?>
+  <?php if(!isset($_POST['search']) && !isset($_SESSION['keyword'])) { ?>
   <ul class="nav nav-tabs" id="companiesTab" role="tablist">
     <li class="nav-item">
       <a class="nav-link <?php if($activeTab==1){echo 'active';} ?>" id="home-tab" data-toggle="tab" href="#shown" role="tab" aria-selected="true">Shown</a>
