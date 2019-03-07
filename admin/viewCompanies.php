@@ -23,6 +23,12 @@
     $GLOBALS['no_rejected'] = mysqli_num_rows($data_rejected);
   }
   countEntries();
+
+  if(!isset($_GET['search']) && !isset($_GET['id']))
+  {
+    $_SESSION["keyword"]=null;
+  }
+
   $activeTab = "1";
 
   if(isset($_POST['approve'])){
@@ -65,9 +71,139 @@
     }
     $activeTab = $_GET['tab'];
   }
+  if(!isset($_POST['search'])){
+    $keyword='';
+  }else {
+    $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+    $_SESSION["keyword"]=mysqli_real_escape_string($dbc, trim($_POST['keyword']));
+  }
 ?>
 
 <div class="container">
+  <form action="<?php echo $_SERVER['PHP_SELF'] . '?search=""';?>" method="post">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" name="keyword" placeholder="Type Keyword" value="<?php if(isset($_SESSION["keyword"])) echo $_SESSION["keyword"] ?>">
+      <div class="input-group-append">
+        <button name="search" class="btn btn-primary" type="submit">Search</button>
+      </div>
+    </div>
+  </form>
+  <?php 
+    // Search Bar 
+    if(isset($_POST['search']) || isset($_SESSION['keyword'])){ 
+      ?>
+      <table class="table">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">S.No.</th>
+          <th scope="col">Company Name</th>
+          <th scope="col">Category</th>
+          <th scope="col">HR Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+      <?php
+        $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+        $keyword=$_SESSION['keyword'];
+        $keywords=explode(" ",$keyword);
+        $categories=["A1", "B1", "B2"];
+        $category=[];// storing the category in the keyword
+        $rem_words="";
+        foreach($keywords as $key){
+          if(in_array(strtoupper($key),$categories)){
+            array_push($category,strtoupper($key));
+          }
+          else {
+            $rem_words.=$key." ";
+          }
+        }
+        if($rem_words!=""){
+          $query="SELECT * FROM recruiters WHERE MATCH (company_name) AGAINST ('$rem_words')";
+          $search_query=mysqli_query($dbc,$query);
+          if(!$search_query){
+            die("error ".mysqli_error($dbc));
+          }
+          $num=mysqli_num_rows($search_query);
+          if($num!=0){
+            add_row($search_query,$category);
+          }
+          else{
+            echo "No result Found";
+          }
+        }
+        else{
+          $query="SELECT * FROM recruiters";
+          $search_query=mysqli_query($dbc,$query);
+          add_row($search_query,$category);
+        }
+      ?>
+     </tbody>
+    </table>
+  <?php }?>
+  <?php  
+    function add_row($search_query,$category){
+      $i=1;
+      while($row=mysqli_fetch_assoc($search_query)){
+        $id=$row['company_id'];
+        $company_name=$row['company_name'];
+        $company_category=$row['company_category'];
+        $hr_name=$row['hr_name'];
+        $hr_email=$row['hr_email'];
+        $status=$row['company_status'];
+        if(!empty($category)){
+          if(in_array($company_category,$category)){
+            ?>
+          <tr>
+            <th scope="row"><?php echo $i;?></th>
+            <td><a href="<?php echo './company.php?id=' . $id;?>" target="_blank"><?php echo $company_name; ?></a></td>
+            <td><?php echo $company_category;?></td>
+            <td><?php echo $hr_name;?></td>
+            <td> <?php echo $hr_email; ?> </td>
+            <?php 
+            if($status=='accepted')
+              echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=1 method="post">'.
+              '<button type="reject" class="btn btn-danger" name="reject">Reject</button></form></td>';
+            else if($status=='pending')
+            echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=2 method="post">'.
+            '<button type="approve" class="btn btn-success" name="approve">Approve</button>'.
+            '<button type="reject" class="btn btn-danger" name="reject">Reject</button></form></td>';
+            else 
+            echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=3 method="post">'.
+            '<button type="approve" class="btn btn-success" name="approve">Approve</button></form></td>';
+            ?>
+          </tr>
+          <?php
+          $i++;
+        }
+      }else { ?>
+      <tr>
+            <th scope="row"><?php echo $i;?></th>
+            <td><a href="<?php echo './company.php?id=' . $id;?>" target="_blank"><?php echo $company_name; ?></a></td>
+            <td><?php echo $company_category;?></td>
+            <td><?php echo $hr_name;?></td>
+            <td> <?php echo $hr_email; ?> </td>
+            <?php 
+            if($status=='accepted')
+              echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=1 method="post">'.
+              '<button type="reject" class="btn btn-danger" name="reject">Reject</button></form></td>';
+            else if($status=='pending')
+            echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=2 method="post">'.
+            '<button type="approve" class="btn btn-success" name="approve">Approve</button>'.
+            '<button type="reject" class="btn btn-danger" name="reject">Reject</button></form></td>';
+            else 
+            echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=3 method="post">'.
+            '<button type="approve" class="btn btn-success" name="approve">Approve</button></form></td>';
+            ?>
+          </tr>
+          <?php
+        $i++;
+      }
+    }
+  }
+  ?>
+  <?php if(!isset($_POST['search']) && !isset($_SESSION['keyword'])) { ?>
   <ul class="nav nav-tabs" id="companiesTab" role="tablist">
     <li class="nav-item">
       <a class="nav-link <?php if($activeTab==1){echo 'active';} ?>" id="accepted-tab" data-toggle="tab" href="#accepted" role="tab" aria-selected="true">
@@ -220,6 +356,7 @@
       </table>
     </div>
   </div>
+  <?php } ?>
 </div>
 
 <?php require_once('../templates/footer.php');?>

@@ -108,9 +108,7 @@
       <tbody>
       <?php
       $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-      // $keyword=mysqli_real_escape_string($dbc, trim($_POST['keyword']));
       $keyword=$_SESSION['keyword'];
-      $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
       $keywords=explode(" ",$keyword);
       $branches=["cs", "ee", "me", "ce", "cb"];
       $branch=[];// storing the branches in the keyword

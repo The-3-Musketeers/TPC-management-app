@@ -48,7 +48,8 @@ CREATE TABLE `recruiters` (
   `hr_email` VARCHAR(64),
   `access_token` VARCHAR(64),
   `password` VARCHAR(40),
-  PRIMARY KEY (`user_id`)
+  PRIMARY KEY (`user_id`),
+  FULLTEXT(`company_name`)
 );
 
 CREATE TABLE `positions` (
