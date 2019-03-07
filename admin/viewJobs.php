@@ -15,7 +15,24 @@
   $page_title = 'Jobs';
   require_once('../templates/header.php');
   require_once('../templates/navbar.php');
+
+  $no_shown; $no_pending; $no_hidden;
+  function countEntries(){
+    $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+    $query_shown = "SELECT * FROM positions INNER JOIN recruiters ON positions.company_id=recruiters.company_id WHERE positions.job_status='shown' AND recruiters.company_status='accepted'";
+    $data_shown = mysqli_query($dbc, $query_shown);
+    $query_pending = "SELECT * FROM positions INNER JOIN recruiters ON positions.company_id=recruiters.company_id WHERE positions.job_status='pending' AND recruiters.company_status='accepted'";
+    $data_pending = mysqli_query($dbc, $query_pending);
+    $query_hidden = "SELECT * FROM positions INNER JOIN recruiters ON positions.company_id=recruiters.company_id WHERE positions.job_status='hidden' AND recruiters.company_status='accepted'";
+    $data_hidden = mysqli_query($dbc, $query_hidden);
+
+    $GLOBALS['no_shown'] = mysqli_num_rows($data_shown);
+    $GLOBALS['no_pending'] = mysqli_num_rows($data_pending);
+    $GLOBALS['no_hidden'] = mysqli_num_rows($data_hidden);
+  }
+  countEntries();
   $activeTab = "1";
+  
   if(isset($_POST['show'])){
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     if (!$dbc) {
@@ -208,14 +225,29 @@
   ?>
   <?php if(!isset($_POST['search']) && !isset($_SESSION['keyword'])) { ?>
   <ul class="nav nav-tabs" id="companiesTab" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link <?php if($activeTab==1){echo 'active';} ?>" id="home-tab" data-toggle="tab" href="#shown" role="tab" aria-selected="true">Shown</a>
+  <li class="nav-item">
+      <a class="nav-link <?php if($activeTab==1){echo 'active';} ?>" id="shown-tab" data-toggle="tab" href="#shown" role="tab" aria-selected="true">
+      Shown <span class="badge badge-secondary">
+        <?php if(isset($_POST['show']) || isset($_POST['hide'])) { countEntries(); }
+        echo $no_shown;
+        ?></span>
+      </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link <?php if($activeTab==2){echo 'active';} ?>" id="profile-tab" data-toggle="tab" href="#pending" role="tab" aria-selected="false">Pending</a>
+      <a class="nav-link <?php if($activeTab==2){echo 'active';} ?>" id="pending-tab" data-toggle="tab" href="#pending" role="tab" aria-selected="false">
+      Pending <span class="badge badge-secondary">
+        <?php if(isset($_POST['show']) || isset($_POST['hide'])) { countEntries(); }
+        echo $no_pending;
+        ?></span>
+      </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link <?php if($activeTab==3){echo 'active';} ?>" id="contact-tab" data-toggle="tab" href="#hidden" role="tab" aria-selected="false">Hidden</a>
+      <a class="nav-link <?php if($activeTab==3){echo 'active';} ?>" id="hidden-tab" data-toggle="tab" href="#hidden" role="tab" aria-selected="false">
+      Hidden <span class="badge badge-secondary">
+        <?php if(isset($_POST['show']) || isset($_POST['hide'])) { countEntries(); }
+        echo $no_hidden;
+        ?></span>
+      </a>
     </li>
   </ul>
   <div class="tab-content" id="companiesTabContent">
@@ -264,7 +296,11 @@
             }
           ?>
         </tbody>
-        <?php } else { ?>
+        <?php
+            if($curr == 1){
+              echo "<tr><td>No data</td></tr>";
+            }
+          } else { ?>
           <tr>
             <td>No data</td>
           </tr>
@@ -376,7 +412,11 @@
           }
         ?>
         </tbody>
-        <?php } else { ?>
+        <?php
+            if($curr == 1){
+              echo "<tr><td>No data</td></tr>";
+            }
+          } else { ?>
           <tr>
             <td>No data</td>
           </tr>
