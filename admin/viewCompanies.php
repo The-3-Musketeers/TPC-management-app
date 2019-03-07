@@ -9,7 +9,22 @@
   require_once('../templates/header.php');
   require_once('../templates/navbar.php');
 
+  $no_accepted; $no_pending; $no_rejected;
+  function countEntries(){
+    $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+    $query_accepted = "SELECT * FROM recruiters WHERE company_status='accepted'";
+    $data_accepted = mysqli_query($dbc, $query_accepted);
+    $query_pending = "SELECT * FROM recruiters WHERE company_status='pending'";
+    $data_pending = mysqli_query($dbc, $query_pending);
+    $query_rejected = "SELECT * FROM recruiters WHERE company_status='rejected'";
+    $data_rejected = mysqli_query($dbc, $query_rejected);
+    $GLOBALS['no_accepted'] = mysqli_num_rows($data_accepted);
+    $GLOBALS['no_pending'] = mysqli_num_rows($data_pending);
+    $GLOBALS['no_rejected'] = mysqli_num_rows($data_rejected);
+  }
+  countEntries();
   $activeTab = "1";
+
   if(isset($_POST['approve'])){
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     if (!$dbc) {
@@ -55,13 +70,28 @@
 <div class="container">
   <ul class="nav nav-tabs" id="companiesTab" role="tablist">
     <li class="nav-item">
-      <a class="nav-link <?php if($activeTab==1){echo 'active';} ?>" id="home-tab" data-toggle="tab" href="#accepted" role="tab" aria-controls="home" aria-selected="true">Accepted</a>
+      <a class="nav-link <?php if($activeTab==1){echo 'active';} ?>" id="accepted-tab" data-toggle="tab" href="#accepted" role="tab" aria-selected="true">
+      Accepted <span class="badge badge-secondary">
+        <?php if(isset($_POST['approve']) || isset($_POST['reject'])) { countEntries(); }
+        echo $no_accepted;
+        ?></span>
+      </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link <?php if($activeTab==2){echo 'active';} ?>" id="profile-tab" data-toggle="tab" href="#pending" role="tab" aria-controls="profile" aria-selected="false">Pending</a>
+      <a class="nav-link <?php if($activeTab==2){echo 'active';} ?>" id="pending-tab" data-toggle="tab" href="#pending" role="tab" aria-selected="false">
+      Pending <span class="badge badge-secondary">
+        <?php if(isset($_POST['approve']) || isset($_POST['reject'])) { countEntries(); }
+        echo $no_pending;
+        ?></span>
+      </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link <?php if($activeTab==3){echo 'active';} ?>" id="contact-tab" data-toggle="tab" href="#rejected" role="tab" aria-controls="contact" aria-selected="false">Rejected</a>
+      <a class="nav-link <?php if($activeTab==3){echo 'active';} ?>" id="rejected-tab" data-toggle="tab" href="#rejected" role="tab" aria-selected="false">
+      Rejected <span class="badge badge-secondary">
+        <?php if(isset($_POST['approve']) || isset($_POST['reject'])) { countEntries(); }
+        echo $no_rejected;
+        ?></span>
+      </a>
     </li>
   </ul>
   <div class="tab-content" id="companiesTabContent">

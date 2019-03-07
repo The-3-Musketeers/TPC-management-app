@@ -12,7 +12,11 @@
 <div class="container">
 
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+  <?php if(isset($_SESSION['username']) && $_SESSION['user_role']=='admin'){ ?>
+    <a class="navbar-brand" href="/TPC-management-app/admin/dashboard.php" style="font-size: inherit;">Home</a>
+  <?php } else { ?>
   <a class="navbar-brand" href="/TPC-management-app/index.php" style="font-size: inherit;">Home</a>
+  <?php }?>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
