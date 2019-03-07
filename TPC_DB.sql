@@ -66,9 +66,15 @@ CREATE TABLE `positions` (
  `job_desc` varchar(256) DEFAULT NULL,
  `created_on` date DEFAULT NULL,
  `company_id` VARCHAR(8) NOT NULL,
+ `company_name` VARCHAR(256) NOT NULL,
  PRIMARY KEY (`job_id`)
 );
 
 /* Add admin to students table */
 
 INSERT INTO students (username, user_role, password, join_date) VALUES ('admin', 'admin', 'admin', NOW());
+
+/* Add FULLTEXT to job_position and company_name in positions */
+
+ALTER TABLE positions ADD FULLTEXT(job_position);
+ALTER TABLE positions ADD FULLTEXT(company_name);
