@@ -56,7 +56,139 @@
   }
 ?>
 
+
+
 <div class="container">
+  <form action="" method="post">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" name="keyword" placeholder="Type Keyword" value=<?php echo $keyword; ?>>
+      <div class="input-group-append">
+        <button name="search" class="btn btn-primary" type="submit">Search</button>
+      </div>
+    </div>
+  </form>
+    <?php 
+    // Search Bar 
+    if(isset($_POST['search'])){
+      echo '<table class="table">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">S.No.</th>
+          <th scope="col">Company Name</th>
+          <th scope="col">Job Name</th>
+          <th scope="col">Course</th>
+          <th scope="col">Branch</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>';
+      $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+      $keyword=mysqli_real_escape_string($dbc, trim($_POST['keyword']));
+      $keywords=explode(" ",$keyword);
+      $branches=["cs", "ee", "me", "ce", "cb"];
+      $branch=[];// storing the branches in the keyword
+      $rem_words="";
+      foreach($keywords as $key){
+        if(in_array(strtolower($key),$branches)){
+          array_push($branch,strtoupper($key));
+        }
+        else {
+          $rem_words.=$key." ";
+        }
+      }
+      if($rem_words!=""){
+        // Finding intersection of remaining words
+        $query="SELECT * FROM positions WHERE MATCH (company_name) AGAINST ('$rem_words') AND MATCH (job_position) AGAINST ('$rem_words')";
+        $search_query=mysqli_query($dbc,$query);
+        if(!$search_query){
+          die("error ".mysqli_error($dbc));
+        }
+        $num=mysqli_num_rows($search_query);
+        if($num!=0){
+          add_row($search_query,$branch);
+        }
+        else{
+          // Finding union of remaining words
+          $query="SELECT * FROM positions WHERE MATCH (company_name) AGAINST ('$rem_words') OR MATCH (job_position) AGAINST ('$rem_words')";
+          $search_query=mysqli_query($dbc,$query);
+          if(!$search_query){
+            die("error ".mysqli_error($dbc));
+          }
+          $num=mysqli_num_rows($search_query);
+          if($num!=0){
+            add_row($search_query,$branch);
+          }
+          else{
+            echo "No result Found";
+          }
+        }
+      }
+      else{
+        // Only branch is present in keyword
+        $query="SELECT * FROM positions";
+        $search_query=mysqli_query($dbc,$query);
+        add_row($search_query,$branch);
+      }
+    }
+    echo '</tbody>
+    </table>';
+  ?>
+  <?php  
+  function add_row($search_query,$B){
+    $i=1;
+    while($row=mysqli_fetch_assoc($search_query)){
+      $id=$row['company_id'];
+      $company_name=$row['company_name'];
+      $job_position=$row['job_position'];
+      $course=$row['course'];
+      $branch=$row['branch'];
+      $status=$row['job_status'];
+      $job_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/../job.php';
+      if(!empty($B)){
+        $db_branch=explode(",",$row['branch']);
+        if(!empty(array_intersect($db_branch,$B))){
+          ?>
+          <tr>
+            <th scope="row"><?php echo $i;?></th>
+            <td><a href="<?php echo './company.php?id=' . $id;?>" target="_blank"><?php echo $company_name; ?></a></td>
+            <td><a href="<?php echo $job_url.'?id='.$row["job_id"]; ?>" target="_blank"><?php echo $row["job_position"]; ?></a></td>
+            <td><?php echo $course;?></td>
+            <td> <?php echo $branch; ?> </td>
+            <td><?php 
+              if($status=='pending')
+                echo '<span class="badge badge-warning">'.$status.'</span>';
+              else if($status=='shown') 
+                echo '<span class="badge badge-success">'.$status.'</span>';
+              else 
+                echo '<span class="badge badge-danger">'.$status.'</span>';
+            ?></td>
+          </tr>
+        <?php
+          $i++;
+        }
+      }else { ?>
+        <tr>
+          <th scope="row"><?php echo $i;?></th>
+          <td><a href="<?php echo './company.php?id=' . $id;?>" target="_blank"><?php echo $company_name; ?></a></td>
+          <td><a href="<?php echo $job_url.'?id='.$row["job_id"]; ?>" target="_blank"><?php echo $row["job_position"]; ?></a></td>
+          <td><?php echo $course;?></td>
+          <td> <?php echo $branch; ?> </td>
+          <td><?php 
+            if($status=='pending')
+              echo '<span class="badge badge-warning">'.$status.'</span>';
+            else if($status=='shown') 
+              echo '<span class="badge badge-success">'.$status.'</span>';
+            else 
+              echo '<span class="badge badge-danger">'.$status.'</span>';
+          ?></td>
+        </tr>
+      <?php
+        $i++;
+      }
+    }
+  }
+  ?>
+  <?php if(!isset($_POST['search'])) { ?>
   <ul class="nav nav-tabs" id="companiesTab" role="tablist">
     <li class="nav-item">
       <a class="nav-link <?php if($activeTab==1){echo 'active';} ?>" id="home-tab" data-toggle="tab" href="#shown" role="tab" aria-selected="true">Shown</a>
@@ -234,6 +366,8 @@
       </table>
     </div>
   </div>
+        <?php } ?>
 </div>
 
 <?php require_once('../templates/footer.php');?>
+

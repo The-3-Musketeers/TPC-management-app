@@ -29,10 +29,11 @@
     $test_date=mysqli_real_escape_string($dbc,trim($_POST['test_date']));
     $job_desc=mysqli_real_escape_string($dbc,trim($_POST['job_desc']));
     $company_id=$_SESSION['company_id'];
+    $company_name=$_SESSION['company_name'];
 
     if($course!='' && $branch!=''){
-      $query1 = "INSERT INTO positions (job_position, course, branch, min_cpi, job_desc, company_id,created_on ";
-      $query2 = "('$job_position', '$course', '$branch', $min_cpi, '$job_desc', '$company_id', NOW() ";
+      $query1 = "INSERT INTO positions (job_position, course, branch, min_cpi, job_desc, company_id,created_on,company_name ";
+      $query2 = "('$job_position', '$course', '$branch', $min_cpi, '$job_desc', '$company_id', NOW(),'$company_name' ";
       // Append to insert query is the fields are not empty
       if(!empty($test_date)){
         $query1 = $query1.", test_date";
@@ -158,4 +159,5 @@
   // Insert the footer
   require_once('../templates/footer.php');
 ?>
+
 
