@@ -1,3 +1,6 @@
+appVars.php
 connectVars.php
+util/*
+!util/captcha.php
 images/
 resume/

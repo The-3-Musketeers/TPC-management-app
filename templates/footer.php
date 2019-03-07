@@ -9,6 +9,7 @@
   <script src="/TPC-management-app/scripts/createPosition.js"></script>
   <script src="/TPC-management-app/scripts/editJob.js"></script>
   <script src="/TPC-management-app/scripts/index.js"></script>
+  <script src="/TPC-management-app/scripts/signup.js"></script>
   <script src="/TPC-management-app/scripts/stats/job.js"></script>
   <script src="/TPC-management-app/scripts/stats/dashboard.js"></script>
 </body>

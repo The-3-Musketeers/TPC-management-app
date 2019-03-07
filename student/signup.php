@@ -1,4 +1,7 @@
 <?php
+    //start session
+    require_once('../templates/startSession.php');
+
     // Database connection variables
     require_once('../connectVars.php');
 
@@ -17,9 +20,12 @@
       $webmail_ID = mysqli_real_escape_string($dbc, trim($_POST['email']));
       $password = mysqli_real_escape_string($dbc, trim($_POST['pwd']));
       $verify_password = mysqli_real_escape_string($dbc, trim($_POST['confirm-pwd']));
-      if(!empty($roll_number) && !empty($webmail_ID) && !empty($username) &&
-        !empty($password) && !empty($verify_password) &&
-        ($verify_password == $password)){
+      $captcha = mysqli_real_escape_string($dbc, trim($_POST['captcha']));
+      // verify Captcha
+      if(SHA1($captcha) == $_SESSION['passphrase']){
+        if(!empty($roll_number) && !empty($webmail_ID) && !empty($username) &&
+          !empty($password) && !empty($verify_password) &&
+          ($verify_password == $password)){
           // Check if webmail_ID is available
           $query = "SELECT * FROM students WHERE webmail_ID = '$webmail_ID'";
           $data = mysqli_query($dbc, $query);
@@ -65,6 +71,11 @@
           'Please enter all fields and make sure to enter same password twice&#33;<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
           '<span aria-hidden="true">&times;</span></button></div></div>';
         }
+      } else{
+        echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+        'Incorrect Captcha&#33; Please try again.<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+        '<span aria-hidden="true">&times;</span></button></div></div>';
+      }
     }
 
     mysqli_close($dbc);
@@ -102,11 +113,21 @@
         </div>
         <input type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="confirm-pwd" name="confirm-pwd" placeholder="Re-Enter password">
       </div>
-        <div class="form-group row">
-          <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary" name="submit">Sign Up</button>
-          </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-default">Verify Captcha:</span>
         </div>
+        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="captcha" name="captcha" placeholder="Enter captcha">
+      </div>
+      <div class="captcha-div">
+        <img id="captcha-image" src="../util/captcha.php" alt="captcha verification">
+        <label class="reload">&#x21BB;</label>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-10">
+          <button type="submit" class="btn btn-primary" name="submit">Sign Up</button>
+        </div>
+      </div>
     </form>
     </div>
 <?php
