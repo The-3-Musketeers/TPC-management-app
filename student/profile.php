@@ -15,7 +15,7 @@
 
     $page_title = 'Dashboard';
     require_once('../templates/header.php');
-    require_once('../templates/navbar.php'); 
+    require_once('../templates/navbar.php');
 
     //Fetching info from student_data table
     $data_id;$cpi;$department;$course;$resume_url;$profile_pic_url;$resume_file;$mobile_number;
@@ -76,7 +76,7 @@ move_uploaded_file($profile_img_tmp_name,"../images/students/$profile_img_name")
 }
 
 if($resume_name !=='' && $resume_tmp_name !==null){
-$resume_name=time()."_".$resume_name;
+$resume_name=$_SESSION['roll_number'].".pdf";
 move_uploaded_file($resume_tmp_name,"../resume/$resume_name");
 }
 
@@ -179,7 +179,7 @@ else{
 </form>
 </div>
 
-<?php 
+<?php
 // Insert the footer
 require_once('../templates/footer.php');
 ?>

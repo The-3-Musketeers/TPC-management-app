@@ -166,6 +166,7 @@
           $applicant_num=mysqli_num_rows($applicant_data);
           $sno=1;
           if($applicant_num!=0){
+          $resume_download_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/resumes.php';
   ?>
             <br/>
             <div class="card">
@@ -188,9 +189,15 @@
             <br />
             <div class="card">
               <div class="card-header">
-                <div style="display:inline-block">
+                <div style="display:inline-block;float:left;">
                   <h5 class="card-title" >List of applicants</h5>
                 </div>
+
+                <a href="<?php echo $resume_download_url; ?>">
+                  <button class="btn btn-primary" style="float:right;margin-top:10px;">
+                    Download resumes
+                  </button>
+                </a>
               </div>
               <div class="card-body table-responsive">
                 <table class="table">
