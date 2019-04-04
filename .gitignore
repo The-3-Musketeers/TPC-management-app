@@ -1,6 +1,8 @@
-appVars.php
-connectVars.php
-util/*
-!util/captcha.php
 images/
 resume/
+lib/
+util/*
+
+appVars.php
+connectVars.php
+!util/captcha.php
