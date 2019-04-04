@@ -22,6 +22,7 @@ CREATE TABLE `students_data` (
   `resume_url` VARCHAR(256),
   `resume_file` VARCHAR(256),
   `mobile_number` VARCHAR(16),
+  `job_offers` VARCHAR(32),
   PRIMARY KEY (`data_id`)
 );
 
@@ -30,6 +31,7 @@ CREATE TABLE `applications` (
   `job_id` int(10) NOT NULL,
   `student_roll_number` VARCHAR(8),
   `application_status` VARCHAR(10) NOT NULL DEFAULT 'pending',
+  `company_category` VARCHAR(2),
   `applied_on` DATETIME,
   PRIMARY KEY (`application_id`)
 );
