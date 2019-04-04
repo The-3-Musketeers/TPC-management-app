@@ -10,9 +10,25 @@
     // Connect to Database
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
-    // Fetch job Details
+    // Fetch job ID
     $job_id = $_GET['id'];
 
+    // Fetch student details to check eligibility
+    $student_cpi = ""; $student_course = ""; $student_department = "";
+    $cpi_above = FALSE; $course_match = FALSE; $dept_match = FALSE;
+    $button_disable_error = "";
+    if($_SESSION['user_role'] == 'student'){
+      $student_query = "SELECT current_cpi, department, course FROM students_data WHERE roll_number='". $_SESSION['roll_number'] ."'";
+      $data = mysqli_query($dbc, $student_query);
+      if(mysqli_num_rows($data) == 1){
+        $row = mysqli_fetch_array($data);
+        $student_cpi = $row['current_cpi'];
+        $student_course = $row['course'];
+        $student_department = $row['department'];
+      }
+    }
+
+    // Fetch job Details
     $query="SELECT * FROM positions WHERE job_id='". $job_id ."'";
     $get_all_positions_query=mysqli_query($dbc,$query);
     $num=mysqli_num_rows($get_all_positions_query);
@@ -25,27 +41,62 @@
       $min_cpi=$row['min_cpi'];
       $no_of_opening=$row['no_of_opening'];
       $apply_by=$row['apply_by'];
-      if($apply_by==null){
-          $apply_by='N.A.';
+
+      // Check eligibility
+      $course_arr = explode(",", $course);
+      $branch_arr = explode(",", $branch);
+      $course_match = FALSE;
+      foreach ($course_arr as $indiv_course) {
+        if(strtolower($indiv_course) == strtolower($student_course)){
+          $course_match = TRUE;
+          break;
+        }
+      }
+      if($course_match){
+        $dept_match = FALSE;
+        foreach ($branch_arr as $indiv_branch) {
+          if(strtolower($indiv_branch) == strtolower($student_department)){
+            $dept_match = TRUE;
+            break;
+          }
+        }
+        if($dept_match){
+          $cpi_above = FALSE;
+          if(floatval($student_cpi) >= floatval($min_cpi)){
+            $cpi_above = TRUE;
+          }
+          if(!$cpi_above){
+            $button_disable_error = "Your CPI doesn't meet eligibility criteria. Please contact TPC if you think this is an error.";
+          }
+        } else {
+          $button_disable_error = "This job is not available for $student_department. Please contact TPC if you think this is an error.";
+        }
       } else {
-          $apply_by=date('d-m-y',strtotime($apply_by));
+        $button_disable_error = "This job is not available for $student_course. Please contact TPC if you think this is an error.";
+      }
+
+      // Adding job details
+      if($apply_by==null){
+        $apply_by='N.A.';
+      } else {
+        $apply_by=date('d-m-y',strtotime($apply_by));
       }
       $stipend=$row['stipend'];
       if($stipend==null){
-          $stipend='N.A.';
+        $stipend='N.A.';
       }
       $ctc=$row['ctc'];
       if($ctc==null){
-          $ctc='N.A.';
+        $ctc='N.A.';
       }
       if($no_of_opening==null){
-          $no_of_opening='N.A.';
+        $no_of_opening='N.A.';
       }
       $test_date=$row['test_date'];
       if($test_date==null){
-          $test_date='N.A.';
+        $test_date='N.A.';
       } else {
-          $test_date=date('d-m-y',strtotime($test_date));
+        $test_date=date('d-m-y',strtotime($test_date));
       }
       $job_desc=$row['job_desc'];
       $created_on=$row['created_on'];
@@ -151,10 +202,21 @@
               </div>
               <?php if($_SESSION['user_role']=='student'){ ?>
                 <a href="<?php echo $job_url . '?id=' . $job_id . '&apply=true'; ?>">
-                  <button class="btn btn-primary" style="float:right;">
+                  <button class="btn btn-primary" style="float:right;"
+                    <?php
+                      if(!$cpi_above || !$dept_match || !$course_match)
+                        echo "disabled";
+                    ?>
+                  >
                     Apply
                   </button>
                 </a>
+                <div style="float:right;margin-top:5px;margin-right:15px;color:red;">
+                  <?php
+                    if(!$cpi_above || !$dept_match || !$course_match)
+                      echo $button_disable_error;
+                  ?>
+                </div>
               <?php } ?>
             </div>
           </div>
