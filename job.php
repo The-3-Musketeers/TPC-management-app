@@ -15,7 +15,6 @@
 
     // Fetch student details to check eligibility
     $student_cpi = ""; $student_course = ""; $student_department = "";
-    $cpi_above = FALSE; $course_match = FALSE; $dept_match = FALSE;
     $button_message = "";
     $is_stud_eligible = TRUE;
     if($_SESSION['user_role'] == 'student'){
@@ -46,97 +45,105 @@
 
       // ************ ELIGIBITLY check starts here ************
 
-      // Check general eligibility (Branch, Course and CPI based)
       if($_SESSION['user_role'] == 'student' && $is_stud_eligible){
-        $course_arr = explode(",", $course);
-        $branch_arr = explode(",", $branch);
-        $course_match = FALSE;
-        foreach ($course_arr as $indiv_course) {
-          if(strtolower($indiv_course) == strtolower($student_course)){
-            $course_match = TRUE;
-            break;
-          }
+        // Check if student has already applied
+        $stud_applications_query = "SELECT * FROM applications WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND job_id='" . $job_id . "'";
+        $data = mysqli_query($dbc, $stud_applications_query);
+        if(mysqli_num_rows($data) != 0){
+          $is_stud_eligible = FALSE;
+          $button_message = "You have already applied for this job.";
         }
-        if($course_match){
-          $dept_match = FALSE;
-          foreach ($branch_arr as $indiv_branch) {
-            if(strtolower($indiv_branch) == strtolower($student_department)){
-              $dept_match = TRUE;
+        
+        // Check general eligibility (Branch, Course and CPI based)
+        if($is_stud_eligible){
+          $course_arr = explode(",", $course);
+          $branch_arr = explode(",", $branch);
+          $course_match = FALSE;
+          foreach ($course_arr as $indiv_course) {
+            if(strtolower($indiv_course) == strtolower($student_course)){
+              $course_match = TRUE;
               break;
             }
           }
-          if($dept_match){
-            $cpi_above = FALSE;
-            if(floatval($student_cpi) >= floatval($min_cpi)){
-              $cpi_above = TRUE;
-            }
-            if(!$cpi_above){
-              $button_message = "Your CPI doesn't meet eligibility criteria. Please contact TPC if you think this is an error.";
-            }
-          } else {
-            $button_message = "This job is not available for $student_department. Please contact TPC if you think this is an error.";
-          }
-        } else {
-          $button_message = "This job is not available for $student_course. Please contact TPC if you think this is an error.";
-        }
-        
-        // Fetch student's current job offers' details
-        $student_query = "SELECT job_offers FROM students_data WHERE roll_number='". $_SESSION['roll_number'] ."'";
-        $data = mysqli_query($dbc, $student_query);
-        $row = mysqli_fetch_array($data);
-        $stud_job_offers = $row['job_offers'];
-        $stud_job_offers_arr = explode(",", $stud_job_offers);
-        foreach($stud_job_offers_arr as $job_offer_id){
-          if(!$is_stud_eligible){
-            break;
-          }
-          // Fetch company id using job id
-          $job_query = "SELECT company_id FROM positions WHERE job_id='" . $job_offer_id . "'";
-          $data = mysqli_query($dbc, $job_query);
-          $row = mysqli_fetch_array($data);
-          $job_offer_company_id = $row['company_id'];
-          // Fetch company category using company id
-          $company_query = "SELECT company_category FROM recruiters WHERE company_id='" . $job_offer_company_id . "'";
-          $data = mysqli_query($dbc, $company_query);
-          $row = mysqli_fetch_array($data);
-          $job_offer_company_cat = $row['company_category'];
-          //echo "Already is " . $job_offer_company_cat . "<br/>";
-          // Check if company is A1
-          if(strtolower($job_offer_company_cat) == "a1"){
-            // Ineligible for further placements.
-            $is_stud_eligible = false;
-            $button_message = "You are ineligible for further participation in campus placements.";
-            break;
-          }
-
-          // Check else if company is B1
-          elseif(strtolower($job_offer_company_cat) == "b1"){
-            // Able to apply for only two A1
-            // Check how many A1s has student already applied to
-            $count_A1_query = "SELECT * FROM applications WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='A1'";
-            $data = mysqli_query($dbc, $count_A1_query);
-            if(mysqli_num_rows($data) < 2){
-              // Student can apply for more A1s
-              $company_query = "SELECT company_category FROM recruiters WHERE company_id='" . $company_id . "'";
-              $data = mysqli_query($dbc, $company_query);
-              $row = mysqli_fetch_assoc($data);
-              //echo "Current company is " . $row['company_category'];
-              // Check if current job is of A1 company.
-              if(strtolower($row['company_category']) != 'a1'){
-                // Can not apply to this job
-                $is_stud_eligible = false;
-                $button_message = "You are ineligible to apply for this job.";
+          if($course_match){
+            $dept_match = FALSE;
+            foreach ($branch_arr as $indiv_branch) {
+              if(strtolower($indiv_branch) == strtolower($student_department)){
+                $dept_match = TRUE;
                 break;
               }
+            }
+            if($dept_match){
+              $cpi_above = FALSE;
+              if(floatval($student_cpi) >= floatval($min_cpi)){
+                $cpi_above = TRUE;
+              }
+              if(!$cpi_above){
+                $is_stud_eligible = FALSE;
+                $button_message = "Your CPI doesn't meet eligibility criteria. Please contact TPC if you think this is an error.";
+              }
             } else {
+              $is_stud_eligible = FALSE;
+              $button_message = "This job is not available for $student_department. Please contact TPC if you think this is an error.";
+            }
+          } else {
+            $is_stud_eligible = FALSE;
+            $button_message = "This job is not available for $student_course. Please contact TPC if you think this is an error.";
+          }
+          
+          // Fetch student's current job offers' details
+          $student_query = "SELECT job_offers FROM students_data WHERE roll_number='". $_SESSION['roll_number'] ."'";
+          $data = mysqli_query($dbc, $student_query);
+          $row = mysqli_fetch_array($data);
+          $stud_job_offers = $row['job_offers'];
+          $stud_job_offers_arr = explode(",", $stud_job_offers);
+          foreach($stud_job_offers_arr as $job_offer_id){
+            if(!$is_stud_eligible){
+              break;
+            }
+            // Fetch company id using job id
+            $job_query = "SELECT company_category FROM applications WHERE job_id='" . $job_offer_id . "'";
+            $data = mysqli_query($dbc, $job_query);
+            $row = mysqli_fetch_array($data);
+            $job_offer_company_cat = $row['company_category'];
+            //echo "Offer is by" . $job_offer_company_cat . "<br/>";
+            // Check if company is A1
+            if(strtolower($job_offer_company_cat) == "a1"){
               // Ineligible for further placements.
               $is_stud_eligible = false;
               $button_message = "You are ineligible for further participation in campus placements.";
               break;
             }
+
+            // Check else if company is B1
+            elseif(strtolower($job_offer_company_cat) == "b1"){
+              // Able to apply for only two A1
+              // Check how many A1s has student already applied to
+              $count_A1_query = "SELECT * FROM applications WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='A1'";
+              $data = mysqli_query($dbc, $count_A1_query);
+              if(mysqli_num_rows($data) < 2){
+                // Student can apply for more A1s
+                $company_query = "SELECT company_category FROM recruiters WHERE company_id='" . $company_id . "'";
+                $data = mysqli_query($dbc, $company_query);
+                $row = mysqli_fetch_assoc($data);
+                //echo "Current company is " . $row['company_category'];
+                // Check if current job is of A1 company.
+                if(strtolower($row['company_category']) != 'a1'){
+                  // Can not apply to this job
+                  $is_stud_eligible = false;
+                  $button_message = "You are ineligible to apply for this job.";
+                  break;
+                }
+              } else {
+                // Ineligible for further placements.
+                $is_stud_eligible = false;
+                $button_message = "You are ineligible for further participation in campus placements.";
+                break;
+              }
+            }
+
+
           }
-
-
         }
       }
 
@@ -182,7 +189,7 @@
           require_once('templates/header.php');
           require_once('templates/navbar.php');
         }
-        if(isset($_GET['apply']) && $_GET['apply']=='true' && $_SESSION['user_role']=='student'){
+        if(isset($_GET['apply']) && $_GET['apply']=='true' && $_SESSION['user_role']=='student' && $is_stud_eligible){
           $apply_error='';
           $apply_query="SELECT application_id FROM applications WHERE job_id='" . $job_id . "' AND student_roll_number='". $_SESSION['roll_number'] ."'";
           $query3=mysqli_query($dbc,$apply_query);
@@ -195,7 +202,7 @@
             $query3=mysqli_query($dbc,$comp_cat_query);
             $row3=mysqli_fetch_assoc($query3);
             $apply_query="INSERT INTO applications (job_id, student_roll_number, company_category, applied_on) VALUES ".
-              "('" . $job_id . "', '" . $_SESSION['roll_number'] . "', '" . $row['company_category'] . "' , NOW())";
+              "('" . $job_id . "', '" . $_SESSION['roll_number'] . "', '" . $row3['company_category'] . "' , NOW())";
             $query3=mysqli_query($dbc,$apply_query);
             if(!$query3){
                 die("QUERY FAILED ".mysqli_error($dbc));
@@ -280,7 +287,7 @@
                 <a href="<?php echo $job_url . '?id=' . $job_id . '&apply=true'; ?>">
                   <button class="btn btn-primary" style="float:right;"
                     <?php
-                      if(!$cpi_above || !$dept_match || !$course_match || !$is_stud_eligible)
+                      if(!$is_stud_eligible)
                         echo "disabled";
                     ?>
                   >
@@ -289,7 +296,7 @@
                 </a>
                 <div style="float:right;margin-top:5px;margin-right:15px;color:red;">
                   <?php
-                    if(!$cpi_above || !$dept_match || !$course_match || !$is_stud_eligible)
+                    if(!$is_stud_eligible)
                       echo $button_message;
                   ?>
                 </div>
