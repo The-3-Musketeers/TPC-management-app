@@ -62,7 +62,7 @@
     </div>
 
   <?php  }
-  
+
   $query3 = "SELECT * FROM applications WHERE student_roll_number='". $roll_number ."'";
   $data3 = mysqli_query($dbc, $query3);
 
@@ -92,7 +92,7 @@
               </tr>
             </thead>
             <tbody>
-              <?php 
+              <?php
               $curr = 1;
               while($row_app = mysqli_fetch_array($data3)){
                 $query_position = "SELECT * FROM positions WHERE job_id='". $row_app["job_id"] ."'";
@@ -104,8 +104,8 @@
               ?>
               <tr>
                 <td><?php echo $curr; ?></td>
-                <td><a href="../job.php?id=<?php echo $row_app["job_id"]; ?>" target="_blank"><?php echo $row_position["job_position"]; ?></a></td>
-                <td><a href="./company.php?id=<?php echo $row_position["company_id"] ?>" target="_blank"><?php echo $row_recruiter["company_name"]; ?></a></td>
+                <td><a href="../job.php?id=<?php echo $row_app["job_id"]; ?>"><?php echo $row_position["job_position"]; ?></a></td>
+                <td><a href="./company.php?id=<?php echo $row_position["company_id"] ?>"><?php echo $row_recruiter["company_name"]; ?></a></td>
                 <td><?php echo $row_app["applied_on"]; ?></td>
                 <td><?php
                   if($row_app["application_status"] == "accepted"){
@@ -117,7 +117,7 @@
                   }
                 ?></td>
               </tr>
-              <?php 
+              <?php
                 $curr = $curr + 1;
               } ?>
             </tbody>
@@ -126,7 +126,7 @@
     </div>
 
   <?php } else { ?>
-    
+
   <?php } ?>
 
 <?php require_once('../templates/footer.php');?>

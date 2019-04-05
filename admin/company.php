@@ -43,7 +43,7 @@
           <div style="display:inline-block">
             <h4 class="card-title" ><?php echo $company_name; ?></h4>
             <h6 class="card-subtitle mb-2 text-muted">
-              <?php  if($company_url) echo "(<a href='$company_url' target='_blank'>$company_url</a>)";?>
+              <?php  if($company_url) echo "(<a href='$company_url'>$company_url</a>)";?>
             </h6>
           </div>
         </div>
@@ -106,7 +106,7 @@
             ?>
                 <tr>
                   <th scope="row"><?php  echo $curr; ?></th>
-                  <td><a href="<?php echo $job_url . '?id=' . $row["job_id"];?>" target="_blank"><?php echo $row["job_position"];?></a></td>
+                  <td><a href="<?php echo $job_url . '?id=' . $row["job_id"];?>"><?php echo $row["job_position"];?></a></td>
                   <td><?php echo $row["course"];?></td>
                   <td><?php echo $row["branch"];?></td>
                   <td><?php echo $row["min_cpi"];?></td>
