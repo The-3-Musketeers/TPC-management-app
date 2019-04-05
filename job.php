@@ -300,6 +300,32 @@
 <?php
         }
         if($_SESSION['user_role']=='admin'){
+          
+          if(isset($_GET['remove'])){
+            $id=$_GET['remove'];
+            $query="DELETE FROM applications WHERE job_id=$job_id AND student_roll_number='".$id."'";
+            $remove_applicant_query=mysqli_query($dbc,$query);
+            if(!$remove_applicant_query)
+            {
+              die("QUERY FAILED ". mysqli_error($dbc));
+            }
+          }
+
+          if(isset($_POST['add_applicant'])){
+            $roll_number=$_POST['roll_number'];
+            $email=$_POST['email'];
+            $company_query = "SELECT company_category FROM recruiters WHERE company_id='" . $job_offer_company_id . "'";
+            $data = mysqli_query($dbc, $company_query);
+            $row = mysqli_fetch_array($data);
+            $company_cat = $row['company_category'];
+            $query="INSERT INTO applications (job_id,student_roll_number,application_status,company_category,applied_on) VALUES".
+                    "($job_id,'$roll_number','pending','$company_cat',NOW())";
+            $insert_applicant_query=mysqli_query($dbc,$query);
+            if(!$insert_applicant_query){
+              die("QUERY FAILED ".mysqli_error($dbc));
+            }
+          }
+
           $applicant_query="SELECT * FROM applications WHERE job_id='" . $job_id ."'";
           $applicant_data=mysqli_query($dbc,$applicant_query);
           $applicant_num=mysqli_num_rows($applicant_data);
@@ -331,9 +357,44 @@
             <div class="card">
               <div class="card-header">
                 <div style="display:inline-block;float:left;">
-                  <h5 class="card-title" >List of applicants</h5>
+                  <h5 class="card-title" >List of Applicants</h5>
+                  <!-- Button trigger modal -->
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addApplicantModal">
+                    Add Applicant
+                  </button>
+                  <!-- void span for to prevent default closing of modal in js -->
+                  <span id="add_app_error_msg" value=<?php echo $add_application_error_msg?>></span>
+                  <!-- Modal -->
+                  <div class="modal fade" id="addApplicantModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLongTitle">Add Applicant</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <form action="<?php echo $_SERVER['PHP_SELF']."?id=".$job_id; ?>" method="post">
+                          <div class="modal-body">
+                            <div class="form-group">
+                              <label for="roll-number">Roll No.<span class="red">*</span></label>
+                              <input type="text" class="form-control" id="" name="roll_number" required>
+                            </div>
+                            <div class="form-group">
+                              <label for="username">Email<span class="red">*</span></label>
+                              <input type="email" class="form-control" name="email" required>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" name="add_applicant">Add</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Modal ends here -->
                 </div>
-
                 <a href="<?php echo $resume_download_url; ?>">
                   <button class="btn btn-primary" style="float:right;margin-top:10px;">
                     Download resumes
@@ -350,10 +411,12 @@
                       <th scope="col">Email</th>
                       <th scope="col">Applied on</th>
                       <th scope="col">Status</th>
+                      <?php if(!isset($_POST['create_applicant_list'])){?>
+                      <th scope="col">Actions</th>
+                      <?php } ?>
                     </tr>
                   </thead>
                   <tbody>
-
 <?php
             }
             while($applicant_row=mysqli_fetch_assoc($applicant_data)){
@@ -383,9 +446,16 @@
                   }elseif($app_status == "rejected") {
                     $table_content .= '<span class="badge badge-danger">Rejected</span>';
                   }
-                $table_content .= '
-                      </td>
-                    </tr>';
+                $table_content .= '</td>';
+                if(!isset($_POST['create_applicant_list'])){
+                $table_content .= 
+                      '<td>
+                        <form action="'.$_SERVER['PHP_SELF']."?id=".$job_id."&remove=".$app_roll_no.'" method="post">
+                          <button type="submit" name="remove" class="btn btn-danger">Remove</button>
+                        </form>
+                      </td>';
+                }
+                $table_content .= '</tr>';
                 $sno+=1;
               }
             }
@@ -394,7 +464,6 @@
 ?>
                   </tbody>
                 </table>
-                <br />
                 <form target="_blank" method="post">
                   <input type="submit" name="create_applicant_list" class="btn btn-danger" value="Create PDF" />
                 </form>
