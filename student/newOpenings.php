@@ -18,6 +18,11 @@ if($num!=0){
       $branch=$row['branch'];
       $no_of_opening=$row['no_of_opening'];
       $stipend=$row['stipend'];
+
+      $company_cat_query = "SELECT company_category FROM recruiters WHERE company_id='" . $company_id . "'";
+      $company_cat_data = mysqli_query($dbc, $company_cat_query);
+      $company_cat_row = mysqli_fetch_assoc($company_cat_data);
+
       if($stipend==null){
           $stipend='N.A.';
       }
@@ -68,6 +73,7 @@ if($num!=0){
                 <th scope="col" class="text-muted">Branch</th>
                 <th scope="col" class="text-muted">Stipend</th>
                 <th scope="col" class="text-muted">Openings</th>
+                <th scope="col" class="text-muted">Category</th>
                 <th scope="col" class="text-muted">Apply By</th>
                 </tr>
             </thead>
@@ -78,6 +84,7 @@ if($num!=0){
                 <td><?php echo $branch; ?></td>
                 <td><?php echo $stipend; ?></td>
                 <td><?php echo $no_of_opening; ?></td>
+                <td><?php echo $company_cat_row['company_category']; ?></td>
                 <td><?php echo $apply_by; ?></td>
                 </tr>
             </tbody>

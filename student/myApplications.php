@@ -13,6 +13,7 @@ if($num!=0){
         <th scope="col">S.No.</th>
         <th scope="col">Job Name</th>
         <th scope="col">Company Name</th>
+        <th scope="col">Category</th>
         <th scope="col">Test Date</th>
         <th scope="col">Applied on</th>
         <th scope="col">Status</th>
@@ -36,6 +37,7 @@ if($num!=0){
       $company_data=mysqli_query($dbc,$company_query);
       $com_row=mysqli_fetch_assoc($company_data);
       $company_name=$com_row['company_name'];
+      $company_cat = $com_row['company_category'];
 
       $job_position=$row1['job_position'];
       $test_date=$row1['test_date'];
@@ -48,9 +50,18 @@ if($num!=0){
             <td><?php echo $sno; ?></td>
             <td><a href="<?php echo $job_url.'?id='.$job_id; ?>"><?php echo $job_position; ?></a></td>
             <td><?php echo $company_name; ?></td>
+            <td><?php echo $company_cat; ?></td>
             <td><?php echo $test_date; ?></td>
             <td><?php echo $applied_on; ?></td>
-            <td><?php echo $application_status; ?></td>
+            <td><?php
+              if($application_status == "accepted"){
+                echo '<span class="badge badge-success">Accepted</span>';
+              }elseif($application_status == "pending") {
+                echo '<span class="badge badge-warning">Pending</span>';
+              }elseif($application_status == "rejected") {
+                echo '<span class="badge badge-danger">Rejected</span>';
+              }
+            ?></td>
             </tr>
             <?php $sno+=1; ?>
 
