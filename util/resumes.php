@@ -1,10 +1,10 @@
 <?php
   // Start the session
-  require_once('templates/startSession.php');
-  require_once('connectVars.php');
+  require_once('../templates/startSession.php');
+  require_once('../connectVars.php');
 
   // Authenticate user
-  require_once('templates/auth.php');
+  require_once('../templates/auth.php');
   checkUserRole('admin', $auth_error);
 
   // Check user roll admin
@@ -41,17 +41,18 @@
   if ($zip->open($filename, ZipArchive::CREATE)!==TRUE) {
     exit("cannot open <$filename>\n");
   }
-  $dir = 'resume/';
-  createZip($zip, $dir, $app_list);
+  $dir = '../resume/';
+  $dir1 = 'resume/';
+  createZip($zip, $dir, $dir1, $app_list);
   $zip->close();
 
-  function createZip($zip,$dir, $app_list){
+  function createZip($zip,$dir, $dir1, $app_list){
     if (is_dir($dir)){
       if ($dh = opendir($dir)){
         foreach ($app_list as $file) {
           if(is_file($dir.$file)){
             if($file != '' && $file != '.' && $file != '..'){
-              $zip->addFile($dir.$file);
+              $zip->addFile($dir.$file, $dir1.$file);
             }
           }
         }

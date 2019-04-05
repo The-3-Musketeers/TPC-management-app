@@ -88,9 +88,9 @@
       </div>
     </div>
   </form>
-  <?php 
-    // Search Bar 
-    if(isset($_POST['search']) || isset($_SESSION['keyword'])){ 
+  <?php
+    // Search Bar
+    if(isset($_POST['search']) || isset($_SESSION['keyword'])){
       ?>
       <table class="table">
       <thead class="thead-light">
@@ -142,7 +142,7 @@
      </tbody>
     </table>
   <?php }?>
-  <?php  
+  <?php
     function add_row($search_query,$category){
       $i=1;
       while($row=mysqli_fetch_assoc($search_query)){
@@ -157,11 +157,11 @@
             ?>
           <tr>
             <th scope="row"><?php echo $i;?></th>
-            <td><a href="<?php echo './company.php?id=' . $id;?>" target="_blank"><?php echo $company_name; ?></a></td>
+            <td><a href="<?php echo './company.php?id=' . $id;?>"><?php echo $company_name; ?></a></td>
             <td><?php echo $company_category;?></td>
             <td><?php echo $hr_name;?></td>
             <td> <?php echo $hr_email; ?> </td>
-            <?php 
+            <?php
             if($status=='accepted')
               echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=1 method="post">'.
               '<button type="reject" class="btn btn-danger" name="reject">Reject</button></form></td>';
@@ -169,7 +169,7 @@
             echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=2 method="post">'.
             '<button type="approve" class="btn btn-success" name="approve">Approve</button>'.
             '<button type="reject" class="btn btn-danger" name="reject">Reject</button></form></td>';
-            else 
+            else
             echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=3 method="post">'.
             '<button type="approve" class="btn btn-success" name="approve">Approve</button></form></td>';
             ?>
@@ -180,11 +180,11 @@
       }else { ?>
       <tr>
             <th scope="row"><?php echo $i;?></th>
-            <td><a href="<?php echo './company.php?id=' . $id;?>" target="_blank"><?php echo $company_name; ?></a></td>
+            <td><a href="<?php echo './company.php?id=' . $id;?>"><?php echo $company_name; ?></a></td>
             <td><?php echo $company_category;?></td>
             <td><?php echo $hr_name;?></td>
             <td> <?php echo $hr_email; ?> </td>
-            <?php 
+            <?php
             if($status=='accepted')
               echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=1 method="post">'.
               '<button type="reject" class="btn btn-danger" name="reject">Reject</button></form></td>';
@@ -192,7 +192,7 @@
             echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=2 method="post">'.
             '<button type="approve" class="btn btn-success" name="approve">Approve</button>'.
             '<button type="reject" class="btn btn-danger" name="reject">Reject</button></form></td>';
-            else 
+            else
             echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=3 method="post">'.
             '<button type="approve" class="btn btn-success" name="approve">Approve</button></form></td>';
             ?>
@@ -254,7 +254,7 @@
             $curr = 1;
             while($row = mysqli_fetch_array($data)){
               echo '<tr><th scope="row">' . $curr . '</th>' .
-                        '<td><a href="./company.php?id=' . $row["company_id"] . '" target="_blank">' . $row["company_name"] . '</a></td>' .
+                        '<td><a href="./company.php?id=' . $row["company_id"] . '">' . $row["company_name"] . '</a></td>' .
                         '<td>' . $row["company_category"] . '</td>' .
                         '<td>' . $row["hr_name"] . '</td>' .
                         '<td>' . $row["hr_email"] . '</td>' .
@@ -295,11 +295,11 @@
             $curr = 1;
             while($row = mysqli_fetch_array($data)){
               echo '<tr><th scope="row">' . $curr . '</th>' .
-                        '<td><a href="./company.php?id=' . $row["company_id"] . '" target="_blank">' . $row["company_name"] . '</a></td>' .
+                        '<td><a href="./company.php?id=' . $row["company_id"] . '">' . $row["company_name"] . '</a></td>' .
                         '<td>' . $row["company_category"] . '</td>' .
                         '<td>' . $row["hr_name"] . '</td>' .
                         '<td>' . $row["hr_email"] . '</td>' .
-                        '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=2" method="post">' . 
+                        '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=2" method="post">' .
                         '<button type="approve" class="btn btn-success" name="approve">Approve</button> ' .
                         '<button type="reject" class="btn btn-danger" name="reject">Reject</button></form></td>' .
                     '</tr>';
@@ -337,11 +337,11 @@
             $curr = 1;
             while($row = mysqli_fetch_array($data)){
               echo '<tr><th scope="row">' . $curr . '</th>' .
-                        '<td><a href="./company.php?id=' . $row["company_id"] . '" target="_blank">' . $row["company_name"] . '</a></td>' .
+                        '<td><a href="./company.php?id=' . $row["company_id"] . '">' . $row["company_name"] . '</a></td>' .
                         '<td>' . $row["company_category"] . '</td>' .
                         '<td>' . $row["hr_name"] . '</td>' .
                         '<td>' . $row["hr_email"] . '</td>' .
-                        '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=3" method="post">' . 
+                        '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=3" method="post">' .
                         '<button type="approve" class="btn btn-success" name="approve">Approve</button></form></td>' .
                     '</tr>';
               $curr = $curr + 1;

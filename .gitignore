@@ -6,3 +6,5 @@ util/*
 appVars.php
 connectVars.php
 !util/captcha.php
+!util/pdf.php
+!util/resumes.php

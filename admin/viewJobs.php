@@ -32,7 +32,7 @@
   }
   countEntries();
   $activeTab = "1";
-  
+
   if(isset($_POST['show'])){
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     if (!$dbc) {
@@ -90,9 +90,9 @@
       </div>
     </div>
   </form>
-    <?php 
-    // Search Bar 
-    if(isset($_POST['search']) || isset($_SESSION['keyword'])){ 
+    <?php
+    // Search Bar
+    if(isset($_POST['search']) || isset($_SESSION['keyword'])){
       ?>
       <table class="table">
       <thead class="thead-light">
@@ -158,7 +158,7 @@
      </tbody>
     </table>
   <?php }?>
-  <?php  
+  <?php
   function add_row($search_query,$B){
     $i=1;
     while($row=mysqli_fetch_assoc($search_query)){
@@ -175,11 +175,11 @@
           ?>
           <tr>
             <th scope="row"><?php echo $i;?></th>
-            <td><a href="<?php echo './company.php?id=' . $id;?>" target="_blank"><?php echo $company_name; ?></a></td>
-            <td><a href="<?php echo $job_url.'?id='.$row["job_id"]; ?>" target="_blank"><?php echo $row["job_position"]; ?></a></td>
+            <td><a href="<?php echo './company.php?id=' . $id;?>"><?php echo $company_name; ?></a></td>
+            <td><a href="<?php echo $job_url.'?id='.$row["job_id"]; ?>"><?php echo $row["job_position"]; ?></a></td>
             <td><?php echo $course;?></td>
             <td> <?php echo $branch; ?> </td>
-            <?php 
+            <?php
             if($status=='shown')
               echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=1 method="post">'.
               '<button type="hide" class="btn btn-danger" name="hide">Hide</button></form></td>';
@@ -187,7 +187,7 @@
             echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=2 method="post">'.
             '<button type="show" class="btn btn-success" name="show">Show</button>'.
             '<button type="hide" class="btn btn-danger" name="hide">Hide</button></form></td>';
-            else 
+            else
             echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=3 method="post">'.
             '<button type="show" class="btn btn-success" name="show">Show</button></form></td>';
             ?>
@@ -198,11 +198,11 @@
       }else { ?>
         <tr>
           <th scope="row"><?php echo $i;?></th>
-          <td><a href="<?php echo './company.php?id=' . $id;?>" target="_blank"><?php echo $company_name; ?></a></td>
-          <td><a href="<?php echo $job_url.'?id='.$row["job_id"]; ?>" target="_blank"><?php echo $row["job_position"]; ?></a></td>
+          <td><a href="<?php echo './company.php?id=' . $id;?>"><?php echo $company_name; ?></a></td>
+          <td><a href="<?php echo $job_url.'?id='.$row["job_id"]; ?>"><?php echo $row["job_position"]; ?></a></td>
           <td><?php echo $course;?></td>
           <td> <?php echo $branch; ?> </td>
-          <?php 
+          <?php
           if($status=='shown')
             echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=1 method="post">'.
             '<button type="hide" class="btn btn-danger" name="hide">Hide</button></form></td>';
@@ -210,7 +210,7 @@
            echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=2 method="post">'.
            '<button type="show" class="btn btn-success" name="show">Show</button>'.
            '<button type="hide" class="btn btn-danger" name="hide">Hide</button></form></td>';
-          else 
+          else
            echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["job_id"] . '&tab=3 method="post">'.
            '<button type="show" class="btn btn-success" name="show">Show</button></form></td>';
           ?>
@@ -281,8 +281,8 @@
             ?>
                 <tr>
                   <th scope="row"><?php echo $curr;?></th>
-                  <td><a href="<?php echo './company.php?id=' . $id;?>" target="_blank"><?php echo $row_recruiters["company_name"]; ?></a></td>
-                  <td><a href="<?php echo $job_url.'?id='.$row["job_id"]; ?>" target="_blank"><?php echo $row["job_position"]; ?></a></td>
+                  <td><a href="<?php echo './company.php?id=' . $id;?>"><?php echo $row_recruiters["company_name"]; ?></a></td>
+                  <td><a href="<?php echo $job_url.'?id='.$row["job_id"]; ?>"><?php echo $row["job_position"]; ?></a></td>
                   <td><?php echo $row["course"];?></td>
                   <td> <?php echo $row["branch"]; ?> </td>
                   <td><?php echo $row["min_cpi"]; ?>  </td>
@@ -340,8 +340,8 @@
             ?>
                 <tr>
                   <th scope="row"><?php  echo $curr; ?></th>
-                  <td><a href="<?php echo './company.php?id=' . $id;?>" target="_blank"><?php echo $row_recruiters["company_name"];?></a></td>
-                  <td><a href="<?php echo $job_url . '?id=' . $row["job_id"];?>" target="_blank"><?php echo $row["job_position"];?></a></td>
+                  <td><a href="<?php echo './company.php?id=' . $id;?>"><?php echo $row_recruiters["company_name"];?></a></td>
+                  <td><a href="<?php echo $job_url . '?id=' . $row["job_id"];?>"><?php echo $row["job_position"];?></a></td>
                   <td><?php echo $row["course"];?></td>
                   <td><?php echo $row["branch"];?></td>
                   <td><?php echo $row["min_cpi"];?></td>
@@ -397,8 +397,8 @@
             ?>
                 <tr>
                   <th scope="row"><?php echo $curr;?></th>
-                  <td><a href="<?php echo './company.php?id=' . $id;?>" target="_blank"><?php echo $row_recruiters["company_name"]; ?></a></td>
-                  <td><a href="<?php echo $job_url . '?id=' . $row["job_id"];?>" target="_blank"><?php echo $row["job_position"];?></a></td>
+                  <td><a href="<?php echo './company.php?id=' . $id;?>"><?php echo $row_recruiters["company_name"]; ?></a></td>
+                  <td><a href="<?php echo $job_url . '?id=' . $row["job_id"];?>"><?php echo $row["job_position"];?></a></td>
                   <td><?php echo $row["course"];?></td>
                   <td><?php echo $row["branch"];?></td>
                   <td><?php echo $row["min_cpi"];?></td>
@@ -426,4 +426,3 @@
 </div>
 
 <?php require_once('../templates/footer.php');?>
-
