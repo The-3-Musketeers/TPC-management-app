@@ -53,7 +53,7 @@
           $is_stud_eligible = FALSE;
           $button_message = "You have already applied for this job.";
         }
-        
+
         // Check general eligibility (Branch, Course and CPI based)
         if($is_stud_eligible){
           $course_arr = explode(",", $course);
@@ -90,7 +90,7 @@
             $is_stud_eligible = FALSE;
             $button_message = "This job is not available for $student_course. Please contact TPC if you think this is an error.";
           }
-          
+
           // Fetch student's current job offers' details
           $student_query = "SELECT job_offers FROM students_data WHERE roll_number='". $_SESSION['roll_number'] ."'";
           $data = mysqli_query($dbc, $student_query);
@@ -307,7 +307,7 @@
 <?php
         }
         if($_SESSION['user_role']=='admin'){
-          
+
           if(isset($_GET['remove'])){
             $id=$_GET['remove'];
             $query="DELETE FROM applications WHERE job_id=$job_id AND student_roll_number='".$id."'";
@@ -337,7 +337,7 @@
           $applicant_data=mysqli_query($dbc,$applicant_query);
           $applicant_num=mysqli_num_rows($applicant_data);
           $sno=1;
-          $resume_download_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/resumes.php';
+          $resume_download_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/resumes.php?job_id=' . $job_id;
           $table_content='';
           if($applicant_num!=0){
             if(!isset($_POST['create_applicant_list'])){
@@ -370,7 +370,6 @@
                     Add Applicant
                   </button>
                   <!-- void span for to prevent default closing of modal in js -->
-                  <span id="add_app_error_msg" value=<?php echo $add_application_error_msg?>></span>
                   <!-- Modal -->
                   <div class="modal fade" id="addApplicantModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -455,7 +454,7 @@
                   }
                 $table_content .= '</td>';
                 if(!isset($_POST['create_applicant_list'])){
-                $table_content .= 
+                $table_content .=
                       '<td>
                         <form action="'.$_SERVER['PHP_SELF']."?id=".$job_id."&remove=".$app_roll_no.'" method="post">
                           <button type="submit" name="remove" class="btn btn-danger">Remove</button>
