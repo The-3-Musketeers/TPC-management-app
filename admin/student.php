@@ -107,7 +107,15 @@
                 <td><a href="../job.php?id=<?php echo $row_app["job_id"]; ?>" target="_blank"><?php echo $row_position["job_position"]; ?></a></td>
                 <td><a href="./company.php?id=<?php echo $row_position["company_id"] ?>" target="_blank"><?php echo $row_recruiter["company_name"]; ?></a></td>
                 <td><?php echo $row_app["applied_on"]; ?></td>
-                <td><?php echo $row_app["application_status"]; ?></td>
+                <td><?php
+                  if($row_app["application_status"] == "accepted"){
+                    echo '<span class="badge badge-success">Accepted</span>';
+                  }elseif($row_app["application_status"] == "pending") {
+                    echo '<span class="badge badge-warning">Pending</span>';
+                  }elseif($row_app["application_status"] == "rejected") {
+                    echo '<span class="badge badge-danger">Rejected</span>';
+                  }
+                ?></td>
               </tr>
               <?php 
                 $curr = $curr + 1;
