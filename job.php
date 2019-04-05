@@ -43,6 +43,12 @@
       $no_of_opening=$row['no_of_opening'];
       $apply_by=$row['apply_by'];
 
+      // Category of job
+      $company_query = "SELECT company_category FROM recruiters WHERE company_id='" . $company_id . "'";
+      $company_data = mysqli_query($dbc, $company_query);
+      $company_row = mysqli_fetch_assoc($company_data);
+      $company_cat = $company_row['company_category'];
+
       // ************ ELIGIBITLY check starts here ************
 
       if($_SESSION['user_role'] == 'student' && $is_stud_eligible){
@@ -53,54 +59,18 @@
           $is_stud_eligible = FALSE;
           $button_message = "You have already applied for this job.";
         }
-
-        // Check general eligibility (Branch, Course and CPI based)
         if($is_stud_eligible){
-          $course_arr = explode(",", $course);
-          $branch_arr = explode(",", $branch);
-          $course_match = FALSE;
-          foreach ($course_arr as $indiv_course) {
-            if(strtolower($indiv_course) == strtolower($student_course)){
-              $course_match = TRUE;
-              break;
-            }
-          }
-          if($course_match){
-            $dept_match = FALSE;
-            foreach ($branch_arr as $indiv_branch) {
-              if(strtolower($indiv_branch) == strtolower($student_department)){
-                $dept_match = TRUE;
-                break;
-              }
-            }
-            if($dept_match){
-              $cpi_above = FALSE;
-              if(floatval($student_cpi) >= floatval($min_cpi)){
-                $cpi_above = TRUE;
-              }
-              if(!$cpi_above){
-                $is_stud_eligible = FALSE;
-                $button_message = "Your CPI doesn't meet eligibility criteria. Please contact TPC if you think this is an error.";
-              }
-            } else {
-              $is_stud_eligible = FALSE;
-              $button_message = "This job is not available for $student_department. Please contact TPC if you think this is an error.";
-            }
-          } else {
-            $is_stud_eligible = FALSE;
-            $button_message = "This job is not available for $student_course. Please contact TPC if you think this is an error.";
-          }
-
           // Fetch student's current job offers' details
           $student_query = "SELECT job_offers FROM students_data WHERE roll_number='". $_SESSION['roll_number'] ."'";
           $data = mysqli_query($dbc, $student_query);
           $row = mysqli_fetch_array($data);
           $stud_job_offers = $row['job_offers'];
           $stud_job_offers_arr = explode(",", $stud_job_offers);
-          foreach($stud_job_offers_arr as $job_offer_id){
-            if(!$is_stud_eligible){
-              break;
-            }
+          if(sizeof($stud_job_offers_arr) > 1){
+            $is_stud_eligible = FALSE;
+            $button_message = "You are ineligible for further participation in campus placements.";
+          } elseif($is_stud_eligible) {
+            $job_offer_id = $stud_job_offers_arr[0];
             // Fetch company id using job id
             $job_query = "SELECT company_category FROM applications WHERE job_id='" . $job_offer_id . "'";
             $data = mysqli_query($dbc, $job_query);
@@ -110,9 +80,8 @@
             // Check if company is A1
             if(strtolower($job_offer_company_cat) == "a1"){
               // Ineligible for further placements.
-              $is_stud_eligible = false;
+              $is_stud_eligible = FALSE;
               $button_message = "You are ineligible for further participation in campus placements.";
-              break;
             }
 
             // Check else if company is B1
@@ -123,26 +92,88 @@
               $data = mysqli_query($dbc, $count_A1_query);
               if(mysqli_num_rows($data) < 2){
                 // Student can apply for more A1s
-                $company_query = "SELECT company_category FROM recruiters WHERE company_id='" . $company_id . "'";
-                $data = mysqli_query($dbc, $company_query);
-                $row = mysqli_fetch_assoc($data);
-                //echo "Current company is " . $row['company_category'];
+                //echo "Current company is " . $company_cat;
                 // Check if current job is of A1 company.
-                if(strtolower($row['company_category']) != 'a1'){
+                if(strtolower($company_cat) != 'a1'){
                   // Can not apply to this job
-                  $is_stud_eligible = false;
+                  $is_stud_eligible = FALSE;
                   $button_message = "You are ineligible to apply for this job.";
-                  break;
                 }
               } else {
                 // Ineligible for further placements.
-                $is_stud_eligible = false;
+                $is_stud_eligible = FALSE;
                 $button_message = "You are ineligible for further participation in campus placements.";
-                break;
               }
             }
 
+            // Check else if company is B2
+            elseif(strtolower($job_offer_company_cat) == "b2"){
+              // Able to apply for 2 A1 and 2 B1
+              // Check how many A1s and B1s has student already applied to
+              $count_A1_query = "SELECT * FROM applications WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='A1'";
+              $dataA1 = mysqli_query($dbc, $count_A1_query);
+              $count_B1_query = "SELECT * FROM applications WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='B1'";
+              $dataB1 = mysqli_query($dbc, $count_B1_query);
+              if(mysqli_num_rows($dataA1) < 2 || mysqli_num_rows($dataB1) < 2){
+                if(strtolower($company_cat) == 'a1' && mysqli_num_rows($dataA1) >= 2){
+                  // Can not apply to this job (already applied to 2 A1)
+                  $is_stud_eligible = FALSE;
+                  $button_message = "You are ineligible to apply for this job.";
+                } elseif (strtolower($company_cat) == 'b1' && mysqli_num_rows($dataB1) >= 2){
+                  // Can not apply to this job (already applied to 2 B1)
+                  $is_stud_eligible = FALSE;
+                  $button_message = "You are ineligible to apply for this job.";
+                } elseif (strtolower($company_cat) == 'b2'){
+                  // Can not apply to this job
+                  $is_stud_eligible = FALSE;
+                  $button_message = "You are ineligible to apply for this job.";
+                }
+              } else {
+                // Ineligible for further placements.
+                $is_stud_eligible = FALSE;
+                $button_message = "You are ineligible for further participation in campus placements.";
+              }
+            }
 
+          }
+
+
+          // Check general eligibility (Branch, Course and CPI based)
+          if($is_stud_eligible){
+            $course_arr = explode(",", $course);
+            $branch_arr = explode(",", $branch);
+            $course_match = FALSE;
+            foreach ($course_arr as $indiv_course) {
+              if(strtolower($indiv_course) == strtolower($student_course)){
+                $course_match = TRUE;
+                break;
+              }
+            }
+            if($course_match){
+              $dept_match = FALSE;
+              foreach ($branch_arr as $indiv_branch) {
+                if(strtolower($indiv_branch) == strtolower($student_department)){
+                  $dept_match = TRUE;
+                  break;
+                }
+              }
+              if($dept_match){
+                $cpi_above = FALSE;
+                if(floatval($student_cpi) >= floatval($min_cpi)){
+                  $cpi_above = TRUE;
+                }
+                if(!$cpi_above){
+                  $is_stud_eligible = FALSE;
+                  $button_message = "Your CPI doesn't meet eligibility criteria. Please contact TPC if you think this is an error.";
+                }
+              } else {
+                $is_stud_eligible = FALSE;
+                $button_message = "This job is not available for $student_department. Please contact TPC if you think this is an error.";
+              }
+            } else {
+              $is_stud_eligible = FALSE;
+              $button_message = "This job is not available for $student_course. Please contact TPC if you think this is an error.";
+            }
           }
         }
       }
