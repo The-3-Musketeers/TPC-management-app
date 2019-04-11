@@ -18,7 +18,7 @@
     require_once('../templates/navbar.php');
 
     //Fetching info from student_data table
-    $data_id;$cpi;$department;$course;$resume_url;$profile_pic_url;$resume_file;$mobile_number;
+    $data_id;$cpi;$department;$course;$resume_url;$profile_pic_url;$resume_file;$mobile_number;$skype;$gmail;$emergency_number;
     function display(){
         $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
         global $roll_number;
@@ -28,11 +28,14 @@
             die("QUERY FAILED ".mysqli_error($dbc));
         }
 
-        global $data_id,$cpi,$department,$course,$resume_url,$profile_pic_url;
+        global $data_id,$cpi,$skype,$gmail,$emergency_number,$department,$course,$resume_url,$profile_pic_url;
         $row=mysqli_fetch_assoc($select_from_student_data_query);
         $data_id=$row['data_id'];
         $cpi=$row['current_cpi'];
         $department=$row['department'];
+        $skype=$row['skype_Id'];
+        $gmail=$row['gmail_Id'];
+        $emergency_number=$row['emergency_number'];
         $course=$row['course'];
         $resume_url=$row['resume_url'];
         $resume_file=$row['resume_file'];
@@ -63,6 +66,9 @@ $department=mysqli_real_escape_string($dbc,trim($_POST['department']));
 $cpi=mysqli_real_escape_string($dbc,trim($_POST['cpi']));
 $resume_url=mysqli_real_escape_string($dbc,trim($_POST['resume']));
 $mobile_number=mysqli_real_escape_string($dbc,trim($_POST['mobile_number']));
+$skype=mysqli_real_escape_string($dbc,trim($_POST['skype']));
+$gmail=mysqli_real_escape_string($dbc,trim($_POST['gmail']));
+$emergency_number=mysqli_real_escape_string($dbc,trim($_POST['emergency_number']));
 
 $profile_img_name=$_FILES['profile_img']['name'];
 $profile_img_tmp_name=$_FILES['profile_img']['tmp_name'];
@@ -80,7 +86,7 @@ $resume_name=$_SESSION['roll_number'].".pdf";
 move_uploaded_file($resume_tmp_name,"../resume/$resume_name");
 }
 
-$query="UPDATE students_data SET course='$course', department='$department', current_cpi=$cpi ";
+$query="UPDATE students_data SET course='$course', department='$department', current_cpi=$cpi, skype_Id='$skype', gmail_Id='$gmail', emergency_number=$emergency_number ";
 if($profile_img_name !== null && $profile_img_name !== ''){
 $query=$query.",profile_pic='$profile_img_name' ";
 }
@@ -140,14 +146,30 @@ else{
         <?php
         echo "<option value='{$course}'>{$course}</option>";
         if($course=='Btech'){
-         echo '<option value="Mtech">Mtech</option>';
+        	echo '<option value="Mtech">Mtech</option>';
+        	echo '<option value="Msc">Msc</option>';
+         	echo '<option value="PHD">PHD</option>';
         }
         else if($course=='Mtech'){
-         echo '<option value="Btech">Btech</option>';
+         	echo '<option value="Btech">Btech</option>';
+         	echo '<option value="Msc">Msc</option>';
+         	echo '<option value="PHD">PHD</option>';
+        }
+        else if($course=='Msc'){
+            echo '<option value="Btech">Btech</option>';
+            echo '<option value="Mtech">Mtech</option>';
+            echo '<option value="PHD">PHD</option>';
+        }
+        else if($course=='PHD'){
+            echo '<option value="Btech">Btech</option>';
+            echo '<option value="Mtech">Mtech</option>';
+            echo '<option value="Msc">Msc</option>';
         }
         else{
-        echo '<option value="Btech">Btech</option>';
-        echo '<option value="Mtech">Mtech</option>';
+            echo '<option value="Btech">Btech</option>';
+            echo '<option value="Mtech">Mtech</option>';
+            echo '<option value="Msc">Msc</option>';
+            echo '<option value="PHD">PHD</option>';
         }
         ?>
     </select>
@@ -162,6 +184,18 @@ else{
   <div class="form-group">
     <label for="cpi">CPI<span class="red">*</span></label>
     <input type="text" class="form-control" id="" name="cpi" value="<?php echo $cpi; ?>" required>
+  </div>
+  <div class="form-group">
+    <label for="skype">Skype Id<span class="red">*</span></label>
+    <input type="email" class="form-control" id="" name="skype" value="<?php echo $skype; ?>" required>
+  </div>
+  <div class="form-group">
+    <label for="gmail">Gmail Id<span class="red">*</span></label>
+    <input type="email" class="form-control" id="" name="gmail" value="<?php echo $gmail; ?>" required>
+  </div>
+  <div class="form-group">
+    <label for="emergency_number">Emergency Contact No.<span class="red">*</span></label>
+    <input type="number" class="form-control" id="" name="emergency_number" value="<?php echo $emergency_number; ?>" required>
   </div>
   <div class="form-group">
     <label for="mobile_number">Mobile No.</label>
