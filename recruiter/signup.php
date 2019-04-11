@@ -18,15 +18,16 @@
       $company_id = mysqli_real_escape_string($dbc, trim($_POST['company-id']));
       $company_name = mysqli_real_escape_string($dbc, trim($_POST['company-name']));
       $company_category = mysqli_real_escape_string($dbc, trim($_POST['company-category']));
-      $hr_name = mysqli_real_escape_string($dbc, trim($_POST['hr-name']));
-      $hr_email = mysqli_real_escape_string($dbc, trim($_POST['hr-email']));
+      $hr_name_1 = mysqli_real_escape_string($dbc, trim($_POST['hr-name-1']));
+      $hr_designation_1 = mysqli_real_escape_string($dbc, trim($_POST['hr-designation-1']));
+      $hr_email_1 = mysqli_real_escape_string($dbc, trim($_POST['hr-email-1']));
       $password = mysqli_real_escape_string($dbc, trim($_POST['pwd']));
       $verify_password = mysqli_real_escape_string($dbc, trim($_POST['confirm-pwd']));
       $captcha = mysqli_real_escape_string($dbc, trim($_POST['captcha']));
       // verify Captcha
       if(SHA1($captcha) == $_SESSION['passphrase']){
         if(!empty($company_id) && !empty($company_name) && $company_category!="0" &&
-          !empty($hr_name) && !empty($hr_email) &&
+          !empty($hr_name_1) && !empty($hr_designation_1) && !empty($hr_email_1) &&
           !empty($password) && !empty($verify_password) &&
           ($verify_password == $password)){
           // Check if company_id is available
@@ -41,8 +42,8 @@
             }elseif($company_category == "3"){
               $company_category = "B2";
             }
-            $query = "INSERT INTO recruiters (company_id, company_name, company_category, company_status, hr_name, hr_email, password, join_date) VALUES ".
-              "('$company_id', '$company_name', '$company_category', 'pending', '$hr_name', '$hr_email', SHA('$password'), NOW())";
+            $query = "INSERT INTO recruiters (company_id, company_name, company_category, company_status, hr_name_1, hr_designation_1, hr_email_1, password, join_date) VALUES ".
+              "('$company_id', '$company_name', '$company_category', 'pending', '$hr_name_1', '$hr_designation_1', '$hr_email_1', SHA('$password'), NOW())";
             mysqli_query($dbc, $query);
 
             //Confirm success with the recruiter
@@ -100,15 +101,19 @@
       </div>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroup-sizing-default">Name of the HR:</span>
+          <span class="input-group-text" id="inputGroup-sizing-default">Name of HR:</span>
         </div>
-        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="hr-name" name="hr-name" value="<?php if(!empty($hr_name)) echo $hr_name; ?>" placeholder="Enter name">
+        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="hr-name-1" name="hr-name-1" value="<?php if(!empty($hr_name_1)) echo $hr_name_1; ?>" placeholder="Enter name">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroup-sizing-default">Designation:</span>
+        </div>  
+        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="hr-designation-1" name="hr-designation-1" value="<?php if(!empty($hr_designation_1)) echo $hr_designation_1; ?>" placeholder="Enter designation">
       </div>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
           <span class="input-group-text" id="inputGroup-sizing-default">HR Email:</span>
         </div>
-        <input type="email" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="hr-email" name="hr-email" value="<?php if(!empty($hr_email)) echo $hr_email; ?>" placeholder="Enter email id">
+        <input type="email" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="hr-email-1" name="hr-email-1" value="<?php if(!empty($hr_email_1)) echo $hr_email_1; ?>" placeholder="Enter email id">
       </div>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
