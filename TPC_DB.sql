@@ -23,6 +23,9 @@ CREATE TABLE `students_data` (
   `resume_file` VARCHAR(256),
   `mobile_number` VARCHAR(16),
   `job_offers` VARCHAR(32),
+  `skype_Id` varchar(255) DEFAULT NULL,
+  `gmail_Id` varchar(255) DEFAULT NULL,
+  `emergency_number` varchar(16) DEFAULT NULL
   PRIMARY KEY (`data_id`)
 );
 

@@ -41,8 +41,10 @@
               //Insert into students_data
               $query = "INSERT INTO students_data (roll_number) VALUES ".
               "('$roll_number')";
-            mysqli_query($dbc, $query);
-
+            $insert_in_student_data=mysqli_query($dbc, $query);
+            if(!$insert_in_student_data){
+              die("QUERY FAILED ".mysqli_error($dbc));
+            }
             //Confirm success with the user
             echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
                 'You have been registered successfully. You can now log in <a href="login.php">here</a>.' .
