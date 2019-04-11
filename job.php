@@ -366,6 +366,7 @@
           $sno=1;
           $resume_download_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/util/resumes.php?job_id=' . $job_id;
           $generate_pdf_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/util/pdf.php?job_id=' . $job_id;
+          $generate_csv_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/util/csv.php?job_id=' . $job_id;
           $table_content='';
           if($applicant_num!=0){
   ?>
@@ -491,7 +492,10 @@
                   </tbody>
                 </table>
                   <a href="<?php echo $generate_pdf_url; ?>" target="_blank">
-                    <button name="create_applicant_list" class="btn btn-danger">Create PDF</button>
+                    <button name="create_applicant_pdf" class="btn btn-danger">Create PDF</button>
+                  </a>
+                  <a href="<?php echo $generate_csv_url; ?>" target="_blank">
+                    <button name="create_applicant_csv" class="btn btn-danger" style="margin-left:10px;">Create CSV</button>
                   </a>
                 </div>
               </div>
