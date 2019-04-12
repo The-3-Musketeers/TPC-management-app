@@ -70,30 +70,46 @@ if(isset($_POST['update'])){
     $hr_designation_3=mysqli_real_escape_string($dbc,trim($_POST['hr_designation_3']));
     $hr_email_3=mysqli_real_escape_string($dbc,trim($_POST['hr_email_3']));
     $company_desc=mysqli_real_escape_string($dbc,trim($_POST['company_desc']));
+    
+    $is_correct = TRUE;
 
-    $company_img_name=$_FILES['company_img']['name'];
-    $company_img_tmp_name=$_FILES['company_img']['tmp_name'];
-    $query="UPDATE recruiters SET company_name='$company_name', company_category='$company_category',company_url='$company_url',
-        hr_name_1='$hr_name_1',hr_designation_1='$hr_designation_1',hr_email_1='$hr_email_1',
-        hr_name_2='$hr_name_2',hr_designation_2='$hr_designation_2',hr_email_2='$hr_email_2',
-        hr_name_3='$hr_name_3',hr_designation_3='$hr_designation_3',hr_email_3='$hr_email_3',
-        company_desc='$company_desc' ";
-    if($company_img_name !=='' && $company_img_name !==null){
-        $company_img_name=time()."_".$company_img_name;
-        move_uploaded_file($company_img_tmp_name,"../images/recruiters/$company_img_name");
-        $query=$query.",company_img='$company_img_name'";
+    if($hr_name_3 != "" || $hr_designation_3 != "" || $hr_email_3 != ""){
+        $is_correct = FALSE;
+        if($hr_name_3 == "" || $hr_designation_3 == "" || $hr_email_3 == ""){
+            // Alert Warning : Write all fields for third HR
+            echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+            'Please enter all fields for the 3rd HR.' .
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+            '<span aria-hidden="true">&times;</span></button></div></div>';
+        } else {
+            $is_correct = TRUE;
+        }
     }
-    $query=$query." WHERE company_id='$company_id'";
-    $update_query=mysqli_query($dbc,$query);
-    if(!$update_query){
-    die("QUERY FAILED db".mysqli_error($dbc));
+    if($is_correct){
+        $company_img_name=$_FILES['company_img']['name'];
+        $company_img_tmp_name=$_FILES['company_img']['tmp_name'];
+        $query="UPDATE recruiters SET company_name='$company_name', company_category='$company_category',company_url='$company_url',
+            hr_name_1='$hr_name_1',hr_designation_1='$hr_designation_1',hr_email_1='$hr_email_1',
+            hr_name_2='$hr_name_2',hr_designation_2='$hr_designation_2',hr_email_2='$hr_email_2',
+            hr_name_3='$hr_name_3',hr_designation_3='$hr_designation_3',hr_email_3='$hr_email_3',
+            company_desc='$company_desc' ";
+        if($company_img_name !=='' && $company_img_name !==null){
+            $company_img_name=time()."_".$company_img_name;
+            move_uploaded_file($company_img_tmp_name,"../images/recruiters/$company_img_name");
+            $query=$query.",company_img='$company_img_name'";
+        }
+        $query=$query." WHERE company_id='$company_id'";
+        $update_query=mysqli_query($dbc,$query);
+        if(!$update_query){
+        die("QUERY FAILED db".mysqli_error($dbc));
+        }
+        // Alert Success : Profile Updated
+        echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+                    'Profile Updated' .
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+                    '<span aria-hidden="true">&times;</span></button></div></div>';
+        display();
     }
-    // Alert Success : Profile Updated
-    echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
-                'Profile Updated' .
-                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
-                '<span aria-hidden="true">&times;</span></button></div></div>';
-    display();
 }
 ?>
 

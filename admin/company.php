@@ -65,16 +65,10 @@
           <div style="display:flex;"><b>Name:</b> <div style="padding-left: 5px;"><?php echo $hr_name_2; ?></div></div>
           <div style="display:flex;"><b>Designation:</b> <div style="padding-left: 5px;"><?php echo $hr_designation_2; ?></div></div>
           <div style="display:flex;"><b>Email:</b> <div style="padding-left: 5px;"><?php echo $hr_email_2; ?></div></div><br>
-          <?php if($hr_name_3 != ""){ ?>
+          <?php if($hr_name_3 != "" && $hr_designation_3 != "" && $hr_email_3 != ""){ ?>
             <h5>3rd HR Details:</h5>
           <div style="display:flex;"><b>Name:</b> <div style="padding-left: 5px;"><?php echo $hr_name_3; ?></div></div>
-          <?php } 
-                if($hr_designation_3 != ""){ 
-          ?>
           <div style="display:flex;"><b>Designation:</b> <div style="padding-left: 5px;"><?php echo $hr_designation_3; ?></div></div>
-          <?php } 
-                if($hr_email_3 != ""){ 
-          ?>
           <div style="display:flex;"><b>Email:</b> <div style="padding-left: 5px;"><?php echo $hr_email_3; ?></div></div><br>
           <?php } ?>
           <h5>About:</h5>
