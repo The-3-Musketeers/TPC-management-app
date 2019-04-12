@@ -131,6 +131,14 @@
         <input class="form-check-input" type="checkbox" id="update_mtech" name="course[]" value="mtech">
         <label class="form-check-label" for="mtech">MTech</label>
       </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="update_msc" name="course[]" value="msc">
+        <label class="form-check-label" for="msc">Msc</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="update_phd" name="course[]" value="phd">
+        <label class="form-check-label" for="phd">PHD</label>
+      </div>
     </div>  
   </div>
   <div class="form-group row">
@@ -139,6 +147,8 @@
       <input type="hidden" id="branch" value="<?php echo $branch;?>">
       <div id="update_btech_branch"></div>
       <div id="update_mtech_branch"></div>
+      <div id="update_msc_branch"></div>
+      <div id="update_phd_branch"></div>
     </div>  
   </div>
   <div class="form-group row">
