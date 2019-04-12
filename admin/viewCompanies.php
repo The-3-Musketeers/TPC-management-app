@@ -149,8 +149,8 @@
         $id=$row['company_id'];
         $company_name=$row['company_name'];
         $company_category=$row['company_category'];
-        $hr_name=$row['hr_name'];
-        $hr_email=$row['hr_email'];
+        $hr_name_1=$row['hr_name_1'];
+        $hr_email_1=$row['hr_email_1'];
         $status=$row['company_status'];
         if(!empty($category)){
           if(in_array($company_category,$category)){
@@ -159,8 +159,8 @@
             <th scope="row"><?php echo $i;?></th>
             <td><a href="<?php echo './company.php?id=' . $id;?>"><?php echo $company_name; ?></a></td>
             <td><?php echo $company_category;?></td>
-            <td><?php echo $hr_name;?></td>
-            <td> <?php echo $hr_email; ?> </td>
+            <td><?php echo $hr_name_1;?></td>
+            <td> <?php echo $hr_email_1; ?> </td>
             <?php
             if($status=='accepted')
               echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=1 method="post">'.
@@ -182,8 +182,8 @@
             <th scope="row"><?php echo $i;?></th>
             <td><a href="<?php echo './company.php?id=' . $id;?>"><?php echo $company_name; ?></a></td>
             <td><?php echo $company_category;?></td>
-            <td><?php echo $hr_name;?></td>
-            <td> <?php echo $hr_email; ?> </td>
+            <td><?php echo $hr_name_1;?></td>
+            <td> <?php echo $hr_email_1; ?> </td>
             <?php
             if($status=='accepted')
               echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=1 method="post">'.
@@ -245,7 +245,7 @@
         </thead>
         <?php
           $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-          $query = "SELECT company_id, company_name, company_category, hr_name, hr_email FROM recruiters WHERE company_status='accepted'";
+          $query = "SELECT company_id, company_name, company_category, hr_name_1, hr_email_1 FROM recruiters WHERE company_status='accepted'";
           $data = mysqli_query($dbc, $query);
           if(mysqli_num_rows($data) != 0){
         ?>
@@ -256,8 +256,8 @@
               echo '<tr><th scope="row">' . $curr . '</th>' .
                         '<td><a href="./company.php?id=' . $row["company_id"] . '">' . $row["company_name"] . '</a></td>' .
                         '<td>' . $row["company_category"] . '</td>' .
-                        '<td>' . $row["hr_name"] . '</td>' .
-                        '<td>' . $row["hr_email"] . '</td>' .
+                        '<td>' . $row["hr_name_1"] . '</td>' .
+                        '<td>' . $row["hr_email_1"] . '</td>' .
                         '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=1" method="post">' .
                         '<button type="reject" class="btn btn-danger" name="reject">Reject</button></form></td>' .
                     '</tr>';
@@ -286,7 +286,7 @@
         </thead>
         <?php
           $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-          $query = "SELECT company_id, company_name, company_category, hr_name, hr_email FROM recruiters WHERE company_status='pending'";
+          $query = "SELECT company_id, company_name, company_category, hr_name_1, hr_email_1 FROM recruiters WHERE company_status='pending'";
           $data = mysqli_query($dbc, $query);
           if(mysqli_num_rows($data) != 0){
         ?>
@@ -297,8 +297,8 @@
               echo '<tr><th scope="row">' . $curr . '</th>' .
                         '<td><a href="./company.php?id=' . $row["company_id"] . '">' . $row["company_name"] . '</a></td>' .
                         '<td>' . $row["company_category"] . '</td>' .
-                        '<td>' . $row["hr_name"] . '</td>' .
-                        '<td>' . $row["hr_email"] . '</td>' .
+                        '<td>' . $row["hr_name_1"] . '</td>' .
+                        '<td>' . $row["hr_email_1"] . '</td>' .
                         '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=2" method="post">' .
                         '<button type="approve" class="btn btn-success" name="approve">Approve</button> ' .
                         '<button type="reject" class="btn btn-danger" name="reject">Reject</button></form></td>' .
@@ -328,7 +328,7 @@
         </thead>
         <?php
           $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-          $query = "SELECT company_id, company_name, company_category, hr_name, hr_email FROM recruiters WHERE company_status='rejected'";
+          $query = "SELECT company_id, company_name, company_category, hr_name_1, hr_email_1 FROM recruiters WHERE company_status='rejected'";
           $data = mysqli_query($dbc, $query);
           if(mysqli_num_rows($data) != 0){
         ?>
@@ -339,8 +339,8 @@
               echo '<tr><th scope="row">' . $curr . '</th>' .
                         '<td><a href="./company.php?id=' . $row["company_id"] . '">' . $row["company_name"] . '</a></td>' .
                         '<td>' . $row["company_category"] . '</td>' .
-                        '<td>' . $row["hr_name"] . '</td>' .
-                        '<td>' . $row["hr_email"] . '</td>' .
+                        '<td>' . $row["hr_name_1"] . '</td>' .
+                        '<td>' . $row["hr_email_1"] . '</td>' .
                         '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=3" method="post">' .
                         '<button type="approve" class="btn btn-success" name="approve">Approve</button></form></td>' .
                     '</tr>';

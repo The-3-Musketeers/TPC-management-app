@@ -31,8 +31,15 @@
     $row = mysqli_fetch_assoc($data);
     $company_name = $row["company_name"];
     $company_category = $row["company_category"];
-    $hr_name = $row["hr_name"];
-    $hr_email = $row["hr_email"];
+    $hr_name_1 = $row["hr_name_1"];
+    $hr_designation_1 = $row["hr_designation_1"];
+    $hr_email_1 = $row["hr_email_1"];
+    $hr_name_2 = $row["hr_name_2"];
+    $hr_designation_2 = $row["hr_designation_2"];
+    $hr_email_2 = $row["hr_email_2"];
+    $hr_name_3 = $row["hr_name_3"];
+    $hr_designation_3 = $row["hr_designation_3"];
+    $hr_email_3 = $row["hr_email_3"];
     $company_desc = $row["company_desc"];
     $company_status = $row["company_status"];
     $company_url = $row["company_url"];
@@ -49,9 +56,21 @@
         </div>
         <div class="card-body">
           <div style="display:flex;"><h5>ID:</h5> <div style="padding-left: 5px;"><?php echo $company_id; ?></div></div>
-          <div style="display:flex;"><h5>Category:</h5> <div style="padding-left: 5px;"><?php echo $company_category; ?></div></div>
-          <div style="display:flex;"><h5>HR Name:</h5> <div style="padding-left: 5px;"><?php echo $hr_name; ?></div></div>
-          <div style="display:flex;"><h5>HR Email:</h5> <div style="padding-left: 5px;"><?php echo $hr_email; ?></div></div>
+          <div style="display:flex;"><h5>Category:</h5> <div style="padding-left: 5px;"><?php echo $company_category; ?></div></div><br>
+          <h5>1st HR Details:</h5>
+          <div style="display:flex;"><b>Name:</b> <div style="padding-left: 5px;"><?php echo $hr_name_1; ?></div></div>
+          <div style="display:flex;"><b>Designation:</b> <div style="padding-left: 5px;"><?php echo $hr_designation_1; ?></div></div>
+          <div style="display:flex;"><b>Email:</b> <div style="padding-left: 5px;"><?php echo $hr_email_1; ?></div></div><br>
+          <h5>2nd HR Details:</h5>
+          <div style="display:flex;"><b>Name:</b> <div style="padding-left: 5px;"><?php echo $hr_name_2; ?></div></div>
+          <div style="display:flex;"><b>Designation:</b> <div style="padding-left: 5px;"><?php echo $hr_designation_2; ?></div></div>
+          <div style="display:flex;"><b>Email:</b> <div style="padding-left: 5px;"><?php echo $hr_email_2; ?></div></div><br>
+          <?php if($hr_name_3 != "" && $hr_designation_3 != "" && $hr_email_3 != ""){ ?>
+            <h5>3rd HR Details:</h5>
+          <div style="display:flex;"><b>Name:</b> <div style="padding-left: 5px;"><?php echo $hr_name_3; ?></div></div>
+          <div style="display:flex;"><b>Designation:</b> <div style="padding-left: 5px;"><?php echo $hr_designation_3; ?></div></div>
+          <div style="display:flex;"><b>Email:</b> <div style="padding-left: 5px;"><?php echo $hr_email_3; ?></div></div><br>
+          <?php } ?>
           <h5>About:</h5>
           <p><?php echo $company_desc;?></p>
         </div>
