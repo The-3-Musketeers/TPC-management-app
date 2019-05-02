@@ -13,16 +13,30 @@ $(document).ready(() => {
 	let branch = $("#branch").val();
 	branch = branch.split(',');
 
+	// Add Btech Branch
 	let add_btech = () => {
 		if (btech[0].checked) {
 			if ($("#update_btech_branch").text() == "Please Select a Course") {
 				$("#update_btech_branch").empty();
 			}
 			const $department = ["CS", "EE", "ME", "CE", "CB"];
+			$count = 0;
+			$department.forEach(($D) => {
+				if (branch.indexOf($D) !== -1) {
+					$count++;
+				}
+			});
+			$("#update_btech_branch").append("<div><span class='badge badge-secondary'>BTech</span></div>");
+			let $all = "<div class='form-check'><input id='btech' class='form-check-input' name='branch[]' type='checkbox' onChange='select_all(this)'";
+			if ($count == $department.length) {
+				$all = $all + "checked";
+			}
+			$all = $all + "><label class='form-check-label'>All</label></div>";
+			$("#update_btech_branch").append($all);
 			$department.forEach(($D) => {
 				if (branch.indexOf($D) !== -1) {
 					$r = $(
-						"<div class='form-check form-check-inline'><input class='form-check-input' name='branch[]' type='checkbox' value=" +
+						"<div class='form-check form-check-inline'><input class='form-check-input btech' name='branch[]' type='checkbox' value=" +
 						$D +
 						" checked><label class='form-check-label'>" +
 						$D +
@@ -31,7 +45,7 @@ $(document).ready(() => {
 				}
 				else {
 					$r = $(
-						"<div class='form-check form-check-inline'><input class='form-check-input' name='branch[]' type='checkbox' value=" +
+						"<div class='form-check form-check-inline'><input class='form-check-input btech' name='branch[]' type='checkbox' value=" +
 						$D +
 						"><label class='form-check-label'>" +
 						$D +
@@ -48,6 +62,7 @@ $(document).ready(() => {
 		}
 	};
 
+	// Add Mtech Branch
 	let add_mtech = () => {
 		if (mtech[0].checked) {
 			if ($("#update_btech_branch").text() == "Please Select a Course") {
@@ -75,11 +90,24 @@ $(document).ready(() => {
 				"mse",
 				"vlsi"
 			];
+			$count = 0;
+			$dept_value.forEach(($val) => {
+				if (branch.indexOf($val) !== -1) {
+					$count++;
+				}
+			});
+			$("#update_mtech_branch").append("<div><span class='badge badge-secondary'>MTech</span></div>");
+			let $all = "<div class='form-check'><input id='mtech' class='form-check-input' name='branch[]' type='checkbox' onChange='select_all(this)'";
+			if ($count == $dept_value.length) {
+				$all = $all + "checked";
+			}
+			$all = $all + "><label class='form-check-label'>All</label></div>";
+			$("#update_mtech_branch").append($all);
 			let $i = 0;
 			$department.forEach(($D) => {
 				if (branch.indexOf($dept_value[$i]) !== -1) {
 					$r = $(
-						"<div class='form-check form-check-inline'><input class='form-check-input' name='branch[]' type='checkbox' value=" +
+						"<div class='form-check form-check-inline'><input class='form-check-input mtech' name='branch[]' type='checkbox' value=" +
 						$dept_value[$i] +
 						" checked><label class='form-check-label'>" +
 						$D +
@@ -88,7 +116,7 @@ $(document).ready(() => {
 				}
 				else {
 					$r = $(
-						"<div class='form-check form-check-inline'><input class='form-check-input' name='branch[]' type='checkbox' value=" +
+						"<div class='form-check form-check-inline'><input class='form-check-input mtech' name='branch[]' type='checkbox' value=" +
 						$dept_value[$i] +
 						"><label class='form-check-label'>" +
 						$D +
@@ -106,6 +134,7 @@ $(document).ready(() => {
 		}
 	};
 
+	// Add MSC Branch
 	let add_msc = () => {
 		if (msc[0].checked) {
 			if ($("#update_btech_branch").text() == "Please Select a Course") {
@@ -121,11 +150,24 @@ $(document).ready(() => {
 				"phy",
 				"chem"
 			];
+			$count = 0;
+			$dept_value.forEach(($val) => {
+				if (branch.indexOf($val) !== -1) {
+					$count++;
+				}
+			});
+			$("#update_msc_branch").append("<div><span class='badge badge-secondary'>MSC</span></div>");
+			let $all = "<div class='form-check'><input id='msc' class='form-check-input' name='branch[]' type='checkbox' onChange='select_all(this)'";
+			if ($count == $dept_value.length) {
+				$all = $all + "checked";
+			}
+			$all = $all + "><label class='form-check-label'>All</label></div>";
+			$("#update_msc_branch").append($all);
 			let $i = 0;
 			$department.forEach(($D) => {
 				if (branch.indexOf($dept_value[$i]) !== -1) {
 					$r = $(
-						"<div class='form-check form-check-inline'><input class='form-check-input' name='branch[]' type='checkbox' value=" +
+						"<div class='form-check form-check-inline'><input class='form-check-input msc' name='branch[]' type='checkbox' value=" +
 						$dept_value[$i] +
 						" checked><label class='form-check-label'>" +
 						$D +
@@ -134,7 +176,7 @@ $(document).ready(() => {
 				}
 				else {
 					$r = $(
-						"<div class='form-check form-check-inline'><input class='form-check-input' name='branch[]' type='checkbox' value=" +
+						"<div class='form-check form-check-inline'><input class='form-check-input msc' name='branch[]' type='checkbox' value=" +
 						$dept_value[$i] +
 						"><label class='form-check-label'>" +
 						$D +
@@ -152,6 +194,7 @@ $(document).ready(() => {
 		}
 	};
 
+	// Add PHD Branch
 	let add_phd = () => {
 		if (phd[0].checked) {
 			if ($("#update_btech_branch").text() == "Please Select a Course") {
@@ -181,11 +224,24 @@ $(document).ready(() => {
 				"chem_phd",
 				"humanities_phd"
 			];
+			$count = 0;
+			$dept_value.forEach(($val) => {
+				if (branch.indexOf($val) !== -1) {
+					$count++;
+				}
+			});
+			$("#update_phd_branch").append("<div><span class='badge badge-secondary'>PHD</span></div>");
+			let $all = "<div class='form-check'><input id='phd' class='form-check-input' name='branch[]' type='checkbox' onChange='select_all(this)'";
+			if ($count == $dept_value.length) {
+				$all = $all + "checked";
+			}
+			$all = $all + "><label class='form-check-label'>All</label></div>";
+			$("#update_phd_branch").append($all);
 			let $i = 0;
 			$department.forEach(($D) => {
 				if (branch.indexOf($dept_value[$i]) !== -1) {
 					$r = $(
-						"<div class='form-check form-check-inline'><input class='form-check-input' name='branch[]' type='checkbox' value=" +
+						"<div class='form-check form-check-inline'><input class='form-check-input phd' name='branch[]' type='checkbox' value=" +
 						$dept_value[$i] +
 						" checked><label class='form-check-label'>" +
 						$D +
@@ -194,7 +250,7 @@ $(document).ready(() => {
 				}
 				else {
 					$r = $(
-						"<div class='form-check form-check-inline'><input class='form-check-input' name='branch[]' type='checkbox' value=" +
+						"<div class='form-check form-check-inline'><input class='form-check-input phd' name='branch[]' type='checkbox' value=" +
 						$dept_value[$i] +
 						"><label class='form-check-label'>" +
 						$D +
