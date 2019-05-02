@@ -1,22 +1,34 @@
+// select all branch function
+let select_all = (This) => {
+  let $id = This.id;
+  let $checked = This.checked;
+  if ($checked)
+    $("." + $id).prop('checked', true);
+  else
+    $("." + $id).prop('checked', false);
+};
+
 $(document).ready(() => {
   let btech = $("#btech");
   let mtech = $("#mtech");
   let msc = $("#msc");
   let phd = $("#phd");
-
   let warn = () => {
     $("#btech_branch").text("Please Select a Course");
   };
 
+  // Add Btech Branch
   let add_btech = () => {
     if (btech[0].checked) {
       if ($("#btech_branch").text() == "Please Select a Course") {
         $("#btech_branch").empty();
       }
       const $department = ["CS", "EE", "ME", "CE", "CB"];
+      $("#btech_branch").append("<div><span class='badge badge-secondary'>BTech</span></div>");
+      $("#btech_branch").append("<div class='form-check'><input id='btech' class='form-check-input' name='branch[]' type='checkbox' onChange='select_all(this)'><label class='form-check-label'>All</label></div>");
       $department.forEach(($D) => {
         $r = $(
-          "<div class='form-check form-check-inline'><input class='form-check-input' name='branch[]' type='checkbox' value=" +
+          "<div class='form-check form-check-inline'><input class='form-check-input btech' name='branch[]' type='checkbox' value=" +
           $D +
           "><label class='form-check-label'>" +
           $D +
@@ -32,6 +44,7 @@ $(document).ready(() => {
     }
   };
 
+  // Add Mtech Branch
   let add_mtech = () => {
     if (mtech[0].checked) {
       if ($("#btech_branch").text() == "Please Select a Course") {
@@ -59,10 +72,12 @@ $(document).ready(() => {
         "mse",
         "vlsi"
       ];
+      $("#mtech_branch").append("<div><span class='badge badge-secondary'>MTech</span></div>");
+      $("#mtech_branch").append("<div class='form-check'><input id='mtech' class='form-check-input' name='branch[]' type='checkbox' onChange='select_all(this)'><label class='form-check-label'>All</label></div>");
       let $i = 0;
       $department.forEach(($D) => {
         $r = $(
-          "<div class='form-check form-check-inline'><input class='form-check-input' name='branch[]' type='checkbox' value=" +
+          "<div class='form-check form-check-inline'><input class='form-check-input mtech' name='branch[]' type='checkbox' value=" +
           $dept_value[$i] +
           "><label class='form-check-label'>" +
           $D +
@@ -79,6 +94,7 @@ $(document).ready(() => {
     }
   };
 
+  // Add MSC Branch
   let add_msc = () => {
     if (msc[0].checked) {
       if ($("#btech_branch").text() == "Please Select a Course") {
@@ -94,10 +110,12 @@ $(document).ready(() => {
         "phy",
         "chem"
       ];
+      $("#msc_branch").append("<div><span class='badge badge-secondary'>MSC</span></div>");
+      $("#msc_branch").append("<div class='form-check'><input id='msc' class='form-check-input' name='branch[]' type='checkbox' onChange='select_all(this)'><label class='form-check-label'>All</label></div>");
       let $i = 0;
       $department.forEach(($D) => {
         $r = $(
-          "<div class='form-check form-check-inline'><input class='form-check-input' name='branch[]' type='checkbox' value=" +
+          "<div class='form-check form-check-inline'><input class='form-check-input msc' name='branch[]' type='checkbox' value=" +
           $dept_value[$i] +
           "><label class='form-check-label'>" +
           $D +
@@ -114,6 +132,7 @@ $(document).ready(() => {
     }
   };
 
+  // Add PHD Branch
   let add_phd = () => {
     if (phd[0].checked) {
       if ($("#btech_branch").text() == "Please Select a Course") {
@@ -143,10 +162,12 @@ $(document).ready(() => {
         "chem_phd",
         "humanities_phd"
       ];
+      $("#phd_branch").append("<div><span class='badge badge-secondary'>PHD</span></div>");
+      $("#phd_branch").append("<div class='form-check'><input id='phd' class='form-check-input' name='branch[]' type='checkbox' onChange='select_all(this)'><label class='form-check-label'>All</label></div>");
       let $i = 0;
       $department.forEach(($D) => {
         $r = $(
-          "<div class='form-check form-check-inline'><input class='form-check-input' name='branch[]' type='checkbox' value=" +
+          "<div class='form-check form-check-inline'><input class='form-check-input phd' name='branch[]' type='checkbox' value=" +
           $dept_value[$i] +
           "><label class='form-check-label'>" +
           $D +
@@ -176,5 +197,4 @@ $(document).ready(() => {
   phd.on("click", () => {
     add_phd();
   });
-
 });
