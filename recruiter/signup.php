@@ -17,7 +17,6 @@
       // Grab the sign in data from the post
       $company_id = mysqli_real_escape_string($dbc, trim($_POST['company-id']));
       $company_name = mysqli_real_escape_string($dbc, trim($_POST['company-name']));
-      $company_category = mysqli_real_escape_string($dbc, trim($_POST['company-category']));
       $hr_name_1 = mysqli_real_escape_string($dbc, trim($_POST['hr-name-1']));
       $hr_designation_1 = mysqli_real_escape_string($dbc, trim($_POST['hr-designation-1']));
       $hr_email_1 = mysqli_real_escape_string($dbc, trim($_POST['hr-email-1']));
@@ -26,7 +25,7 @@
       $captcha = mysqli_real_escape_string($dbc, trim($_POST['captcha']));
       // verify Captcha
       if(SHA1($captcha) == $_SESSION['passphrase']){
-        if(!empty($company_id) && !empty($company_name) && $company_category!="0" &&
+        if(!empty($company_id) && !empty($company_name) &&
           !empty($hr_name_1) && !empty($hr_designation_1) && !empty($hr_email_1) &&
           !empty($password) && !empty($verify_password) &&
           ($verify_password == $password)){
@@ -35,15 +34,8 @@
           $data = mysqli_query($dbc, $query);
           if(mysqli_num_rows($data) == 0){
             // company_id is available
-            if($company_category == "1"){
-              $company_category = "A1";
-            }elseif($company_category == "2"){
-              $company_category = "B1";
-            }elseif($company_category == "3"){
-              $company_category = "B2";
-            }
-            $query = "INSERT INTO recruiters (company_id, company_name, company_category, company_status, hr_name_1, hr_designation_1, hr_email_1, password, join_date) VALUES ".
-              "('$company_id', '$company_name', '$company_category', 'pending', '$hr_name_1', '$hr_designation_1', '$hr_email_1', SHA('$password'), NOW())";
+            $query = "INSERT INTO recruiters (company_id, company_name, company_status, hr_name_1, hr_designation_1, hr_email_1, password, join_date) VALUES ".
+              "('$company_id', '$company_name', 'pending', '$hr_name_1', '$hr_designation_1', '$hr_email_1', SHA('$password'), NOW())";
             mysqli_query($dbc, $query);
 
             //Confirm success with the recruiter
@@ -92,21 +84,13 @@
         <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="company-name" name="company-name" value="<?php if(!empty($company_name)) echo $company_name; ?>" placeholder="Enter name of the company">
       </div>
       <div class="input-group mb-3">
-        <select class="custom-select" id="company-category" name="company-category">
-          <option value="0" selected>Select Category</option>
-          <option value="1">A1</option>
-          <option value="2">B1</option>
-          <option value="3">B2</option>
-        </select>
-      </div>
-      <div class="input-group mb-3">
         <div class="input-group-prepend">
           <span class="input-group-text" id="inputGroup-sizing-default">Name of HR:</span>
         </div>
         <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="hr-name-1" name="hr-name-1" value="<?php if(!empty($hr_name_1)) echo $hr_name_1; ?>" placeholder="Enter name">
         <div class="input-group-prepend">
           <span class="input-group-text" id="inputGroup-sizing-default">Designation:</span>
-        </div>  
+        </div>
         <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="hr-designation-1" name="hr-designation-1" value="<?php if(!empty($hr_designation_1)) echo $hr_designation_1; ?>" placeholder="Enter designation">
       </div>
       <div class="input-group mb-3">

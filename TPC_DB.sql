@@ -25,7 +25,7 @@ CREATE TABLE `students_data` (
   `job_offers` VARCHAR(32),
   `skype_Id` varchar(255) DEFAULT NULL,
   `gmail_Id` varchar(255) DEFAULT NULL,
-  `emergency_number` varchar(16) DEFAULT NULL
+  `emergency_number` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`data_id`)
 );
 
@@ -46,6 +46,9 @@ CREATE TABLE `recruiters` (
   `company_name` VARCHAR(64),
   `company_desc` VARCHAR(256),
   `company_category` VARCHAR(2),
+  `company_type` VARCHAR(10),
+  `turnover` VARCHAR(10),
+  `scr_rounds` INT(2),
   `company_url` VARCHAR(256),
   `company_status` VARCHAR(10),
   `company_img` varchar(256) DEFAULT NULL,

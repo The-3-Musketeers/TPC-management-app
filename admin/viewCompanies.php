@@ -37,19 +37,33 @@
       die("Connection failed: " . mysqli_connect_error());
     }
     $company_id = mysqli_real_escape_string($dbc, trim($_GET['id']));
-    $update_status_query = "UPDATE recruiters SET company_status='accepted' WHERE company_id='$company_id'";
-    $update_status = mysqli_query($dbc, $update_status_query);
-    if(!$update_status){
+    $company_category = mysqli_real_escape_string($dbc, trim($_POST['company-category']));
+    if($company_category==0){
       echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+      'Select company category before approving' . '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+      '<span aria-hidden="true">&times;</span></button></div></div>';
+    } else{
+        if($company_category==1) {
+          $company_category='A1';
+        } else if($company_category==2) {
+          $company_category='B1';
+        } else if($company_category==3) {
+          $company_category='B2';
+        }
+      $update_status_query = "UPDATE recruiters SET company_status='accepted', company_category='$company_category' WHERE company_id='$company_id'";
+      $update_status = mysqli_query($dbc, $update_status_query);
+      if(!$update_status){
+        echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
         'Failed to update. Please try again.' . '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
         '<span aria-hidden="true">&times;</span></button></div></div>';
-      die("QUERY FAILED ".mysqli_error($dbc));
-    } else {
-      echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
-          'Successfully Updated.<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
-          '<span aria-hidden="true">&times;</span></button></div></div>';
+        die("QUERY FAILED ".mysqli_error($dbc));
+      } else {
+        echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+        'Successfully Updated.<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+        '<span aria-hidden="true">&times;</span></button></div></div>';
+      }
+      $activeTab = $_GET['tab'];
     }
-    $activeTab = $_GET['tab'];
   }
   if(isset($_POST['reject'])){
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
@@ -160,7 +174,7 @@
             <td><a href="<?php echo './company.php?id=' . $id;?>"><?php echo $company_name; ?></a></td>
             <td><?php echo $company_category;?></td>
             <td><?php echo $hr_name_1;?></td>
-            <td> <?php echo $hr_email_1; ?> </td>
+            <td><?php echo $hr_email_1;?></td>
             <?php
             if($status=='accepted')
               echo '<td><form action=' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=1 method="post">'.
@@ -296,10 +310,17 @@
             while($row = mysqli_fetch_array($data)){
               echo '<tr><th scope="row">' . $curr . '</th>' .
                         '<td><a href="./company.php?id=' . $row["company_id"] . '">' . $row["company_name"] . '</a></td>' .
-                        '<td>' . $row["company_category"] . '</td>' .
+                        '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=2" method="post">'.
+                        '<select class="custom-select" id="company-category" name="company-category">
+                          <option value="0" selected>Select Category</option>
+                          <option value="1">A1</option>
+                          <option value="2">B1</option>
+                          <option value="3">B2</option>
+                        </select>'.
+                        $row["company_category"] . '</td>' .
                         '<td>' . $row["hr_name_1"] . '</td>' .
                         '<td>' . $row["hr_email_1"] . '</td>' .
-                        '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=2" method="post">' .
+                        '<td>' .
                         '<button type="approve" class="btn btn-success" name="approve">Approve</button> ' .
                         '<button type="reject" class="btn btn-danger" name="reject">Reject</button></form></td>' .
                     '</tr>';
