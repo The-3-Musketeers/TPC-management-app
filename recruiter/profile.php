@@ -14,10 +14,10 @@
 
     $page_title = 'Profile';
     require_once('../templates/header.php');
-    require_once('../templates/navbar.php'); 
+    require_once('../templates/navbar.php');
 
     //Fetching info from student_data table
-    $company_name;$company_desc;$company_category;$company_url;$hr_name_1;$hr_email_1;$company_img;
+    $company_name;$company_desc;$company_type;$turnover;$scr_rounds;$company_url;$hr_name_1;$hr_email_1;$company_img;
     function display(){
         $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
         global $company_id;
@@ -27,11 +27,13 @@
             die("QUERY FAILED ".mysqli_error($dbc));
         }
 
-        global $company_name,$company_desc,$company_category,$company_url,$hr_name_1,$hr_designation_1,$hr_email_1,$hr_name_2,$hr_designation_2,$hr_email_2,$hr_name_3,$hr_designation_3,$hr_email_3,$company_img;
+        global $company_name,$company_desc,$company_type,$scr_rounds,$turnover,$company_url,$hr_name_1,$hr_designation_1,$hr_email_1,$hr_name_2,$hr_designation_2,$hr_email_2,$hr_name_3,$hr_designation_3,$hr_email_3,$company_img;
         $row=mysqli_fetch_assoc($select_from_recruiters_query);
         $company_name=$row['company_name'];
         $company_desc=$row['company_desc'];
-        $company_category=$row['company_category'];
+        $company_type=$row['company_type'];
+        $turnover=$row['turnover'];
+        $scr_rounds=$row['scr_rounds'];
         $company_url=$row['company_url'];
         $hr_name_1=$row['hr_name_1'];
         $hr_designation_1=$row['hr_designation_1'];
@@ -58,7 +60,9 @@
 if(isset($_POST['update'])){
 
     $company_name=mysqli_real_escape_string($dbc,trim($_POST['company_name']));
-    $company_category=mysqli_real_escape_string($dbc,trim($_POST['company_category']));
+    $company_type=mysqli_real_escape_string($dbc,trim($_POST['company_type']));
+    $turnover=mysqli_real_escape_string($dbc,trim($_POST['turnover']));
+    $scr_rounds=mysqli_real_escape_string($dbc,trim($_POST['scr_rounds']));
     $company_url=mysqli_real_escape_string($dbc,trim($_POST['company_url']));
     $hr_name_1=mysqli_real_escape_string($dbc,trim($_POST['hr_name_1']));
     $hr_designation_1=mysqli_real_escape_string($dbc,trim($_POST['hr_designation_1']));
@@ -70,8 +74,17 @@ if(isset($_POST['update'])){
     $hr_designation_3=mysqli_real_escape_string($dbc,trim($_POST['hr_designation_3']));
     $hr_email_3=mysqli_real_escape_string($dbc,trim($_POST['hr_email_3']));
     $company_desc=mysqli_real_escape_string($dbc,trim($_POST['company_desc']));
-    
+
     $is_correct = TRUE;
+
+    if($company_type == ""){
+        $is_correct = FALSE;
+            // Alert Warning : Select company type
+            echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+            'Please select the type of your company.' .
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+            '<span aria-hidden="true">&times;</span></button></div></div>';
+    }
 
     if($hr_name_3 != "" || $hr_designation_3 != "" || $hr_email_3 != ""){
         $is_correct = FALSE;
@@ -88,7 +101,7 @@ if(isset($_POST['update'])){
     if($is_correct){
         $company_img_name=$_FILES['company_img']['name'];
         $company_img_tmp_name=$_FILES['company_img']['tmp_name'];
-        $query="UPDATE recruiters SET company_name='$company_name', company_category='$company_category',company_url='$company_url',
+        $query="UPDATE recruiters SET company_name='$company_name', company_type='$company_type', turnover='$turnover', scr_rounds='$scr_rounds', company_url='$company_url',
             hr_name_1='$hr_name_1',hr_designation_1='$hr_designation_1',hr_email_1='$hr_email_1',
             hr_name_2='$hr_name_2',hr_designation_2='$hr_designation_2',hr_email_2='$hr_email_2',
             hr_name_3='$hr_name_3',hr_designation_3='$hr_designation_3',hr_email_3='$hr_email_3',
@@ -130,24 +143,50 @@ if(isset($_POST['update'])){
                     <input type="text" class="form-control" id="" name="company_name" value="<?php echo $company_name; ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="company_category">Company Category<span class="red">*</span></label>
-                    <select name="company_category" id="course">
+                    <label for="company_type">Company Type<span class="red">*</span></label>
+                    <select name="company_type" id="company_type">
                     <?php
-                        echo "<option value='{$company_category}'>{$company_category}</option>";
-                        if($company_category=='A1'){
-                            echo '<option value="B1">B1</option>';
-                            echo '<option value="B2">B2</option>';
+                        if($company_type!=''){
+                          echo "<option value='{$company_type}'>{$company_type}</option>";
+                        } else{
+                          echo "<option value=''>Select your Category</option>";
                         }
-                        else if($company_category=='B1'){
-                            echo '<option value="A1">A1</option>';
-                            echo '<option value="B2">B2</option>';
+                        if($company_type=='Private'){
+                            echo '<option value="PSU">PSU</option>';
+                            echo '<option value="Acadmic">Acadmic</option>';
+                            echo '<option value="Other">Other</option>';
+                        }
+                        else if($company_type=='PSU'){
+                            echo '<option value="Private">Private</option>';
+                            echo '<option value="Acadmic">Acadmic</option>';
+                            echo '<option value="Other">Other</option>';
+                        }
+                        else if($company_type=='Acadmic'){
+                            echo '<option value="Private">Private</option>';
+                            echo '<option value="PSU">PSU</option>';
+                            echo '<option value="Other">Other</option>';
+                        }
+                        else if($company_type=='Other'){
+                            echo '<option value="Private">Private</option>';
+                            echo '<option value="PSU">PSU</option>';
+                            echo '<option value="Acadmic">Acadmic</option>';
                         }
                         else{
-                            echo '<option value="A1">A1</option>';
-                            echo '<option value="B2">B2</option>';
+                          echo '<option value="Private">Private</option>';
+                          echo '<option value="PSU">PSU</option>';
+                          echo '<option value="Acadmic">Acadmic</option>';
+                          echo '<option value="Other">Other</option>';
                         }
                     ?>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label for="turnover">Annual Turnover<span class="red">*</span></label>
+                    <input type="text" class="form-control" id="" name="turnover" value="<?php echo $turnover; ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="scr_rounds">No of screening rounds<span class="red">*</span></label>
+                    <input type="text" class="form-control" id="" name="scr_rounds" value="<?php echo $scr_rounds; ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="comapny_url">Company Website Link<span class="red">*</span></label>
@@ -199,7 +238,7 @@ if(isset($_POST['update'])){
     </form>
 </div>
 
-<?php 
+<?php
 // Insert the footer
 require_once('../templates/footer.php');
 ?>
