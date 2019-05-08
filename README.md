@@ -14,6 +14,13 @@ Training and Placement Cell for college
   define('DB_NAME', '');
 ?>
 ```
+- Create the appVars.php file in the main directory. This file contains application constants.
+```
+<?php
+  // Define Captcha font
+  define('CAPTCHA_FONT', 'Courier New Bold.ttf');
+?>
+```
 - Setup your database by either importing the TPC_DB.sql file using phpMyAdmin or manually copy and paste the code in the SQL terminal.
 
 ## Setup the connection variables(in connectVars.php):
@@ -21,6 +28,16 @@ Training and Placement Cell for college
 - DB_USER - Username
 - DB_PASSWORD - Password
 - DB_NAME - Name of the database
+
+## Setup the app variables(in appVars.php):
+- Download the font file([Courier New Bold.ttf](https://fontzone.net/font-details/courier-new-bold)) or any other font for captcha generation into the util directory.
+- CAPTCHA_FONT - Name of the font file for captcha
+
+## Other libraries / Resources required:
+- Create a directory "lib"  in the main directory and download the [tcpdf](https://tcpdf.org/) library in it.
+
+## Optional:
+- If your app throws error during uploading photos/resumes by student or company, try creating images and resume directory manually and then create two subdirectories recruiters and students inside the images directory.
 
 ## Steps to start the web app:
 - Start your XAMPP server.
