@@ -21,9 +21,26 @@
   $data1 = mysqli_query($dbc, $query1);
   $query2 = "SELECT * FROM students_data WHERE roll_number='". $roll_number ."'";
   $data2 = mysqli_query($dbc, $query2);
+  $job_offers = "";
 
   if(!$data1 || !$data2){
     die("QUERY FAILED ".mysqli_error($dbc));
+  }
+
+  if(isset($_POST['submit'])){
+    $job_offers = mysqli_real_escape_string($dbc,trim($_POST['job_offers']));
+    $query = "UPDATE students_data SET job_offers='$job_offers' WHERE roll_number='$roll_number'";
+    $update_query = mysqli_query($dbc, $query);
+    // Query db again for receiving job offer
+    $data2 = mysqli_query($dbc, $query2);
+    if(!$update_query){
+      die("QUERY FAILED ".mysqli_error($dbc));
+    }
+    // Alert Success : Job offers updated
+    echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+            'Job offer(s) updated' .
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+          '<span aria-hidden="true">&times;</span></button></div></div>';
   }
 
   if(mysqli_num_rows($data1) == "1" && mysqli_num_rows($data2) == "1"){
@@ -37,6 +54,7 @@
     $course = $row2["course"];
     $resume_url = $row2["resume_url"];
     $mobile_number = $row2["mobile_number"];
+    $job_offers = $row2["job_offers"];
     ?>
     <div class="container" style="max-width: 80%; padding: 20px;">
       <div class="card">
@@ -57,6 +75,18 @@
             <div style="padding-left: 5px;"><?php echo $resume_url; ?></a></div>
           </div>
           <div style="display:flex;"><h5>Mobile Number:</h5> <div style="padding-left: 5px;"><?php echo $mobile_number; ?></div></div>
+          <div style="display:flex;">
+            <form action="<?php echo $_SERVER['PHP_SELF'] . "?roll=" . $roll_number; ?>" method="post" enctype="multipart/form-data">
+              <div class="form-group" style="margin-bottom:0">
+                <label for="roll-number" style="margin-bottom:0"><h5>Job Offer(s):</h5></label>
+                <div style="display:flex">
+                <input type="text" class="form-control" id="" name="job_offers" value="<?php echo $job_offers; ?>" required>
+                <button type="submit" name="submit" class="btn btn-primary" style="margin-left:10px">Submit</button>
+              </div>
+              </div>
+              <small>Please enter company category of the job offer received by student. If multiple offers are received, write the categories separated by comma. Ex: <code>A1,B2</code> or <code>B2</code> or <code>B1,B2</code> etc.</small>
+            </form>
+          </div>
         </div>
       </div>
     </div>
