@@ -187,7 +187,7 @@ else{
   </div>
   <div class="form-group">
     <label for="skype">Skype Id<span class="red">*</span></label>
-    <input type="email" class="form-control" id="" name="skype" value="<?php echo $skype; ?>" required>
+    <input type="text" class="form-control" id="" name="skype" value="<?php echo $skype; ?>" required>
   </div>
   <div class="form-group">
     <label for="gmail">Gmail Id<span class="red">*</span></label>
