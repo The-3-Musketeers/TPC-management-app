@@ -359,7 +359,14 @@
             while($row = mysqli_fetch_array($data)){
               echo '<tr><th scope="row">' . $curr . '</th>' .
                         '<td><a href="./company.php?id=' . $row["company_id"] . '">' . $row["company_name"] . '</a></td>' .
-                        '<td>' . $row["company_category"] . '</td>' .
+                        '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=2" method="post">'.
+                        '<select class="custom-select" id="company-category" name="company-category">
+                          <option value="0" selected>Select Category</option>
+                          <option value="1">A1</option>
+                          <option value="2">B1</option>
+                          <option value="3">B2</option>
+                        </select>'.
+                        '</td>' .
                         '<td>' . $row["hr_name_1"] . '</td>' .
                         '<td>' . $row["hr_email_1"] . '</td>' .
                         '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=3" method="post">' .
