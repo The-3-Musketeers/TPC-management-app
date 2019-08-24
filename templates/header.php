@@ -10,11 +10,12 @@
     <meta name="viewport" content="width = device-width, initial-scale = 1">
 
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/TPC-management-app/css/footer.css">
     <link rel="stylesheet" href="/TPC-management-app/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link rel="stylesheet" href="/TPC-management-app/css/index.css">
     <link rel="stylesheet" href="/TPC-management-app/css/job.css">
-    <?php if(isset($_SESSION['username']) && $_SESSION['user_role']=='admin'){ ?>
-      <link rel="stylesheet" href="/TPC-management-app/css/viewJobs.css">
+    <?php if(isset($_SESSION['user_role']) && $_SESSION['user_role']=='admin'){ ?>
+        <link rel="stylesheet" href="/TPC-management-app/css/viewJobs.css">
     <?php } ?>
 
     <?php

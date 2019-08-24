@@ -1,3 +1,5 @@
+  <!-- Footer -->
+  <script src="/TPC-management-app/scripts/footer.js"></script>
   <!-- jQuery, Popper.js, Bootstrap JS, Chart.js -->
   <script src="/TPC-management-app/scripts/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="/TPC-management-app/scripts/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
