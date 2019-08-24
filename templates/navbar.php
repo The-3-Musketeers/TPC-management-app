@@ -24,6 +24,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <?php if(!isset($_SESSION['username']) || $_SESSION['user_role']!='admin'){ ?>
+      <!--
       <li class="nav-item active">
         <a class="nav-link" href="#">Why IIT Patna?</a>
       </li>
@@ -41,6 +42,7 @@
           <a class="dropdown-item" href="#">Set Appointment</a>
         </div>
       </li>
+      -->
       <?php } ?>
       <?php if(isset($_SESSION['username']) && $_SESSION['user_role']=='admin'){ ?>
       <li class="nav-item active">
