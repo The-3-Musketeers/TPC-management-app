@@ -29,4 +29,4 @@ function setValus(arr) {
     document.getElementById("dev2").innerHTML=arr[1][0] + ",";
     document.getElementById("dev3").innerHTML=arr[2][0];
 };
-setValus(arr); 
+setValus(arr);
