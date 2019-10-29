@@ -22,7 +22,7 @@
                         "</tr>" .
                       "</thead>";
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-    $query = "SELECT roll_number, current_cpi, mobile_number FROM students_data WHERE course='$course' AND department='$dept'";
+    $query = "SELECT roll_number, current_cpi, mobile_number FROM students_data WHERE course='$course' AND department='$dept' ORDER BY roll_number ASC";
     $data = mysqli_query($dbc, $query);
     if(mysqli_num_rows($data) != 0){
       $html_content .= "<tbody>";
@@ -74,7 +74,7 @@
     <div class="tab-pane fade show active" id="btech" role="tabpanel" aria-labelledby="btech-tab">
       <div class="accordion" id="accordionBtech">
         <?php
-          $branches = ["CS"=>"Computer Science and Engineering", 
+          $branches = ["CS"=>"Computer Science and Engineering",
                         "EE"=>"Electrical Engineering",
                         "ME"=>"Mechanical Engineering",
                         "CE"=>"Civil and Environmental Engineering",
@@ -107,7 +107,7 @@
     <div class="tab-pane fade" id="mtech" role="tabpanel" aria-labelledby="mtech-tab">
       <div class="accordion" id="accordionMtech">
         <?php
-          $branches = ["mech"=>"Mechatronics", 
+          $branches = ["mech"=>"Mechatronics",
                         "mnc"=>"Mathematics & Computing",
                         "nano"=>"Nano Science & Technology",
                         "cse"=>"Computer Science & Engineering",
@@ -140,11 +140,11 @@
         ?>
       </div>
     </div>
-  
+
     <div class="tab-pane fade" id="msc" role="tabpanel" aria-labelledby="msc-tab">
       <div class="accordion" id="accordionMSC">
         <?php
-          $branches = ["math"=>"Mathematics", 
+          $branches = ["math"=>"Mathematics",
                         "phy"=>"Physics",
                         "chem"=>"Chemistry"
                           ];
@@ -175,7 +175,7 @@
     <div class="tab-pane fade" id="phd" role="tabpanel" aria-labelledby="phd-tab">
       <div class="accordion" id="accordionPHD">
         <?php
-          $branches = ["cse_phd"=>"Computer Science & Engineering", 
+          $branches = ["cse_phd"=>"Computer Science & Engineering",
                         "ee_phd"=>"Electrical Engineering",
                         "me_phd"=>"Mechanical Engineering",
                         "ce_phd"=>"Civil & Environment Engineering",
