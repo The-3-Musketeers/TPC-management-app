@@ -12,11 +12,11 @@
   $no_accepted; $no_pending; $no_rejected;
   function countEntries(){
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-    $query_accepted = "SELECT * FROM recruiters WHERE company_status='accepted'";
+    $query_accepted = "SELECT * FROM recruiters_data WHERE company_status='accepted'";
     $data_accepted = mysqli_query($dbc, $query_accepted);
-    $query_pending = "SELECT * FROM recruiters WHERE company_status='pending'";
+    $query_pending = "SELECT * FROM recruiters_data WHERE company_status='pending'";
     $data_pending = mysqli_query($dbc, $query_pending);
-    $query_rejected = "SELECT * FROM recruiters WHERE company_status='rejected'";
+    $query_rejected = "SELECT * FROM recruiters_data WHERE company_status='rejected'";
     $data_rejected = mysqli_query($dbc, $query_rejected);
     $GLOBALS['no_accepted'] = mysqli_num_rows($data_accepted);
     $GLOBALS['no_pending'] = mysqli_num_rows($data_pending);
@@ -50,7 +50,7 @@
         } else if($company_category==3) {
           $company_category='B2';
         }
-      $update_status_query = "UPDATE recruiters SET company_status='accepted', company_category='$company_category' WHERE company_id='$company_id'";
+      $update_status_query = "UPDATE recruiters_data SET company_status='accepted', company_category='$company_category' WHERE company_id='$company_id'";
       $update_status = mysqli_query($dbc, $update_status_query);
       if(!$update_status){
         echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
@@ -71,7 +71,7 @@
       die("Connection failed: " . mysqli_connect_error());
     }
     $company_id = mysqli_real_escape_string($dbc, trim($_GET['id']));
-    $update_status_query = "UPDATE recruiters SET company_status='rejected' WHERE company_id='$company_id'";
+    $update_status_query = "UPDATE recruiters_data SET company_status='rejected' WHERE company_id='$company_id'";
     $update_status = mysqli_query($dbc, $update_status_query);
     if(!$update_status){
       echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
@@ -128,13 +128,12 @@
         foreach($keywords as $key){
           if(in_array(strtoupper($key),$categories)){
             array_push($category,strtoupper($key));
-          }
-          else {
+          }else{
             $rem_words.=$key." ";
           }
         }
         if($rem_words!=""){
-          $query="SELECT * FROM recruiters WHERE MATCH (company_name) AGAINST ('$rem_words')";
+          $query="SELECT * FROM recruiters_data WHERE MATCH (company_name) AGAINST ('$rem_words')";
           $search_query=mysqli_query($dbc,$query);
           if(!$search_query){
             die("error ".mysqli_error($dbc));
@@ -142,13 +141,11 @@
           $num=mysqli_num_rows($search_query);
           if($num!=0){
             add_row($search_query,$category);
-          }
-          else{
+          }else{
             echo "No result Found";
           }
-        }
-        else{
-          $query="SELECT * FROM recruiters";
+        }else{
+          $query="SELECT * FROM recruiters_data";
           $search_query=mysqli_query($dbc,$query);
           add_row($search_query,$category);
         }
@@ -259,7 +256,7 @@
         </thead>
         <?php
           $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-          $query = "SELECT company_id, company_name, company_category, hr_name_1, hr_email_1 FROM recruiters WHERE company_status='accepted'";
+          $query = "SELECT company_id, company_name, company_category, hr_name_1, hr_email_1 FROM recruiters_data WHERE company_status='accepted'";
           $data = mysqli_query($dbc, $query);
           if(mysqli_num_rows($data) != 0){
         ?>
@@ -300,7 +297,7 @@
         </thead>
         <?php
           $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-          $query = "SELECT company_id, company_name, company_category, hr_name_1, hr_email_1 FROM recruiters WHERE company_status='pending'";
+          $query = "SELECT company_id, company_name, company_category, hr_name_1, hr_email_1 FROM recruiters_data WHERE company_status='pending'";
           $data = mysqli_query($dbc, $query);
           if(mysqli_num_rows($data) != 0){
         ?>
@@ -349,7 +346,7 @@
         </thead>
         <?php
           $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-          $query = "SELECT company_id, company_name, company_category, hr_name_1, hr_email_1 FROM recruiters WHERE company_status='rejected'";
+          $query = "SELECT company_id, company_name, company_category, hr_name_1, hr_email_1 FROM recruiters_data WHERE company_status='rejected'";
           $data = mysqli_query($dbc, $query);
           if(mysqli_num_rows($data) != 0){
         ?>

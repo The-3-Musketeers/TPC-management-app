@@ -44,7 +44,7 @@
       $apply_by=$row['apply_by'];
 
       // Category of job
-      $company_query = "SELECT company_category FROM recruiters WHERE company_id='" . $company_id . "'";
+      $company_query = "SELECT company_category FROM recruiters_data WHERE company_id='" . $company_id . "'";
       $company_data = mysqli_query($dbc, $company_query);
       $company_row = mysqli_fetch_assoc($company_data);
       $company_cat = $company_row['company_category'];
@@ -206,7 +206,7 @@
       $job_desc=$row['job_desc'];
       $created_on=$row['created_on'];
       $created_on=date('d-m-y',strtotime($created_on));
-      $company_query="SELECT company_name, company_url, company_desc FROM recruiters WHERE company_id='" . $company_id . "'";
+      $company_query="SELECT company_name, company_url, company_desc FROM recruiters_data WHERE company_id='" . $company_id . "'";
       $get_company_name_query=mysqli_query($dbc,$company_query);
       $num1=mysqli_num_rows($get_company_name_query);
       if($num1==1){
@@ -227,7 +227,7 @@
             $comp_id_query="SELECT company_id FROM positions WHERE job_id='" . $job_id . "'";
             $query3=mysqli_query($dbc,$comp_id_query);
             $row3=mysqli_fetch_assoc($query3);
-            $comp_cat_query="SELECT company_category FROM recruiters WHERE company_id='" . $row3['company_id'] . "'";
+            $comp_cat_query="SELECT company_category FROM recruiters_data WHERE company_id='" . $row3['company_id'] . "'";
             $query3=mysqli_query($dbc,$comp_cat_query);
             $row3=mysqli_fetch_assoc($query3);
             $apply_query="INSERT INTO applications (job_id, student_roll_number, company_category, applied_on) VALUES ".
@@ -348,7 +348,7 @@
           if(isset($_POST['add_applicant'])){
             $roll_number=$_POST['roll_number'];
             $email=$_POST['email'];
-            $company_query = "SELECT company_category FROM recruiters WHERE company_id='" . $job_offer_company_id . "'";
+            $company_query = "SELECT company_category FROM recruiters_data WHERE company_id='" . $job_offer_company_id . "'";
             $data = mysqli_query($dbc, $company_query);
             $row = mysqli_fetch_array($data);
             $company_cat = $row['company_category'];

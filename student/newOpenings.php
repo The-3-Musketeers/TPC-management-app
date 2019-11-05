@@ -19,7 +19,7 @@ if($num!=0){
       $no_of_opening=$row['no_of_opening'];
       $stipend=$row['stipend'];
 
-      $company_cat_query = "SELECT company_category FROM recruiters WHERE company_id='" . $company_id . "'";
+      $company_cat_query = "SELECT company_category FROM recruiters_data WHERE company_id='" . $company_id . "'";
       $company_cat_data = mysqli_query($dbc, $company_cat_query);
       $company_cat_row = mysqli_fetch_assoc($company_cat_data);
 
@@ -43,7 +43,7 @@ if($num!=0){
       }
       $created_on=$row['created_on'];
       $created_on=date('d-m-y',strtotime($created_on));
-      $company_query="SELECT company_name FROM recruiters WHERE company_id='" . $company_id . "'";
+      $company_query="SELECT company_name FROM recruiters_data WHERE company_id='" . $company_id . "'";
       $get_company_name_query=mysqli_query($dbc,$company_query);
       $num1=mysqli_num_rows($get_company_name_query);
       if($num1==1){

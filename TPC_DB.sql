@@ -39,32 +39,37 @@ CREATE TABLE `applications` (
   PRIMARY KEY (`application_id`)
 );
 
-CREATE TABLE `recruiters` (
-  `user_id` INT AUTO_INCREMENT,
-  `join_date` DATETIME,
-  `company_id` VARCHAR(8),
-  `company_name` VARCHAR(64),
-  `company_desc` VARCHAR(256),
-  `company_category` VARCHAR(2),
-  `company_type` VARCHAR(10),
-  `turnover` VARCHAR(10),
-  `scr_rounds` INT(2),
-  `company_url` VARCHAR(256),
-  `company_status` VARCHAR(10),
-  `company_img` varchar(256) DEFAULT NULL,
-  `hr_name_1` VARCHAR(32),
-  `hr_email_1` VARCHAR(64),
-  `hr_designation_1` VARCHAR(32),
-  `hr_name_2` VARCHAR(32),
-  `hr_email_2` VARCHAR(64),
-  `hr_designation_2` VARCHAR(32),
-  `hr_name_3` VARCHAR(32),
-  `hr_email_3` VARCHAR(64),
-  `hr_designation_3` VARCHAR(32),
-  `access_token` VARCHAR(64),
-  `password` VARCHAR(40),
-  PRIMARY KEY (`user_id`),
-  FULLTEXT(`company_name`)
+CREATE TABLE recruiters (
+  company_id VARCHAR(8),
+  join_date DATETIME,
+  access_token VARCHAR(64),
+  password VARCHAR(40),
+  PRIMARY KEY (company_id)
+);
+
+CREATE TABLE recruiters_data (
+  company_id VARCHAR(8),
+  company_name VARCHAR(64),
+  company_desc VARCHAR(256),
+  company_category VARCHAR(2),
+  company_type VARCHAR(10),
+  turnover VARCHAR(10),
+  scr_rounds INT(2),
+  company_url VARCHAR(256),
+  company_status VARCHAR(10),
+  company_img varchar(256) DEFAULT NULL,
+  hr_name_1 VARCHAR(32),
+  hr_email_1 VARCHAR(64),
+  hr_designation_1 VARCHAR(32),
+  hr_name_2 VARCHAR(32),
+  hr_email_2 VARCHAR(64),
+  hr_designation_2 VARCHAR(32),
+  hr_name_3 VARCHAR(32),
+  hr_email_3 VARCHAR(64),
+  hr_designation_3 VARCHAR(32),
+  PRIMARY KEY (company_id),
+  FOREIGN KEY (company_id) REFERENCES recruiters(company_id),
+  FULLTEXT (company_name)
 );
 
 CREATE TABLE `positions` (
