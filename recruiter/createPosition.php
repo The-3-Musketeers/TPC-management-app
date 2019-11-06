@@ -14,6 +14,16 @@
   //Connect to the database
   $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
   
+  // Random job_id generator
+  function generate_job_id() 
+  { 
+    // String of all alphanumeric character 
+    $str_result = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'; 
+    // Shufle the $str_result and returns substring 
+    // of length 6 
+    return substr(str_shuffle($str_result), 0, 6); 
+  } 
+  
   // Insert New Position
   if(isset($_POST['submit'])){
     $job_position=mysqli_real_escape_string($dbc,trim($_POST['job_position']));
@@ -30,10 +40,11 @@
     $job_desc=mysqli_real_escape_string($dbc,trim($_POST['job_desc']));
     $company_id=$_SESSION['company_id'];
     $company_name=$_SESSION['company_name'];
+    $job_id=generate_job_id();
 
     if($course!='' && $branch!=''){
-      $query1 = "INSERT INTO positions (job_position, course, branch, min_cpi, job_desc, company_id,created_on,company_name ";
-      $query2 = "('$job_position', '$course', '$branch', $min_cpi, '$job_desc', '$company_id', NOW(),'$company_name' ";
+      $query1 = "INSERT INTO positions (job_id, job_position, course, branch, min_cpi, job_desc, company_id,created_on,company_name ";
+      $query2 = "('$job_id', '$job_position', '$course', '$branch', $min_cpi, '$job_desc', '$company_id', NOW(),'$company_name' ";
       // Append to insert query is the fields are not empty
       if(!empty($test_date)){
         $query1 = $query1.", test_date";
@@ -70,6 +81,17 @@
                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
                 '<span aria-hidden="true">&times;</span></button></div></div>';
       } else {
+      
+      // Checking whether the random generated job_id is already present or not
+      $job_id_query="SELECT * FROM positions WHERE job_id='$job_id'";
+      $select_query=mysqli_query($dbc,$job_id_query);
+      $select_query_row_count=mysqli_num_rows($select_query);
+      while($select_query_row_count>0){
+        $job_id=generate_job_id();
+        $select_query=mysqli_query($dbc,$job_id_query);
+        $select_query_row_count=mysqli_num_rows($select_query);
+      }
+
       $create_job_query=mysqli_query($dbc,$query);
       if(!$create_job_query){
         die("QUERY FAILED ".mysqli_error($dbc));
