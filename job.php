@@ -44,7 +44,7 @@
       $apply_by=$row['apply_by'];
 
       // Category of job
-      $company_query = "SELECT company_category FROM recruiters WHERE company_id='" . $company_id . "'";
+      $company_query = "SELECT company_category FROM recruiters_data WHERE company_id='" . $company_id . "'";
       $company_data = mysqli_query($dbc, $company_query);
       $company_row = mysqli_fetch_assoc($company_data);
       $company_cat = $company_row['company_category'];
@@ -206,7 +206,7 @@
       $job_desc=$row['job_desc'];
       $created_on=$row['created_on'];
       $created_on=date('d-m-y',strtotime($created_on));
-      $company_query="SELECT company_name, company_url, company_desc FROM recruiters WHERE company_id='" . $company_id . "'";
+      $company_query="SELECT company_name, company_url, company_desc FROM recruiters_data WHERE company_id='" . $company_id . "'";
       $get_company_name_query=mysqli_query($dbc,$company_query);
       $num1=mysqli_num_rows($get_company_name_query);
       if($num1==1){

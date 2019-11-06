@@ -20,7 +20,7 @@
   require_once('../templates/header.php');
   require_once('../templates/navbar.php');
 
-  $query = "SELECT * FROM recruiters WHERE company_id='". $company_id ."'";
+  $query = "SELECT * FROM recruiters_data WHERE company_id='". $company_id ."'";
   $data = mysqli_query($dbc, $query);
 
   if(!$data){

@@ -10,7 +10,7 @@
 
     //Connect to the database
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-    $company_id=$_SESSION['company_id'];
+    $company_id = $_SESSION['company_id'];
 
     $page_title = 'Profile';
     require_once('../templates/header.php');
@@ -21,35 +21,35 @@
     function display(){
         $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
         global $company_id;
-        $query="SELECT * FROM recruiters WHERE company_id='{$company_id}'";
+        $query="SELECT * FROM recruiters_data WHERE company_id='{$company_id}'";
         $select_from_recruiters_query=mysqli_query($dbc,$query);
         if(!$select_from_recruiters_query){
             die("QUERY FAILED ".mysqli_error($dbc));
         }
 
         global $company_name,$company_desc,$company_type,$scr_rounds,$turnover,$company_url,$hr_name_1,$hr_designation_1,$hr_email_1,$hr_name_2,$hr_designation_2,$hr_email_2,$hr_name_3,$hr_designation_3,$hr_email_3,$company_img;
-        $row=mysqli_fetch_assoc($select_from_recruiters_query);
-        $company_name=$row['company_name'];
-        $company_desc=$row['company_desc'];
-        $company_type=$row['company_type'];
-        $turnover=$row['turnover'];
-        $scr_rounds=$row['scr_rounds'];
-        $company_url=$row['company_url'];
-        $hr_name_1=$row['hr_name_1'];
-        $hr_designation_1=$row['hr_designation_1'];
-        $hr_email_1=$row['hr_email_1'];
-        $hr_name_2=$row['hr_name_2'];
-        $hr_designation_2=$row['hr_designation_2'];
-        $hr_email_2=$row['hr_email_2'];
-        $hr_name_3=$row['hr_name_3'];
-        $hr_designation_3=$row['hr_designation_3'];
-        $hr_email_3=$row['hr_email_3'];
-        $company_img=$row['company_img'];
-        if($company_img!==null && $company_img!==''){
-            $company_img='/TPC-management-app/images/recruiters/'.$row['company_img'];
+        $row = mysqli_fetch_assoc($select_from_recruiters_query);
+        $company_name = $row['company_name'];
+        $company_desc = $row['company_desc'];
+        $company_type = $row['company_type'];
+        $turnover = $row['turnover'];
+        $scr_rounds = $row['scr_rounds'];
+        $company_url = $row['company_url'];
+        $hr_name_1 = $row['hr_name_1'];
+        $hr_designation_1 = $row['hr_designation_1'];
+        $hr_email_1 = $row['hr_email_1'];
+        $hr_name_2 = $row['hr_name_2'];
+        $hr_designation_2 = $row['hr_designation_2'];
+        $hr_email_2 = $row['hr_email_2'];
+        $hr_name_3 = $row['hr_name_3'];
+        $hr_designation_3 = $row['hr_designation_3'];
+        $hr_email_3 = $row['hr_email_3'];
+        $company_img = $row['company_img'];
+        if($company_img !== null && $company_img !== ''){
+            $company_img = '/TPC-management-app/images/recruiters/'.$row['company_img'];
         }
         else{
-            $company_img='/TPC-management-app/pictures/company_icon.png';
+            $company_img = '/TPC-management-app/pictures/company_icon.png';
         }
     }
     display();
@@ -59,21 +59,21 @@
 //Updating Profile
 if(isset($_POST['update'])){
 
-    $company_name=mysqli_real_escape_string($dbc,trim($_POST['company_name']));
-    $company_type=mysqli_real_escape_string($dbc,trim($_POST['company_type']));
-    $turnover=mysqli_real_escape_string($dbc,trim($_POST['turnover']));
-    $scr_rounds=mysqli_real_escape_string($dbc,trim($_POST['scr_rounds']));
-    $company_url=mysqli_real_escape_string($dbc,trim($_POST['company_url']));
-    $hr_name_1=mysqli_real_escape_string($dbc,trim($_POST['hr_name_1']));
-    $hr_designation_1=mysqli_real_escape_string($dbc,trim($_POST['hr_designation_1']));
-    $hr_email_1=mysqli_real_escape_string($dbc,trim($_POST['hr_email_1']));
-    $hr_name_2=mysqli_real_escape_string($dbc,trim($_POST['hr_name_2']));
-    $hr_designation_2=mysqli_real_escape_string($dbc,trim($_POST['hr_designation_2']));
-    $hr_email_2=mysqli_real_escape_string($dbc,trim($_POST['hr_email_2']));
-    $hr_name_3=mysqli_real_escape_string($dbc,trim($_POST['hr_name_3']));
-    $hr_designation_3=mysqli_real_escape_string($dbc,trim($_POST['hr_designation_3']));
-    $hr_email_3=mysqli_real_escape_string($dbc,trim($_POST['hr_email_3']));
-    $company_desc=mysqli_real_escape_string($dbc,trim($_POST['company_desc']));
+    $company_name = mysqli_real_escape_string($dbc,trim($_POST['company_name']));
+    $company_type = mysqli_real_escape_string($dbc,trim($_POST['company_type']));
+    $turnover = mysqli_real_escape_string($dbc,trim($_POST['turnover']));
+    $scr_rounds = mysqli_real_escape_string($dbc,trim($_POST['scr_rounds']));
+    $company_url = mysqli_real_escape_string($dbc,trim($_POST['company_url']));
+    $hr_name_1 = mysqli_real_escape_string($dbc,trim($_POST['hr_name_1']));
+    $hr_designation_1 = mysqli_real_escape_string($dbc,trim($_POST['hr_designation_1']));
+    $hr_email_1 = mysqli_real_escape_string($dbc,trim($_POST['hr_email_1']));
+    $hr_name_2 = mysqli_real_escape_string($dbc,trim($_POST['hr_name_2']));
+    $hr_designation_2 = mysqli_real_escape_string($dbc,trim($_POST['hr_designation_2']));
+    $hr_email_2 = mysqli_real_escape_string($dbc,trim($_POST['hr_email_2']));
+    $hr_name_3 = mysqli_real_escape_string($dbc,trim($_POST['hr_name_3']));
+    $hr_designation_3 = mysqli_real_escape_string($dbc,trim($_POST['hr_designation_3']));
+    $hr_email_3 = mysqli_real_escape_string($dbc,trim($_POST['hr_email_3']));
+    $company_desc = mysqli_real_escape_string($dbc,trim($_POST['company_desc']));
 
     $is_correct = TRUE;
 
@@ -99,22 +99,22 @@ if(isset($_POST['update'])){
         }
     }
     if($is_correct){
-        $company_img_name=$_FILES['company_img']['name'];
-        $company_img_tmp_name=$_FILES['company_img']['tmp_name'];
-        $query="UPDATE recruiters SET company_name='$company_name', company_type='$company_type', turnover='$turnover', scr_rounds='$scr_rounds', company_url='$company_url',
+        $company_img_name = $_FILES['company_img']['name'];
+        $company_img_tmp_name = $_FILES['company_img']['tmp_name'];
+        $query = "UPDATE recruiters_data SET company_name='$company_name', company_type='$company_type', turnover='$turnover', scr_rounds='$scr_rounds', company_url='$company_url',
             hr_name_1='$hr_name_1',hr_designation_1='$hr_designation_1',hr_email_1='$hr_email_1',
             hr_name_2='$hr_name_2',hr_designation_2='$hr_designation_2',hr_email_2='$hr_email_2',
             hr_name_3='$hr_name_3',hr_designation_3='$hr_designation_3',hr_email_3='$hr_email_3',
             company_desc='$company_desc' ";
-        if($company_img_name !=='' && $company_img_name !==null){
-            $company_img_name=time()."_".$company_img_name;
+        if($company_img_name !== '' && $company_img_name !== null){
+            $company_img_name = time()."_".$company_img_name;
             move_uploaded_file($company_img_tmp_name,"../images/recruiters/$company_img_name");
-            $query=$query.",company_img='$company_img_name'";
+            $query = $query.",company_img='$company_img_name'";
         }
-        $query=$query." WHERE company_id='$company_id'";
-        $update_query=mysqli_query($dbc,$query);
+        $query = $query." WHERE company_id='$company_id'";
+        $update_query = mysqli_query($dbc,$query);
         if(!$update_query){
-        die("QUERY FAILED db".mysqli_error($dbc));
+            die("QUERY FAILED db".mysqli_error($dbc));
         }
         // Alert Success : Profile Updated
         echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .

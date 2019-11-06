@@ -12,17 +12,19 @@
       $company_password = mysqli_real_escape_string($dbc, trim($_POST['pwd']));
 
       if(!empty($company_id) && !empty($company_password)){
-        $query = "SELECT company_name FROM recruiters WHERE company_id='$company_id' AND password=SHA('$company_password')";
+        $query = "SELECT * FROM recruiters WHERE company_id='$company_id' AND password=SHA('$company_password')";
         $data = mysqli_query($dbc, $query);
         if(mysqli_num_rows($data) == 1){
+          $query = "SELECT company_name FROM recruiters_data WHERE company_id='$company_id'";
+          $data = mysqli_query($dbc, $query);
           $row = mysqli_fetch_array($data);
           $token = bin2hex(random_bytes(32));
           $_SESSION['access_token'] = $token;
           $_SESSION['user_role'] = 'recruiter';
           $_SESSION['company_name'] = $row['company_name'];
           $_SESSION['company_id'] = $company_id;
-          $update_token_query="UPDATE recruiters SET access_token='$token' WHERE company_id='$company_id'";
-          $update_token=mysqli_query($dbc, $update_token_query);
+          $update_token_query = "UPDATE recruiters SET access_token='$token' WHERE company_id='$company_id'";
+          $update_token = mysqli_query($dbc, $update_token_query);
           if(!$update_token){
             die("QUERY FAILED ".mysqli_error($dbc));
           }

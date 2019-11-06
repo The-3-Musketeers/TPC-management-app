@@ -34,8 +34,13 @@
           $data = mysqli_query($dbc, $query);
           if(mysqli_num_rows($data) == 0){
             // company_id is available
-            $query = "INSERT INTO recruiters (company_id, company_name, company_status, hr_name_1, hr_designation_1, hr_email_1, password, join_date) VALUES ".
-              "('$company_id', '$company_name', 'pending', '$hr_name_1', '$hr_designation_1', '$hr_email_1', SHA('$password'), NOW())";
+            // inserting to recruiters table
+            $query = "INSERT INTO recruiters (company_id, join_date, password) VALUES ".
+              "('$company_id', NOW(), SHA('$password'))";
+            mysqli_query($dbc, $query);
+            // inserting to recruiters_data table
+            $query = "INSERT INTO recruiters_data (company_id, company_name, company_status, hr_name_1, hr_designation_1, hr_email_1) VALUES ".
+              "('$company_id', '$company_name', 'pending', '$hr_name_1', '$hr_designation_1', '$hr_email_1')";
             mysqli_query($dbc, $query);
 
             //Confirm success with the recruiter
