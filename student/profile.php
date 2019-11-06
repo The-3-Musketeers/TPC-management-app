@@ -18,7 +18,7 @@
     require_once('../templates/navbar.php');
 
     //Fetching info from student_data table
-    $data_id;$cpi;$department;$course;$resume_url;$profile_pic_url;$resume_file;$mobile_number;$skype;$gmail;$emergency_number;
+    $cpi;$department;$course;$resume_url;$profile_pic_url;$resume_file;$mobile_number;$skype;$gmail;$emergency_number;
     function display(){
         $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
         global $roll_number;
@@ -28,9 +28,8 @@
             die("QUERY FAILED ".mysqli_error($dbc));
         }
 
-        global $data_id,$cpi,$skype,$gmail,$emergency_number,$department,$course,$resume_url,$profile_pic_url;
+        global $cpi,$skype,$gmail,$emergency_number,$department,$course,$resume_url,$profile_pic_url;
         $row=mysqli_fetch_assoc($select_from_student_data_query);
-        $data_id=$row['data_id'];
         $cpi=$row['current_cpi'];
         $department=$row['department'];
         $skype=$row['skype_Id'];
@@ -100,7 +99,7 @@ if($mobile_number!='' && $mobile_number!=null){
 $query=$query.",mobile_number=$mobile_number ";
 }
 
-$query=$query." WHERE data_id=$data_id";
+$query=$query." WHERE roll_number='$roll_number'";
 if($department!='null' && $department!=null && $department!='Select your department'){
     $update_query=mysqli_query($dbc,$query);
     if(!$update_query){

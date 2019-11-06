@@ -20,6 +20,7 @@
       $webmail_ID = mysqli_real_escape_string($dbc, trim($_POST['email']));
       $password = mysqli_real_escape_string($dbc, trim($_POST['pwd']));
       $verify_password = mysqli_real_escape_string($dbc, trim($_POST['confirm-pwd']));
+      $year_of_roll = mysqli_real_escape_string($dbc, trim($_POST['year-of-roll']));
       $captcha = mysqli_real_escape_string($dbc, trim($_POST['captcha']));
       // verify Captcha
       if(SHA1($captcha) == $_SESSION['passphrase']){
@@ -38,9 +39,14 @@
               "('$roll_number', '$username', 'student', '$webmail_ID', SHA('$password'), NOW())";
             mysqli_query($dbc, $query);
 
+            // Finding enrollment year
+            if(date('m') > 5){
+              $year_of_roll = $year_of_roll-1;
+            }
+
               //Insert into students_data
-              $query = "INSERT INTO students_data (roll_number) VALUES ".
-              "('$roll_number')";
+              $query = "INSERT INTO students_data (roll_number,year_of_enroll) VALUES ".
+              "('$roll_number',YEAR(DATE_SUB(CURDATE(),INTERVAL $year_of_roll YEAR)))";
             $insert_in_student_data=mysqli_query($dbc, $query);
             if(!$insert_in_student_data){
               die("QUERY FAILED ".mysqli_error($dbc));
@@ -114,6 +120,19 @@
           <span class="input-group-text" id="inputGroup-sizing-default">Confirm Password:</span>
         </div>
         <input type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="confirm-pwd" name="confirm-pwd" placeholder="Re-Enter password">
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend" style="margin-right:25px">
+          <span class="input-group-text" id="inputGroup-sizing-default">Current Year:</span>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="year-of-roll" value="3">
+          <label class="form-check-label">3rd Year</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="year-of-roll" value="4">
+          <label class="form-check-label">4th Year</label>
+        </div>
       </div>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
