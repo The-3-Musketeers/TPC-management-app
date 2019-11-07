@@ -29,16 +29,6 @@ CREATE TABLE `students_data` (
   FOREIGN KEY (`roll_number`) REFERENCES students (`roll_number`)
 );
 
-CREATE TABLE `applications` (
-  `application_id` INT AUTO_INCREMENT,
-  `job_id` VARCHAR(6) NOT NULL,
-  `student_roll_number` VARCHAR(8),
-  `application_status` VARCHAR(10) NOT NULL DEFAULT 'pending',
-  `applied_on` DATETIME,
-  PRIMARY KEY (`application_id`),
-  FOREIGN KEY (`job_id`) REFERENCES positions (`job_id`)
-);
-
 CREATE TABLE recruiters (
   company_id VARCHAR(8),
   join_date DATETIME,
@@ -117,6 +107,16 @@ CREATE TABLE `jobs_db` (
  PRIMARY KEY (`job_id`, `db_id`),
  FOREIGN KEY (`job_id`) REFERENCES `jobs`(`job_id`),
  FOREIGN KEY (`db_id`) REFERENCES `degree_branch`(`db_id`)
+);
+
+CREATE TABLE `applications` (
+  `application_id` INT AUTO_INCREMENT,
+  `job_id` VARCHAR(6) NOT NULL,
+  `student_roll_number` VARCHAR(8),
+  `application_status` VARCHAR(10) NOT NULL DEFAULT 'pending',
+  `applied_on` DATETIME,
+  PRIMARY KEY (`application_id`),
+  FOREIGN KEY (`job_id`) REFERENCES jobs (`job_id`)
 );
 /* Add admin to students table */
 
