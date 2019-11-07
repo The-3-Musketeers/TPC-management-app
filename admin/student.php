@@ -158,17 +158,17 @@
               <?php
               $curr = 1;
               while($row_app = mysqli_fetch_array($data3)){
-                $query_position = "SELECT * FROM positions WHERE job_id='". $row_app["job_id"] ."'";
-                $data_position = mysqli_query($dbc, $query_position);
-                $row_position = mysqli_fetch_assoc($data_position);
-                $query_recruiter = "SELECT * FROM recruiters_data WHERE company_id='". $row_position["company_id"] ."'";
+                $query_job = "SELECT * FROM jobs WHERE job_id='". $row_app["job_id"] ."'";
+                $data_job = mysqli_query($dbc, $query_job);
+                $row_job = mysqli_fetch_assoc($data_job);
+                $query_recruiter = "SELECT * FROM recruiters_data WHERE company_id='". $row_job["company_id"] ."'";
                 $data_recruiter = mysqli_query($dbc, $query_recruiter);
                 $row_recruiter = mysqli_fetch_assoc($data_recruiter);
               ?>
               <tr>
                 <td><?php echo $curr; ?></td>
-                <td><a href="../job.php?id=<?php echo $row_app["job_id"]; ?>"><?php echo $row_position["job_position"]; ?></a></td>
-                <td><a href="./company.php?id=<?php echo $row_position["company_id"] ?>"><?php echo $row_recruiter["company_name"]; ?></a></td>
+                <td><a href="../job.php?id=<?php echo $row_app["job_id"]; ?>"><?php echo $row_job["job_position"]; ?></a></td>
+                <td><a href="./company.php?id=<?php echo $row_job["company_id"] ?>"><?php echo $row_recruiter["company_name"]; ?></a></td>
                 <td><?php echo $row_app["applied_on"]; ?></td>
                 <td><?php
                   if($row_app["application_status"] == "accepted"){

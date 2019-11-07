@@ -14,9 +14,9 @@
   $job_id = $_GET['job_id'];
 
   // Fetch applicants data
-  $query="SELECT * FROM positions WHERE job_id='". $job_id ."'";
-  $get_all_positions_query=mysqli_query($dbc,$query);
-  $num=mysqli_num_rows($get_all_positions_query);
+  $query="SELECT * FROM jobs WHERE job_id='". $job_id ."'";
+  $get_all_jobs_query=mysqli_query($dbc,$query);
+  $num=mysqli_num_rows($get_all_jobs_query);
   if($num==1){
     $applicant_query="SELECT * FROM applications WHERE job_id='" . $job_id ."' ORDER BY student_roll_number ASC";
     $applicant_data=mysqli_query($dbc,$applicant_query);

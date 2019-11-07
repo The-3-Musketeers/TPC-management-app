@@ -27,7 +27,7 @@ if($num!=0){
     $application_status=$row['application_status'];
     $applied_on=$row['applied_on'];
     $applied_on=date('d-m-y',strtotime($applied_on));
-    $job_query="SELECT * FROM positions WHERE job_id='" . $job_id . "'";
+    $job_query="SELECT * FROM jobs WHERE job_id='" . $job_id . "'";
     $job_data=mysqli_query($dbc,$job_query);
     $num1=mysqli_num_rows($job_data);
     if($num1==1){

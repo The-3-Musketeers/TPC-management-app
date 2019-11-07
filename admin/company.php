@@ -89,7 +89,7 @@
       <br/>
       <?php
         $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-        $query = "SELECT job_id, job_position, job_status, course, branch, min_cpi  FROM positions WHERE company_id=$company_id";
+        $query = "SELECT job_id, job_position, job_status, min_cpi  FROM jobs WHERE company_id=$company_id";
         $data = mysqli_query($dbc, $query);
         if(mysqli_num_rows($data) != 0){
       ?>
@@ -105,7 +105,7 @@
             <tr>
               <th scope="col">S.No.</th>
               <th scope="col">Job Name</th>
-              <th scope="col">Course</th>
+              <th scope="col">Degree</th>
               <th scope="col">Branch</th>
               <th scope="col">Min. CPI</th>
               <th scope="col">Status</th>
@@ -118,16 +118,37 @@
               $id = $row['job_id'];
               $job_name = $row['job_position'];
               $job_status = $row['job_status'];
-              $course = $row['course'];
-              $branch = $row['branch'];
+
+              // Get all eligible degrees
+              $degree_query = "SELECT degree.degree_name AS degree_name FROM degree, degree_branch, jobs_db "
+                              ."WHERE jobs_db.job_id = '$job_id' AND jobs_db.db_id = degree_branch.db_id "
+                              ."AND degree_branch.degree_id = degree.degree_id";
+              $get_all_degree=mysqli_query($dbc,$degree_query);
+              $degree_row=mysqli_fetch_assoc($get_all_degree);
+              $degree = $degree_row['degree_name'];
+              while($degree_row=mysqli_fetch_assoc($get_all_degree)){
+                $degree = $degree . ', ' . $degree_row['degree_name'];
+              }
+
+              // Get all eligible branches
+              $branch_query = "SELECT branch.branch_name AS branch_name FROM branch, degree_branch, jobs_db "
+                              ."WHERE jobs_db.job_id = '$job_id' AND jobs_db.db_id = degree_branch.db_id "
+                              ."AND branch.branch_id = degree_branch.branch_id";
+              $get_all_branch=mysqli_query($dbc,$branch_query);
+              $branch_row=mysqli_fetch_assoc($get_all_branch);
+              $branch = $branch_row['branch_name'];
+              while($branch_row=mysqli_fetch_assoc($get_all_branch)){
+                $branch = $branch . ', ' . $branch_row['branch_name'];
+              }
+
               $min_cpi = $row['min_cpi'];
               $job_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/../job.php';
             ?>
                 <tr>
                   <th scope="row"><?php  echo $curr; ?></th>
                   <td><a href="<?php echo $job_url . '?id=' . $row["job_id"];?>"><?php echo $row["job_position"];?></a></td>
-                  <td><?php echo $row["course"];?></td>
-                  <td><?php echo $row["branch"];?></td>
+                  <td><?php echo $degree;?></td>
+                  <td><?php echo $branch;?></td>
                   <td><?php echo $row["min_cpi"];?></td>
                   <td>
                     <?php if ($job_status == "shown"){ ?>
