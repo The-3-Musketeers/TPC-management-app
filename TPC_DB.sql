@@ -67,12 +67,31 @@ CREATE TABLE `recruiters` (
   FULLTEXT(`company_name`)
 );
 
-CREATE TABLE `positions` (
- `job_id` int(10) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `degree` (
+ `degree_id` varchar(6),
+ `degree_name` varchar(128) NOT NULL,
+ PRIMARY KEY (`degree_id`)
+);
+
+CREATE TABLE `branch` (
+ `branch_id` varchar(6),
+ `branch_name` varchar(128) NOT NULL,
+ PRIMARY KEY (`branch_id`)
+);
+
+CREATE TABLE `degree_branch` (
+ `db_id` varchar(6),
+ `degree_id` varchar(6),
+ `branch_id` varchar(6),
+ PRIMARY KEY (`db_id`),
+ FOREIGN KEY (`degree_id`) REFERENCES `degree`(`degree_id`),
+ FOREIGN KEY (`branch_id`) REFERENCES `branch`(`branch_id`)
+);
+
+CREATE TABLE `jobs` (
+ `job_id` varchar(6),
  `job_position` varchar(256) NOT NULL,
  `job_status` VARCHAR(10) NOT NULL DEFAULT 'pending',
- `course` varchar(256) DEFAULT NULL,
- `branch` varchar(256) DEFAULT NULL,
  `min_cpi` float DEFAULT NULL,
  `no_of_opening` int(5) DEFAULT NULL,
  `apply_by` varchar(20) DEFAULT NULL,
@@ -85,6 +104,14 @@ CREATE TABLE `positions` (
  `company_name` VARCHAR(256) NOT NULL,
  PRIMARY KEY (`job_id`),
  FULLTEXT(`job_position`),FULLTEXT(`company_name`)
+);
+
+CREATE TABLE `jobs_db` (
+ `job_id` varchar(6),
+ `db_id` varchar(6),
+ PRIMARY KEY (`job_id`, `db_id`),
+ FOREIGN KEY (`job_id`) REFERENCES `jobs`(`job_id`),
+ FOREIGN KEY (`db_id`) REFERENCES `degree_branch`(`db_id`)
 );
 /* Add admin to students table */
 

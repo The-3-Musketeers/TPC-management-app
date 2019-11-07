@@ -2,11 +2,11 @@
 // Authenticate user
 require_once('../templates/auth.php');
 checkUserRole('student', $auth_error);
-$query="SELECT * FROM positions WHERE job_status='shown'";
-$get_all_positions_query=mysqli_query($dbc,$query);
-$num=mysqli_num_rows($get_all_positions_query);
+$query="SELECT * FROM jobs WHERE job_status='shown'";
+$get_all_jobs_query=mysqli_query($dbc,$query);
+$num=mysqli_num_rows($get_all_jobs_query);
 if($num!=0){
-  while($row=mysqli_fetch_assoc($get_all_positions_query)){
+  while($row=mysqli_fetch_assoc($get_all_jobs_query)){
     $job_id=$row['job_id'];
     $application_query="SELECT * FROM applications WHERE job_id='". $job_id ."' AND student_roll_number='". $_SESSION['roll_number'] ."'";
     $application_data=mysqli_query($dbc, $application_query);
@@ -14,8 +14,29 @@ if($num!=0){
     if($app_num==0){
       $company_id=$row['company_id'];
       $job_position=$row['job_position'];
-      $course=$row['course'];
-      $branch=$row['branch'];
+      
+      // Get all eligible degrees
+      $degree_query = "SELECT degree.degree_name AS degree_name FROM degree, degree_branch, jobs_db "
+                      ."WHERE jobs_db.job_id = '$job_id' AND jobs_db.db_id = degree_branch.db_id "
+                      ."AND degree_branch.degree_id = degree.degree_id";
+      $get_all_degree=mysqli_query($dbc,$degree_query);
+      $degree_row=mysqli_fetch_assoc($get_all_degree);
+      $degree = $degree_row['degree_name'];
+      while($degree_row=mysqli_fetch_assoc($get_all_degree)){
+        $degree = $degree . ', ' . $degree_row['degree_name'];
+      }
+
+      // Get all eligible branches
+      $branch_query = "SELECT branch.branch_name AS branch_name FROM branch, degree_branch, jobs_db "
+                      ."WHERE jobs_db.job_id = '$job_id' AND jobs_db.db_id = degree_branch.db_id "
+                      ."AND branch.branch_id = degree_branch.branch_id";
+      $get_all_branch=mysqli_query($dbc,$branch_query);
+      $branch_row=mysqli_fetch_assoc($get_all_branch);
+      $branch = $branch_row['branch_name'];
+      while($branch_row=mysqli_fetch_assoc($get_all_branch)){
+        $branch = $branch . ', ' . $branch_row['branch_name'];
+      }
+
       $no_of_opening=$row['no_of_opening'];
       $stipend=$row['stipend'];
 
@@ -69,7 +90,7 @@ if($num!=0){
             <thead>
                 <tr>
                 <th scope="col" class="text-muted">Test Date</th>
-                <th scope="col" class="text-muted">Course</th>
+                <th scope="col" class="text-muted">Degree</th>
                 <th scope="col" class="text-muted">Branch</th>
                 <th scope="col" class="text-muted">Stipend</th>
                 <th scope="col" class="text-muted">Openings</th>
@@ -80,7 +101,7 @@ if($num!=0){
             <tbody>
                 <tr>
                 <td><?php echo $test_date; ?></td>
-                <td><?php echo $course; ?></td>
+                <td><?php echo $degree; ?></td>
                 <td><?php echo $branch; ?></td>
                 <td><?php echo $stipend; ?></td>
                 <td><?php echo $no_of_opening; ?></td>
