@@ -65,7 +65,7 @@
       $apply_by=$row['apply_by'];
 
       // Category of job
-      $company_query = "SELECT company_category FROM recruiters WHERE company_id='" . $company_id . "'";
+      $company_query = "SELECT company_category FROM recruiters_data WHERE company_id='" . $company_id . "'";
       $company_data = mysqli_query($dbc, $company_query);
       $company_row = mysqli_fetch_assoc($company_data);
       $company_cat = $company_row['company_category'];
@@ -93,7 +93,7 @@
           } elseif($is_stud_eligible) {
             $job_offer_id = $stud_job_offers_arr[0];
             // Fetch company id using job id
-            $job_query = "SELECT company_category FROM applications WHERE job_id='" . $job_offer_id . "'";
+            $job_query="SELECT company_category FROM recruiters INNER JOIN positions ON recruiters.company_id=positions.company_id WHERE job_id='$job_offer_id'";
             $data = mysqli_query($dbc, $job_query);
             $row = mysqli_fetch_array($data);
             $job_offer_company_cat = $row['company_category'];
@@ -109,7 +109,7 @@
             elseif(strtolower($job_offer_company_cat) == "b1"){
               // Able to apply for only two A1
               // Check how many A1s has student already applied to
-              $count_A1_query = "SELECT * FROM applications WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='A1'";
+              $count_A1_query = "SELECT * FROM applications INNER JOIN positions ON applications.job_id=positions.job_id INNER JOIN recruiters ON positions.company_id=recruiters.company_id WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='A1'";
               $data = mysqli_query($dbc, $count_A1_query);
               if(mysqli_num_rows($data) < 2){
                 // Student can apply for more A1s
@@ -131,9 +131,9 @@
             elseif(strtolower($job_offer_company_cat) == "b2"){
               // Able to apply for 2 A1 and 2 B1
               // Check how many A1s and B1s has student already applied to
-              $count_A1_query = "SELECT * FROM applications WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='A1'";
+              $count_A1_query = "SELECT * FROM applications INNER JOIN positions ON applications.job_id=positions.job_id INNER JOIN recruiters ON positions.company_id=recruiters.company_id WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='A1'";
               $dataA1 = mysqli_query($dbc, $count_A1_query);
-              $count_B1_query = "SELECT * FROM applications WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='B1'";
+              $count_B1_query = "SELECT * FROM applications INNER JOIN positions ON applications.job_id=positions.job_id INNER JOIN recruiters ON positions.company_id=recruiters.company_id WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='B1'";
               $dataB1 = mysqli_query($dbc, $count_B1_query);
               if(mysqli_num_rows($dataA1) < 2 || mysqli_num_rows($dataB1) < 2){
                 if(strtolower($company_cat) == 'a1' && mysqli_num_rows($dataA1) >= 2){
@@ -227,7 +227,7 @@
       $job_desc=$row['job_desc'];
       $created_on=$row['created_on'];
       $created_on=date('d-m-y',strtotime($created_on));
-      $company_query="SELECT company_name, company_url, company_desc FROM recruiters WHERE company_id='" . $company_id . "'";
+      $company_query="SELECT company_name, company_url, company_desc FROM recruiters_data WHERE company_id='" . $company_id . "'";
       $get_company_name_query=mysqli_query($dbc,$company_query);
       $num1=mysqli_num_rows($get_company_name_query);
       if($num1==1){
@@ -245,14 +245,8 @@
           $query3=mysqli_query($dbc,$apply_query);
           $num3=mysqli_num_rows($query3);
           if($num3==0){
-            $comp_id_query="SELECT company_id FROM jobs WHERE job_id='" . $job_id . "'";
-            $query3=mysqli_query($dbc,$comp_id_query);
-            $row3=mysqli_fetch_assoc($query3);
-            $comp_cat_query="SELECT company_category FROM recruiters WHERE company_id='" . $row3['company_id'] . "'";
-            $query3=mysqli_query($dbc,$comp_cat_query);
-            $row3=mysqli_fetch_assoc($query3);
-            $apply_query="INSERT INTO applications (job_id, student_roll_number, company_category, applied_on) VALUES ".
-              "('" . $job_id . "', '" . $_SESSION['roll_number'] . "', '" . $row3['company_category'] . "' , NOW())";
+            $apply_query = "INSERT INTO applications (job_id, student_roll_number, applied_on) VALUES ".
+              "('" . $job_id . "', '" . $_SESSION['roll_number'] . "', NOW())";
             $query3=mysqli_query($dbc,$apply_query);
             if(!$query3){
                 die("QUERY FAILED ".mysqli_error($dbc));
@@ -369,12 +363,8 @@
           if(isset($_POST['add_applicant'])){
             $roll_number=$_POST['roll_number'];
             $email=$_POST['email'];
-            $company_query = "SELECT company_category FROM recruiters WHERE company_id='" . $job_offer_company_id . "'";
-            $data = mysqli_query($dbc, $company_query);
-            $row = mysqli_fetch_array($data);
-            $company_cat = $row['company_category'];
-            $query="INSERT INTO applications (job_id,student_roll_number,application_status,company_category,applied_on) VALUES".
-                    "($job_id,'$roll_number','pending','$company_cat',NOW())";
+            $query="INSERT INTO applications (job_id,student_roll_number,application_status,applied_on) VALUES".
+                    "($job_id,'$roll_number','pending',NOW())";
             $insert_applicant_query=mysqli_query($dbc,$query);
             if(!$insert_applicant_query){
               die("QUERY FAILED ".mysqli_error($dbc));

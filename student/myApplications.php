@@ -2,8 +2,8 @@
 // Authenticate user
 require_once('../templates/auth.php');
 checkUserRole('student', $auth_error);
-$get_all_applications_query="SELECT * FROM applications WHERE student_roll_number='" . $_SESSION['roll_number'] . "'";
-$application_data=mysqli_query($dbc,$get_all_applications_query);
+$get_all_applications_query = "SELECT * FROM applications WHERE student_roll_number='" . $_SESSION['roll_number'] . "'";
+$application_data = mysqli_query($dbc,$get_all_applications_query);
 $num=mysqli_num_rows($application_data);
 if($num!=0){
   ?>
@@ -33,7 +33,7 @@ if($num!=0){
     if($num1==1){
       $row1=mysqli_fetch_assoc($job_data);
       $company_id=$row1['company_id'];
-      $company_query="SELECT * FROM recruiters WHERE company_id='" . $company_id . "'";
+      $company_query="SELECT * FROM recruiters_data WHERE company_id='" . $company_id . "'";
       $company_data=mysqli_query($dbc,$company_query);
       $com_row=mysqli_fetch_assoc($company_data);
       $company_name=$com_row['company_name'];

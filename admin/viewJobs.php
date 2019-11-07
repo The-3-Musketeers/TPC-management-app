@@ -19,11 +19,11 @@
   $no_shown; $no_pending; $no_hidden;
   function countEntries(){
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-    $query_shown = "SELECT * FROM jobs INNER JOIN recruiters ON jobs.company_id=recruiters.company_id WHERE jobs.job_status='shown' AND recruiters.company_status='accepted'";
+    $query_shown = "SELECT * FROM jobs INNER JOIN recruiters_data ON jobs.company_id=recruiters_data.company_id WHERE jobs.job_status='shown' AND recruiters_data.company_status='accepted'";
     $data_shown = mysqli_query($dbc, $query_shown);
-    $query_pending = "SELECT * FROM jobs INNER JOIN recruiters ON jobs.company_id=recruiters.company_id WHERE jobs.job_status='pending' AND recruiters.company_status='accepted'";
+    $query_pending = "SELECT * FROM jobs INNER JOIN recruiters_data ON jobs.company_id=recruiters_data.company_id WHERE jobs.job_status='pending' AND recruiters_data.company_status='accepted'";
     $data_pending = mysqli_query($dbc, $query_pending);
-    $query_hidden = "SELECT * FROM jobs INNER JOIN recruiters ON jobs.company_id=recruiters.company_id WHERE jobs.job_status='hidden' AND recruiters.company_status='accepted'";
+    $query_hidden = "SELECT * FROM jobs INNER JOIN recruiters_data ON jobs.company_id=recruiters_data.company_id WHERE jobs.job_status='hidden' AND recruiters_data.company_status='accepted'";
     $data_hidden = mysqli_query($dbc, $query_hidden);
 
     $GLOBALS['no_shown'] = mysqli_num_rows($data_shown);
@@ -281,7 +281,7 @@
             $curr = 1;
             while($row = mysqli_fetch_array($data)){
               $id = $row['company_id'];
-              $query_recruiters = "SELECT company_name, company_status FROM recruiters WHERE company_id='$id'";
+              $query_recruiters = "SELECT company_name, company_status FROM recruiters_data WHERE company_id='$id'";
               $data_recruiters = mysqli_query($dbc, $query_recruiters);
               $row_recruiters = mysqli_fetch_array($data_recruiters);
               if($row_recruiters["company_status"] == "accepted"){
@@ -360,7 +360,7 @@
             $curr = 1;
             while($row = mysqli_fetch_array($data)){
               $id = $row['company_id'];
-              $query_recruiters = "SELECT company_name, company_status FROM recruiters WHERE company_id='$id'";
+              $query_recruiters = "SELECT company_name, company_status FROM recruiters_data WHERE company_id='$id'";
               $data_recruiters = mysqli_query($dbc, $query_recruiters);
               if(!$data_recruiters){
                 die("QUERY FAILED ".mysqli_error($dbc));
@@ -442,7 +442,7 @@
             $curr = 1;
             while($row = mysqli_fetch_array($data)){
               $id = $row['company_id'];
-              $query_recruiters = "SELECT company_name, company_status FROM recruiters WHERE company_id='$id'";
+              $query_recruiters = "SELECT company_name, company_status FROM recruiters_data WHERE company_id='$id'";
               $data_recruiters = mysqli_query($dbc, $query_recruiters);
               $row_recruiters = mysqli_fetch_array($data_recruiters);
               if($row_recruiters["company_status"] == "accepted"){

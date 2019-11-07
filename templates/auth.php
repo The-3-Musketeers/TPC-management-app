@@ -18,9 +18,9 @@
           }
         }
         mysqli_close($dbc);
-      } else if(isset($_SESSION['company_name'])){
+      } else if(isset($_SESSION['company_id'])){
         $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-        $query = "SELECT access_token FROM recruiters WHERE company_name='" . $_SESSION['company_name'] ."'";
+        $query = "SELECT access_token FROM recruiters WHERE company_id='" . $_SESSION['company_id'] ."'";
         $data = mysqli_query($dbc, $query);
         if(mysqli_num_rows($data) == 1){
           $row = mysqli_fetch_array($data);

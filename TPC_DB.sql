@@ -1,7 +1,6 @@
 /* Create tables */
 
 CREATE TABLE `students` (
-  `user_id` INT AUTO_INCREMENT,
   `join_date` DATETIME,
   `roll_number` VARCHAR(8),
   `username` VARCHAR(64),
@@ -9,62 +8,68 @@ CREATE TABLE `students` (
   `webmail_id` VARCHAR(32),
   `password` VARCHAR(40),
   `access_token` VARCHAR(64),
-  PRIMARY KEY (`user_id`)
+  PRIMARY KEY (`roll_number`)
 );
 
 CREATE TABLE `students_data` (
-  `data_id` INT AUTO_INCREMENT,
-  `roll_number` VARCHAR(8),
-  `current_cpi` FLOAT(4),
-  `department` VARCHAR(8),
-  `course` VARCHAR(8),
-  `profile_pic` VARCHAR(256),
-  `resume_url` VARCHAR(256),
-  `resume_file` VARCHAR(256),
-  `mobile_number` VARCHAR(16),
-  `job_offers` VARCHAR(32),
+  `roll_number` varchar(8) NOT NULL,
+  `current_cpi` float DEFAULT NULL,
+  `department` varchar(8) DEFAULT NULL,
+  `course` varchar(8) DEFAULT NULL,
+  `profile_pic` varchar(256) DEFAULT NULL,
+  `resume_url` varchar(256) DEFAULT NULL,
+  `resume_file` varchar(256) DEFAULT NULL,
+  `mobile_number` varchar(16) DEFAULT NULL,
+  `job_offers` varchar(32) DEFAULT NULL,
   `skype_Id` varchar(255) DEFAULT NULL,
   `gmail_Id` varchar(255) DEFAULT NULL,
   `emergency_number` varchar(16) DEFAULT NULL,
-  PRIMARY KEY (`data_id`)
+  `year_of_enroll` year(4) NOT NULL,
+  PRIMARY KEY (`roll_number`),
+  FOREIGN KEY (`roll_number`) REFERENCES students (`roll_number`)
 );
 
 CREATE TABLE `applications` (
   `application_id` INT AUTO_INCREMENT,
-  `job_id` int(10) NOT NULL,
+  `job_id` VARCHAR(6) NOT NULL,
   `student_roll_number` VARCHAR(8),
   `application_status` VARCHAR(10) NOT NULL DEFAULT 'pending',
-  `company_category` VARCHAR(2),
   `applied_on` DATETIME,
-  PRIMARY KEY (`application_id`)
+  PRIMARY KEY (`application_id`),
+  FOREIGN KEY (`job_id`) REFERENCES positions (`job_id`)
 );
 
-CREATE TABLE `recruiters` (
-  `user_id` INT AUTO_INCREMENT,
-  `join_date` DATETIME,
-  `company_id` VARCHAR(8),
-  `company_name` VARCHAR(64),
-  `company_desc` VARCHAR(256),
-  `company_category` VARCHAR(2),
-  `company_type` VARCHAR(10),
-  `turnover` VARCHAR(10),
-  `scr_rounds` INT(2),
-  `company_url` VARCHAR(256),
-  `company_status` VARCHAR(10),
-  `company_img` varchar(256) DEFAULT NULL,
-  `hr_name_1` VARCHAR(32),
-  `hr_email_1` VARCHAR(64),
-  `hr_designation_1` VARCHAR(32),
-  `hr_name_2` VARCHAR(32),
-  `hr_email_2` VARCHAR(64),
-  `hr_designation_2` VARCHAR(32),
-  `hr_name_3` VARCHAR(32),
-  `hr_email_3` VARCHAR(64),
-  `hr_designation_3` VARCHAR(32),
-  `access_token` VARCHAR(64),
-  `password` VARCHAR(40),
-  PRIMARY KEY (`user_id`),
-  FULLTEXT(`company_name`)
+CREATE TABLE recruiters (
+  company_id VARCHAR(8),
+  join_date DATETIME,
+  access_token VARCHAR(64),
+  password VARCHAR(40),
+  PRIMARY KEY (company_id)
+);
+
+CREATE TABLE recruiters_data (
+  company_id VARCHAR(8),
+  company_name VARCHAR(64),
+  company_desc VARCHAR(256),
+  company_category VARCHAR(2),
+  company_type VARCHAR(10),
+  turnover VARCHAR(10),
+  scr_rounds INT(2),
+  company_url VARCHAR(256),
+  company_status VARCHAR(10),
+  company_img varchar(256) DEFAULT NULL,
+  hr_name_1 VARCHAR(32),
+  hr_email_1 VARCHAR(64),
+  hr_designation_1 VARCHAR(32),
+  hr_name_2 VARCHAR(32),
+  hr_email_2 VARCHAR(64),
+  hr_designation_2 VARCHAR(32),
+  hr_name_3 VARCHAR(32),
+  hr_email_3 VARCHAR(64),
+  hr_designation_3 VARCHAR(32),
+  PRIMARY KEY (company_id),
+  FOREIGN KEY (company_id) REFERENCES recruiters(company_id),
+  FULLTEXT (company_name)
 );
 
 CREATE TABLE `degree` (
@@ -115,4 +120,4 @@ CREATE TABLE `jobs_db` (
 );
 /* Add admin to students table */
 
-INSERT INTO students (username, user_role, password, join_date) VALUES ('admin', 'admin', 'admin', NOW());
+INSERT INTO students (roll_number,username, user_role, password, join_date) VALUES ('admin','admin', 'admin', 'admin', NOW());

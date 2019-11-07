@@ -161,7 +161,7 @@
                 $query_job = "SELECT * FROM jobs WHERE job_id='". $row_app["job_id"] ."'";
                 $data_job = mysqli_query($dbc, $query_job);
                 $row_job = mysqli_fetch_assoc($data_job);
-                $query_recruiter = "SELECT * FROM recruiters WHERE company_id='". $row_job["company_id"] ."'";
+                $query_recruiter = "SELECT * FROM recruiters_data WHERE company_id='". $row_job["company_id"] ."'";
                 $data_recruiter = mysqli_query($dbc, $query_recruiter);
                 $row_recruiter = mysqli_fetch_assoc($data_recruiter);
               ?>
