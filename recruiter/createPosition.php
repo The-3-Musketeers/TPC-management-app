@@ -24,11 +24,11 @@
     return substr(str_shuffle($str_result), 0, 6); 
   } 
   
-  // Insert New Position
+  // Insert New Job
   if(isset($_POST['submit'])){
     $job_position=mysqli_real_escape_string($dbc,trim($_POST['job_position']));
-    $multiple_course = implode(",",$_POST["course"]);
-    $course=mysqli_real_escape_string($dbc,trim($multiple_course));
+    $multiple_degree = implode(",",$_POST["course"]);
+    $degree=mysqli_real_escape_string($dbc,trim($multiple_degree));
     $multiple_branch = implode(",",$_POST["branch"]);
     $branch=mysqli_real_escape_string($dbc,trim($multiple_branch));
     $min_cpi=mysqli_real_escape_string($dbc,trim($_POST['min_cpi']));
@@ -42,9 +42,9 @@
     $company_name=$_SESSION['company_name'];
     $job_id=generate_job_id();
 
-    if($course!='' && $branch!=''){
-      $query1 = "INSERT INTO positions (job_id, job_position, course, branch, min_cpi, job_desc, company_id,created_on,company_name ";
-      $query2 = "('$job_id', '$job_position', '$course', '$branch', $min_cpi, '$job_desc', '$company_id', NOW(),'$company_name' ";
+    if($degree!='' && $branch!=''){
+      $query1 = "INSERT INTO jobs (job_id, job_position, min_cpi, job_desc, company_id,created_on,company_name ";
+      $query2 = "('$job_id', '$job_position', $min_cpi, '$job_desc', '$company_id', NOW(),'$company_name' ";
       // Append to insert query is the fields are not empty
       if(!empty($test_date)){
         $query1 = $query1.", test_date";
@@ -83,7 +83,7 @@
       } else {
       
       // Checking whether the random generated job_id is already present or not
-      $job_id_query="SELECT * FROM positions WHERE job_id='$job_id'";
+      $job_id_query="SELECT * FROM jobs WHERE job_id='$job_id'";
       $select_query=mysqli_query($dbc,$job_id_query);
       $select_query_row_count=mysqli_num_rows($select_query);
       while($select_query_row_count>0){
@@ -96,6 +96,26 @@
       if(!$create_job_query){
         die("QUERY FAILED ".mysqli_error($dbc));
       }
+
+      // fetch all db_id
+      $query3 = "SELECT degree_branch.db_id AS db_id FROM degree AS D, branch AS B, degree_branch  AS DB WHERE D.degree_id = DB.degree_id "
+                . "AND B.branch_id = DB.branch_id AND D.degree_name IN '$degree' AND B.branch_name IN '$branch'";
+      
+      $select_DB_query=mysqli_query($dbc,$query3);
+
+      // insert them in jobs_db
+      while($DB_row=mysqli_fetch_assoc($select_DB_query)){
+        $db_id = DB_row['db_id'];
+        $query4 = "INSERT INTO jobs_db VALUES('$job_id', '$db_id')";
+        $insert_DB_query=mysqli_query($dbc,$query4);
+        if(!$insert_DB_query){
+          die("QUERY FAILED ".mysqli_error($dbc));
+        }
+      }
+
+      if(!$select_DB_query){
+        die("QUERY FAILED ".mysqli_error($dbc));
+      }
       // Alert Success : Profile Updated
       echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
                 'Job Position Created' .
@@ -105,9 +125,9 @@
 
     }
     else{
-      // Alert error : when branch or course not selected
+      // Alert error : when branch or degree not selected
       echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
-                'Please Select Course and Branch' .
+                'Please Select Degree and Branch' .
                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
                 '<span aria-hidden="true">&times;</span></button></div></div>';
     }
@@ -122,7 +142,7 @@
     <input type="text" class="col-sm-10 form-control" id="job_position" name="job_position" value="" required>
   </div>
   <div class="form-group row">
-  <label class="col-sm-2 col-form-label">Course<span class="red">*</span></label>
+  <label class="col-sm-2 col-form-label">Degree<span class="red">*</span></label>
   <div class="col-sm-10">
     <div class="form-check form-check-inline">
       <input class="form-check-input" type="checkbox" id="btech" value="btech" name="course[]" checked>

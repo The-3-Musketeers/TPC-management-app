@@ -93,7 +93,7 @@
           } elseif($is_stud_eligible) {
             $job_offer_id = $stud_job_offers_arr[0];
             // Fetch company id using job id
-            $job_query="SELECT company_category FROM recruiters INNER JOIN positions ON recruiters.company_id=positions.company_id WHERE job_id='$job_offer_id'";
+            $job_query="SELECT company_category FROM recruiters INNER JOIN jobs ON recruiters.company_id=jobs.company_id WHERE job_id='$job_offer_id'";
             $data = mysqli_query($dbc, $job_query);
             $row = mysqli_fetch_array($data);
             $job_offer_company_cat = $row['company_category'];
@@ -109,7 +109,7 @@
             elseif(strtolower($job_offer_company_cat) == "b1"){
               // Able to apply for only two A1
               // Check how many A1s has student already applied to
-              $count_A1_query = "SELECT * FROM applications INNER JOIN positions ON applications.job_id=positions.job_id INNER JOIN recruiters ON positions.company_id=recruiters.company_id WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='A1'";
+              $count_A1_query = "SELECT * FROM applications INNER JOIN jobs ON applications.job_id=jobs.job_id INNER JOIN recruiters ON jobs.company_id=recruiters.company_id WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='A1'";
               $data = mysqli_query($dbc, $count_A1_query);
               if(mysqli_num_rows($data) < 2){
                 // Student can apply for more A1s
@@ -131,9 +131,9 @@
             elseif(strtolower($job_offer_company_cat) == "b2"){
               // Able to apply for 2 A1 and 2 B1
               // Check how many A1s and B1s has student already applied to
-              $count_A1_query = "SELECT * FROM applications INNER JOIN positions ON applications.job_id=positions.job_id INNER JOIN recruiters ON positions.company_id=recruiters.company_id WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='A1'";
+              $count_A1_query = "SELECT * FROM applications INNER JOIN jobs ON applications.job_id=jobs.job_id INNER JOIN recruiters ON jobs.company_id=recruiters.company_id WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='A1'";
               $dataA1 = mysqli_query($dbc, $count_A1_query);
-              $count_B1_query = "SELECT * FROM applications INNER JOIN positions ON applications.job_id=positions.job_id INNER JOIN recruiters ON positions.company_id=recruiters.company_id WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='B1'";
+              $count_B1_query = "SELECT * FROM applications INNER JOIN jobs ON applications.job_id=jobs.job_id INNER JOIN recruiters ON jobs.company_id=recruiters.company_id WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='B1'";
               $dataB1 = mysqli_query($dbc, $count_B1_query);
               if(mysqli_num_rows($dataA1) < 2 || mysqli_num_rows($dataB1) < 2){
                 if(strtolower($company_cat) == 'a1' && mysqli_num_rows($dataA1) >= 2){
