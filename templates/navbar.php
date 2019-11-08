@@ -54,6 +54,9 @@
       <li class="nav-item active">
         <a class="nav-link" href="/TPC-management-app/admin/viewStudents.php">Students</a>
       </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/TPC-management-app/admin/settings.php">Settings</a>
+      </li>
       <?php } ?>
     </ul>
     <span class="navbar-text">
