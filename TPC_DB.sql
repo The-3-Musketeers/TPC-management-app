@@ -58,8 +58,7 @@ CREATE TABLE recruiters_data (
   hr_email_3 VARCHAR(64),
   hr_designation_3 VARCHAR(32),
   PRIMARY KEY (company_id),
-  FOREIGN KEY (company_id) REFERENCES recruiters(company_id),
-  FULLTEXT (company_name)
+  FOREIGN KEY (company_id) REFERENCES recruiters(company_id)
 );
 
 CREATE TABLE `degree` (
@@ -118,6 +117,22 @@ CREATE TABLE `applications` (
   PRIMARY KEY (`application_id`),
   FOREIGN KEY (`job_id`) REFERENCES jobs (`job_id`)
 );
+
+CREATE TABLE company_category (
+  id VARCHAR(8),
+  name VARCHAR(4),
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE company_constraints (
+  current_id VARCHAR(8),
+  can_apply_id VARCHAR(8),
+  num INT, /* Number of times student can apply to can_apply_id if selected in current_id */
+  PRIMARY KEY (current_id, can_apply_id),
+  FOREIGN KEY (current_id) REFERENCES company_category(id),
+  FOREIGN KEY (can_apply_id) REFERENCES company_category(id)
+);
+
 /* Add admin to students table */
 
 INSERT INTO students (roll_number,username, user_role, password, join_date) VALUES ('admin','admin', 'admin', 'admin', NOW());
