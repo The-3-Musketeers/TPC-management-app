@@ -127,8 +127,8 @@ else{
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
 <div class="row">
  <div class="col-sm-3">
-    <img src="<?php echo $profile_pic_url; ?>" width="250px" height="250px" alt="...">
-    <input type="file" name="profile_img" value="">
+    <img src="<?php echo $profile_pic_url; ?>" alt="..." style="width: inherit; height:auto;">
+    <input type="file" name="profile_img" value="" style="width: inherit;">
 </div>
  <div class="col-sm-9">
   <div class="form-group">
