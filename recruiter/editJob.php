@@ -16,7 +16,7 @@
 
   //Select Job Info from  Jobs Table 
   $job_id=$_GET['job_id'];
-  $query="SELECT * FROM jobs WHERE job_id=$job_id";
+  $query="SELECT * FROM jobs WHERE job_id='$job_id'";
   $select_job_query=mysqli_query($dbc,$query);
   $row=mysqli_fetch_assoc($select_job_query);
   $job_position=$row['job_position'];
@@ -29,7 +29,7 @@
   $degree_row=mysqli_fetch_assoc($get_all_degree);
   $degree = $degree_row['degree_name'];
   while($degree_row=mysqli_fetch_assoc($get_all_degree)){
-  $degree = $degree . ', ' . $degree_row['degree_name'];
+    $degree = $degree . ',' . $degree_row['degree_name'];
   }
 
   // Get all eligible branches
@@ -40,7 +40,7 @@
   $branch_row=mysqli_fetch_assoc($get_all_branch);
   $branch = $branch_row['branch_name'];
   while($branch_row=mysqli_fetch_assoc($get_all_branch)){
-    $branch = $branch . ', ' . $branch_row['branch_name'];
+    $branch = $branch . ',' . $branch_row['branch_name'];
   }
 
   $min_cpi=$row['min_cpi'];
@@ -96,7 +96,7 @@
       }else{
         $query1 = $query1.",ctc=NULL";
       }
-      $query=$query1." WHERE job_id={$job_id}";
+      $query=$query1." WHERE job_id='$job_id'";
       $today=date('Y-m-d');
       if(!empty($apply_by) && $today > $apply_by){
         // Alert Error if apply by is less than today
@@ -123,18 +123,22 @@
         
         // Insert new entries into jobs_db
           // fetch all db_id
-          $query3 = "SELECT degree_branch.db_id AS db_id FROM degree AS D, branch AS B, degree_branch  AS DB WHERE D.degree_id = DB.degree_id "
-          . "AND B.branch_id = DB.branch_id AND D.degree_name IN '$degree' AND B.branch_name IN '$branch'";
+          $query3 = "SELECT DB.db_id AS db_id FROM degree AS D, branch AS B, degree_branch  AS DB WHERE D.degree_id = DB.degree_id "
+                    . "AND B.branch_id = DB.branch_id AND LOCATE(D.degree_name, '$degree') > 0 AND LOCATE(B.branch_name, '$branch') > 0";
 
           $select_DB_query=mysqli_query($dbc,$query3);
 
+          if(!$select_DB_query){
+            die("QUERY FAILED ".mysqli_error($dbc));
+          }
+
           // insert them in jobs_db
           while($DB_row=mysqli_fetch_assoc($select_DB_query)){
-            $db_id = DB_row['db_id'];
+            $db_id = $DB_row['db_id'];
             $query4 = "INSERT INTO jobs_db VALUES('$job_id', '$db_id')";
             $insert_DB_query=mysqli_query($dbc,$query4);
             if(!$insert_DB_query){
-            die("QUERY FAILED ".mysqli_error($dbc));
+              die("QUERY FAILED ".mysqli_error($dbc));
             }
           }
       }
@@ -146,15 +150,14 @@
       }
 
     }
-    else{
-      // Alert error : when branch or degree not selected
-      echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
-                'Please Select Degree and Branch' .
-                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
-                '<span aria-hidden="true">&times;</span></button></div></div>';
-    }
+  } else{
+    // Alert error : when branch or degree not selected
+    echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+              'Please Select Degree and Branch' .
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+              '<span aria-hidden="true">&times;</span></button></div></div>';
   }
-
+  }
 ?>
 
 <div class="container" style="max-width: 60%; padding: 20px;">

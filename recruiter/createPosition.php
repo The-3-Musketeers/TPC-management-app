@@ -96,16 +96,18 @@
       if(!$create_job_query){
         die("QUERY FAILED ".mysqli_error($dbc));
       }
-
       // fetch all db_id
-      $query3 = "SELECT degree_branch.db_id AS db_id FROM degree AS D, branch AS B, degree_branch  AS DB WHERE D.degree_id = DB.degree_id "
-                . "AND B.branch_id = DB.branch_id AND D.degree_name IN '$degree' AND B.branch_name IN '$branch'";
+      $query3 = "SELECT DB.db_id AS db_id FROM degree AS D, branch AS B, degree_branch  AS DB WHERE D.degree_id = DB.degree_id "
+                . "AND B.branch_id = DB.branch_id AND LOCATE(D.degree_name, '$degree') > 0 AND LOCATE(B.branch_name, '$branch') > 0";
       
       $select_DB_query=mysqli_query($dbc,$query3);
+      if(!$select_DB_query){
+        die("QUERY FAILED ".mysqli_error($dbc));
+      }
 
       // insert them in jobs_db
       while($DB_row=mysqli_fetch_assoc($select_DB_query)){
-        $db_id = DB_row['db_id'];
+        $db_id = $DB_row['db_id'];
         $query4 = "INSERT INTO jobs_db VALUES('$job_id', '$db_id')";
         $insert_DB_query=mysqli_query($dbc,$query4);
         if(!$insert_DB_query){

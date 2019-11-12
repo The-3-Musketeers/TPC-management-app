@@ -16,7 +16,7 @@ if($num!=0){
       $job_position=$row['job_position'];
       
       // Get all eligible degrees
-      $degree_query = "SELECT degree.degree_name AS degree_name FROM degree, degree_branch, jobs_db "
+      $degree_query = "SELECT DISTINCT degree.degree_name AS degree_name FROM degree, degree_branch, jobs_db "
                       ."WHERE jobs_db.job_id = '$job_id' AND jobs_db.db_id = degree_branch.db_id "
                       ."AND degree_branch.degree_id = degree.degree_id";
       $get_all_degree=mysqli_query($dbc,$degree_query);
@@ -27,7 +27,7 @@ if($num!=0){
       }
 
       // Get all eligible branches
-      $branch_query = "SELECT branch.branch_name AS branch_name FROM branch, degree_branch, jobs_db "
+      $branch_query = "SELECT DISTINCT branch.branch_name AS branch_name FROM branch, degree_branch, jobs_db "
                       ."WHERE jobs_db.job_id = '$job_id' AND jobs_db.db_id = degree_branch.db_id "
                       ."AND branch.branch_id = degree_branch.branch_id";
       $get_all_branch=mysqli_query($dbc,$branch_query);
