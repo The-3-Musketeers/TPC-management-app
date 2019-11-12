@@ -75,10 +75,10 @@
       $apply_by=$row['apply_by'];
 
       // Category of job
-      $company_query = "SELECT company_category FROM recruiters_data WHERE company_id='" . $company_id . "'";
+      $company_query = "SELECT company_category_id FROM recruiters_data WHERE company_id='" . $company_id . "'";
       $company_data = mysqli_query($dbc, $company_query);
       $company_row = mysqli_fetch_assoc($company_data);
-      $company_cat = $company_row['company_category'];
+      $company_cat_id = $company_row['company_category_id'];
 
       // ************ ELIGIBITLY check starts here ************
 
@@ -97,77 +97,32 @@
           $row = mysqli_fetch_array($data);
           $stud_job_offers = $row['job_offers'];
           $stud_job_offers_arr = explode(",", $stud_job_offers);
-          if(sizeof($stud_job_offers_arr) > 1){
-            $is_stud_eligible = FALSE;
-            $button_message = "You are ineligible for further participation in campus placements.";
-          } elseif($is_stud_eligible) {
-            $job_offer_id = $stud_job_offers_arr[0];
-            // Fetch company id using job id
-            $job_query="SELECT company_category FROM recruiters INNER JOIN jobs ON recruiters.company_id=jobs.company_id WHERE job_id='$job_offer_id'";
-            $data = mysqli_query($dbc, $job_query);
-            $row = mysqli_fetch_array($data);
-            $job_offer_company_cat = $row['company_category'];
-            //echo "Offer is by" . $job_offer_company_cat . "<br/>";
-            // Check if company is A1
-            if(strtolower($job_offer_company_cat) == "a1"){
-              // Ineligible for further placements.
+          if(sizeof($stud_job_offers_arr) > 0){
+            // check of which company category offer is and in how many more companies can student apply
+            $num_times_can_apply = -1; // to the company category of job opened
+            $num_times_already_applied = 0; // to the company category of job opened
+            foreach($stud_job_offers_arr as $cat_id){
+              if($cat_id == $company_cat_id){
+                $num_times_already_applied += 1;
+              }else{
+                $query_num = "SELECT num FROM company_constraints WHERE current_id='$cat_id' AND can_apply_id='$company_cat_id'";
+                $data_num = mysqli_query($dbc, $query_num);
+                $row_num = mysqli_fetch_array($data_num);
+                if(mysqli_num_rows($data_num) > 0){
+                  if($num_times_can_apply == -1){
+                    $num_times_can_apply = $row_num['num'];
+                  }else{
+                    $num_times_can_apply = min($num_times_can_apply, $row_num['num']);
+                  }
+                }
+              }
+            }
+            // if no constraint or already applied as many times as specified in constraints
+            if($num_times_can_apply == -1 || $num_times_already_applied >= $num_times_can_apply){
               $is_stud_eligible = FALSE;
               $button_message = "You are ineligible for further participation in campus placements.";
             }
-
-            // Check else if company is B1
-            elseif(strtolower($job_offer_company_cat) == "b1"){
-              // Able to apply for only two A1
-              // Check how many A1s has student already applied to
-              $count_A1_query = "SELECT * FROM applications INNER JOIN jobs ON applications.job_id=jobs.job_id INNER JOIN recruiters ON jobs.company_id=recruiters.company_id WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='A1'";
-              $data = mysqli_query($dbc, $count_A1_query);
-              if(mysqli_num_rows($data) < 2){
-                // Student can apply for more A1s
-                //echo "Current company is " . $company_cat;
-                // Check if current job is of A1 company.
-                if(strtolower($company_cat) != 'a1'){
-                  // Can not apply to this job
-                  $is_stud_eligible = FALSE;
-                  $button_message = "You are ineligible to apply for this job.";
-                }
-              } else {
-                // Ineligible for further placements.
-                $is_stud_eligible = FALSE;
-                $button_message = "You are ineligible for further participation in campus placements.";
-              }
-            }
-
-            // Check else if company is B2
-            elseif(strtolower($job_offer_company_cat) == "b2"){
-              // Able to apply for 2 A1 and 2 B1
-              // Check how many A1s and B1s has student already applied to
-              $count_A1_query = "SELECT * FROM applications INNER JOIN jobs ON applications.job_id=jobs.job_id INNER JOIN recruiters ON jobs.company_id=recruiters.company_id WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='A1'";
-              $dataA1 = mysqli_query($dbc, $count_A1_query);
-              $count_B1_query = "SELECT * FROM applications INNER JOIN jobs ON applications.job_id=jobs.job_id INNER JOIN recruiters ON jobs.company_id=recruiters.company_id WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND company_category='B1'";
-              $dataB1 = mysqli_query($dbc, $count_B1_query);
-              if(mysqli_num_rows($dataA1) < 2 || mysqli_num_rows($dataB1) < 2){
-                if(strtolower($company_cat) == 'a1' && mysqli_num_rows($dataA1) >= 2){
-                  // Can not apply to this job (already applied to 2 A1)
-                  $is_stud_eligible = FALSE;
-                  $button_message = "You are ineligible to apply for this job.";
-                } elseif (strtolower($company_cat) == 'b1' && mysqli_num_rows($dataB1) >= 2){
-                  // Can not apply to this job (already applied to 2 B1)
-                  $is_stud_eligible = FALSE;
-                  $button_message = "You are ineligible to apply for this job.";
-                } elseif (strtolower($company_cat) == 'b2'){
-                  // Can not apply to this job
-                  $is_stud_eligible = FALSE;
-                  $button_message = "You are ineligible to apply for this job.";
-                }
-              } else {
-                // Ineligible for further placements.
-                $is_stud_eligible = FALSE;
-                $button_message = "You are ineligible for further participation in campus placements.";
-              }
-            }
-
           }
-
 
           // Check general eligibility (Branch, Degree and CPI based)
           if($is_stud_eligible){
