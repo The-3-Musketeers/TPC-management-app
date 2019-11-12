@@ -22,7 +22,7 @@
     function display(){
         $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
         global $roll_number;
-        $query="SELECT * FROM students_data WHERE roll_number='{$roll_number}'";
+        $query = "SELECT * FROM students_data WHERE roll_number='{$roll_number}'";
         $select_from_student_data_query=mysqli_query($dbc,$query);
         if(!$select_from_student_data_query){
             die("QUERY FAILED ".mysqli_error($dbc));
@@ -31,20 +31,34 @@
         global $cpi,$skype,$gmail,$emergency_number,$department,$course,$resume_url,$profile_pic_url;
         $row=mysqli_fetch_assoc($select_from_student_data_query);
         $cpi=$row['current_cpi'];
-        $department=$row['department'];
-        $skype=$row['skype_Id'];
-        $gmail=$row['gmail_Id'];
-        $emergency_number=$row['emergency_number'];
-        $course=$row['course'];
-        $resume_url=$row['resume_url'];
-        $resume_file=$row['resume_file'];
-        $mobile_number=$row['mobile_number'];
-        if($course==null){
-            $course="Select your course";
+        
+        // Fetch degree and branch using db_id
+        $db_id = $row['db_id'];
+        if($db_id != null){
+          $fetch_degree_branch = "SELECT D.degree_name AS d_name, B.branch_name AS b_name FROM degree_branch AS DB,"
+                                ." degree AS D, branch AS B WHERE D.degree_id = DB.degree_id AND B.branch_id = DB.branch_id"
+                                ." AND db_id='{$db_id}'";
+
+          $fetch_degree_branch_query = mysqli_query($dbc,$fetch_degree_branch);
+          $degree_branch = mysqli_fetch_assoc($fetch_degree_branch_query);
+          $department = $degree_branch['b_name'];
+          $course = $degree_branch['d_name'];
         }
-        if($department==null){
-            $department="Select your department";
+
+        $skype = $row['skype_Id'];
+        $gmail = $row['gmail_Id'];
+        $emergency_number = $row['emergency_number'];
+        $resume_url = $row['resume_url'];
+        $resume_file = $row['resume_file'];
+        $mobile_number = $row['mobile_number'];
+
+        if($db_id == null){
+            $course = "Select your course";
         }
+        if($db_id == null){
+            $department = "Select your department";
+        }
+
         if($row['profile_pic']!==null && $row['profile_pic']!==''){
             $profile_pic_url='../images/students/'.$row['profile_pic'];
         }
@@ -60,8 +74,18 @@
 if(isset($_POST['update'])){
 
 $username=mysqli_real_escape_string($dbc,trim($_POST['username']));
+
+// Fetch db_id
 $course=mysqli_real_escape_string($dbc,trim($_POST['course']));
 $department=mysqli_real_escape_string($dbc,trim($_POST['department']));
+$fetch_db_id = "SELECT DB.db_id AS db_id FROM degree_branch AS DB,"
+              ." degree AS D, branch AS B WHERE D.degree_id = DB.degree_id AND B.branch_id = DB.branch_id"
+              ." AND D.degree_name='{$course}' AND b.branch_name='{$department}'";
+
+$fetch_db_id_query = mysqli_query($dbc,$fetch_db_id);
+$db_id_row = mysqli_fetch_assoc($fetch_db_id_query);
+$db_id = $db_id_row['db_id'];
+
 $cpi=mysqli_real_escape_string($dbc,trim($_POST['cpi']));
 $resume_url=mysqli_real_escape_string($dbc,trim($_POST['resume']));
 $mobile_number=mysqli_real_escape_string($dbc,trim($_POST['mobile_number']));
@@ -85,7 +109,7 @@ $resume_name=$_SESSION['roll_number'].".pdf";
 move_uploaded_file($resume_tmp_name,"../resume/$resume_name");
 }
 
-$query="UPDATE students_data SET course='$course', department='$department', current_cpi=$cpi, skype_Id='$skype', gmail_Id='$gmail', emergency_number=$emergency_number ";
+$query="UPDATE students_data SET db_id='$db_id', current_cpi=$cpi, skype_Id='$skype', gmail_Id='$gmail', emergency_number=$emergency_number ";
 if($profile_img_name !== null && $profile_img_name !== ''){
 $query=$query.",profile_pic='$profile_img_name' ";
 }
