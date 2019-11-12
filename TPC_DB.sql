@@ -29,6 +29,21 @@ CREATE TABLE `students_data` (
   FOREIGN KEY (`roll_number`) REFERENCES students (`roll_number`)
 );
 
+CREATE TABLE company_category (
+  id VARCHAR(6),
+  name VARCHAR(8),
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE company_constraints (
+  current_id VARCHAR(6),
+  can_apply_id VARCHAR(6),
+  num INT, /* Number of times student can apply to can_apply_id if selected in current_id */
+  PRIMARY KEY (current_id, can_apply_id),
+  FOREIGN KEY (current_id) REFERENCES company_category(id),
+  FOREIGN KEY (can_apply_id) REFERENCES company_category(id)
+);
+
 CREATE TABLE recruiters (
   company_id VARCHAR(8),
   join_date DATETIME,
@@ -41,7 +56,7 @@ CREATE TABLE recruiters_data (
   company_id VARCHAR(8),
   company_name VARCHAR(64),
   company_desc VARCHAR(256),
-  company_category VARCHAR(2),
+  company_category_id VARCHAR(6),
   company_type VARCHAR(10),
   turnover VARCHAR(10),
   scr_rounds INT(2),
@@ -58,7 +73,8 @@ CREATE TABLE recruiters_data (
   hr_email_3 VARCHAR(64),
   hr_designation_3 VARCHAR(32),
   PRIMARY KEY (company_id),
-  FOREIGN KEY (company_id) REFERENCES recruiters(company_id)
+  FOREIGN KEY (company_id) REFERENCES recruiters(company_id),
+  FOREIGN KEY (company_category_id) REFERENCES company_category(id)
 );
 
 CREATE TABLE `degree` (
@@ -116,21 +132,6 @@ CREATE TABLE `applications` (
   `applied_on` DATETIME,
   PRIMARY KEY (`application_id`),
   FOREIGN KEY (`job_id`) REFERENCES jobs (`job_id`)
-);
-
-CREATE TABLE company_category (
-  id VARCHAR(8),
-  name VARCHAR(4),
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE company_constraints (
-  current_id VARCHAR(8),
-  can_apply_id VARCHAR(8),
-  num INT, /* Number of times student can apply to can_apply_id if selected in current_id */
-  PRIMARY KEY (current_id, can_apply_id),
-  FOREIGN KEY (current_id) REFERENCES company_category(id),
-  FOREIGN KEY (can_apply_id) REFERENCES company_category(id)
 );
 
 /* Add admin to students table */
