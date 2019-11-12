@@ -30,7 +30,12 @@
   if(mysqli_num_rows($data) == "1"){
     $row = mysqli_fetch_assoc($data);
     $company_name = $row["company_name"];
-    $company_category = $row["company_category"];
+    $company_category_id = $row["company_category_id"];
+    // fetch company category name from id
+    $query_cat = "SELECT name FROM company_category WHERE id='$company_category_id'";
+    $data_cat = mysqli_query($dbc, $query_cat);
+    $row_cat = mysqli_fetch_assoc($data_cat);
+    $company_category = $row_cat['name'];
     $hr_name_1 = $row["hr_name_1"];
     $hr_designation_1 = $row["hr_designation_1"];
     $hr_email_1 = $row["hr_email_1"];

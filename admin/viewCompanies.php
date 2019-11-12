@@ -30,27 +30,20 @@
   }
 
   $activeTab = "1";
+  $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+  if (!$dbc) {
+    die("Connection failed: " . mysqli_connect_error());
+  }
 
   if(isset($_POST['approve'])){
-    $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-    if (!$dbc) {
-      die("Connection failed: " . mysqli_connect_error());
-    }
     $company_id = mysqli_real_escape_string($dbc, trim($_GET['id']));
-    $company_category = mysqli_real_escape_string($dbc, trim($_POST['company-category']));
-    if($company_category==0){
+    $company_category_id = mysqli_real_escape_string($dbc, trim($_POST['company-category']));
+    if($company_category_id == "0"){
       echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
       'Select company category before approving' . '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
       '<span aria-hidden="true">&times;</span></button></div></div>';
     } else{
-        if($company_category==1) {
-          $company_category='A1';
-        } else if($company_category==2) {
-          $company_category='B1';
-        } else if($company_category==3) {
-          $company_category='B2';
-        }
-      $update_status_query = "UPDATE recruiters_data SET company_status='accepted', company_category='$company_category' WHERE company_id='$company_id'";
+      $update_status_query = "UPDATE recruiters_data SET company_status='accepted', company_category_id='$company_category_id' WHERE company_id='$company_id'";
       $update_status = mysqli_query($dbc, $update_status_query);
       if(!$update_status){
         echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
@@ -65,11 +58,8 @@
       $activeTab = $_GET['tab'];
     }
   }
+
   if(isset($_POST['reject'])){
-    $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-    if (!$dbc) {
-      die("Connection failed: " . mysqli_connect_error());
-    }
     $company_id = mysqli_real_escape_string($dbc, trim($_GET['id']));
     $update_status_query = "UPDATE recruiters_data SET company_status='rejected' WHERE company_id='$company_id'";
     $update_status = mysqli_query($dbc, $update_status_query);
@@ -85,12 +75,14 @@
     }
     $activeTab = $_GET['tab'];
   }
+
   if(!isset($_POST['search'])){
     $keyword='';
   }else {
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     $_SESSION["keyword"]=mysqli_real_escape_string($dbc, trim($_POST['keyword']));
   }
+
 ?>
 
 <div class="container">
@@ -159,7 +151,12 @@
       while($row=mysqli_fetch_assoc($search_query)){
         $id=$row['company_id'];
         $company_name=$row['company_name'];
-        $company_category=$row['company_category'];
+        $company_category_id=$row['company_category_id'];
+        // fetch company category name through id
+        $query_cat = "SELECT name FROM company_category WHERE id='$company_category_id'";
+        $data_cat = mysqli_query($dbc,$query_cat);
+        $row_cat = mysqli_fetch_assoc($data_cat);
+        $company_category = $row_cat['name'];
         $hr_name_1=$row['hr_name_1'];
         $hr_email_1=$row['hr_email_1'];
         $status=$row['company_status'];
@@ -256,7 +253,7 @@
         </thead>
         <?php
           $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-          $query = "SELECT company_id, company_name, company_category, hr_name_1, hr_email_1 FROM recruiters_data WHERE company_status='accepted'";
+          $query = "SELECT company_id, company_name, company_category_id, hr_name_1, hr_email_1 FROM recruiters_data WHERE company_status='accepted'";
           $data = mysqli_query($dbc, $query);
           if(mysqli_num_rows($data) != 0){
         ?>
@@ -264,9 +261,13 @@
           <?php
             $curr = 1;
             while($row = mysqli_fetch_array($data)){
+              $comp_id = $row["company_category_id"];
+              $query_cat = "SELECT name FROM company_category WHERE id='$comp_id'";
+              $data_cat = mysqli_query($dbc, $query_cat);
+              $row_cat = mysqli_fetch_array($data_cat);
               echo '<tr><th scope="row">' . $curr . '</th>' .
                         '<td><a href="./company.php?id=' . $row["company_id"] . '">' . $row["company_name"] . '</a></td>' .
-                        '<td>' . $row["company_category"] . '</td>' .
+                        '<td>' . $row_cat["name"] . '</td>' .
                         '<td>' . $row["hr_name_1"] . '</td>' .
                         '<td>' . $row["hr_email_1"] . '</td>' .
                         '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=1" method="post">' .
@@ -297,24 +298,26 @@
         </thead>
         <?php
           $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-          $query = "SELECT company_id, company_name, company_category, hr_name_1, hr_email_1 FROM recruiters_data WHERE company_status='pending'";
+          $query = "SELECT company_id, company_name, company_category_id, hr_name_1, hr_email_1 FROM recruiters_data WHERE company_status='pending'";
           $data = mysqli_query($dbc, $query);
           if(mysqli_num_rows($data) != 0){
         ?>
         <tbody>
           <?php
             $curr = 1;
+            $query_cat = "SELECT * FROM company_category ORDER BY name ASC";
+            $data_cat = mysqli_query($dbc, $query_cat);
             while($row = mysqli_fetch_array($data)){
               echo '<tr><th scope="row">' . $curr . '</th>' .
                         '<td><a href="./company.php?id=' . $row["company_id"] . '">' . $row["company_name"] . '</a></td>' .
                         '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=2" method="post">'.
                         '<select class="custom-select" id="company-category" name="company-category">
-                          <option value="0" selected>Select Category</option>
-                          <option value="1">A1</option>
-                          <option value="2">B1</option>
-                          <option value="3">B2</option>
-                        </select>'.
-                        $row["company_category"] . '</td>' .
+                          <option value="0" selected>Select Category</option>';
+              while($row_cat = mysqli_fetch_array($data_cat)){
+                echo '<option value="' . $row_cat['id'] .'">' . $row_cat['name'] . '</option>';
+              }
+              echo '</select>'.
+                        '</td>' .
                         '<td>' . $row["hr_name_1"] . '</td>' .
                         '<td>' . $row["hr_email_1"] . '</td>' .
                         '<td>' .
@@ -346,23 +349,25 @@
         </thead>
         <?php
           $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-          $query = "SELECT company_id, company_name, company_category, hr_name_1, hr_email_1 FROM recruiters_data WHERE company_status='rejected'";
+          $query = "SELECT company_id, company_name, company_category_id, hr_name_1, hr_email_1 FROM recruiters_data WHERE company_status='rejected'";
           $data = mysqli_query($dbc, $query);
           if(mysqli_num_rows($data) != 0){
         ?>
         <tbody>
           <?php
             $curr = 1;
+            $query_cat = "SELECT * FROM company_category ORDER BY name ASC";
+            $data_cat = mysqli_query($dbc, $query_cat);
             while($row = mysqli_fetch_array($data)){
               echo '<tr><th scope="row">' . $curr . '</th>' .
                         '<td><a href="./company.php?id=' . $row["company_id"] . '">' . $row["company_name"] . '</a></td>' .
                         '<td><form action="' . $_SERVER['PHP_SELF'] . '?id=' . $row["company_id"] . '&tab=2" method="post">'.
                         '<select class="custom-select" id="company-category" name="company-category">
-                          <option value="0" selected>Select Category</option>
-                          <option value="1">A1</option>
-                          <option value="2">B1</option>
-                          <option value="3">B2</option>
-                        </select>'.
+                          <option value="0" selected>Select Category</option>';
+              while($row_cat = mysqli_fetch_array($data_cat)){
+                echo '<option value="' . $row_cat['id'] .'">' . $row_cat['name'] . '</option>';
+              }
+              echo '</select>'.
                         '</td>' .
                         '<td>' . $row["hr_name_1"] . '</td>' .
                         '<td>' . $row["hr_email_1"] . '</td>' .

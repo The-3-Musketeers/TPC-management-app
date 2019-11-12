@@ -37,8 +37,12 @@ if($num!=0){
       $company_data=mysqli_query($dbc,$company_query);
       $com_row=mysqli_fetch_assoc($company_data);
       $company_name=$com_row['company_name'];
-      $company_cat = $com_row['company_category'];
-
+      $company_cat_id = $com_row['company_category_id'];
+      // fetch company category name from id
+      $query_cat = "SELECT name FROM company_category WHERE id='$company_cat_id'";
+      $data_cat = mysqli_query($dbc, $query_cat);
+      $row_cat = mysqli_fetch_assoc($data_cat);
+      $company_cat = $row_cat['name'];
       $job_position=$row1['job_position'];
       $test_date=$row1['test_date'];
       if($test_date==''){
