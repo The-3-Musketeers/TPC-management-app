@@ -40,9 +40,15 @@ if($num!=0){
       $no_of_opening=$row['no_of_opening'];
       $stipend=$row['stipend'];
 
-      $company_cat_query = "SELECT company_category FROM recruiters_data WHERE company_id='" . $company_id . "'";
+      $company_cat_query = "SELECT company_category_id FROM recruiters_data WHERE company_id='" . $company_id . "'";
       $company_cat_data = mysqli_query($dbc, $company_cat_query);
       $company_cat_row = mysqli_fetch_assoc($company_cat_data);
+      $company_category_id = $company_cat_row['company_category'];
+      // fetch company category name from id
+      $query_cat = "SELECT name FROM company_category WHERE id='$company_category_id'";
+      $data_cat = mysqli_query($dbc, $query_cat);
+      $row_cat = mysqli_fetch_assoc($data_cat);
+      $company_category = $row_cat['name'];
 
       if($stipend==null){
           $stipend='N.A.';
@@ -105,7 +111,7 @@ if($num!=0){
                 <td><?php echo $branch; ?></td>
                 <td><?php echo $stipend; ?></td>
                 <td><?php echo $no_of_opening; ?></td>
-                <td><?php echo $company_cat_row['company_category']; ?></td>
+                <td><?php echo $company_category; ?></td>
                 <td><?php echo $apply_by; ?></td>
                 </tr>
             </tbody>

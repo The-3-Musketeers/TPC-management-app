@@ -136,3 +136,8 @@ CREATE TABLE `applications` (
 /* Add admin to students table */
 
 INSERT INTO students (roll_number,username, user_role, password, join_date) VALUES ('admin','admin', 'admin', 'admin', NOW());
+
+/* Add current categories */
+
+INSERT INTO `company_category` (`id`, `name`) VALUES ('Bdtl61', 'A1'), ('Hiakm6', 'B2'), ('KnAtiB', 'B1');
+INSERT INTO `company_constraints` (`current_id`, `can_apply_id`, `num`) VALUES ('Hiakm6', 'Bdtl61', 2), ('Hiakm6', 'KnAtiB', 2), ('KnAtiB', 'Bdtl61', 2);
