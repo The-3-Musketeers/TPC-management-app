@@ -1,5 +1,26 @@
 /* Create tables */
 
+CREATE TABLE `degree` (
+ `degree_id` varchar(6),
+ `degree_name` varchar(128) NOT NULL,
+ PRIMARY KEY (`degree_id`)
+);
+
+CREATE TABLE `branch` (
+ `branch_id` varchar(6),
+ `branch_name` varchar(128) NOT NULL,
+ PRIMARY KEY (`branch_id`)
+);
+
+CREATE TABLE `degree_branch` (
+ `db_id` varchar(6),
+ `degree_id` varchar(6),
+ `branch_id` varchar(6),
+ PRIMARY KEY (`db_id`),
+ FOREIGN KEY (`degree_id`) REFERENCES `degree`(`degree_id`),
+ FOREIGN KEY (`branch_id`) REFERENCES `branch`(`branch_id`)
+);
+
 CREATE TABLE `students` (
   `join_date` DATETIME,
   `roll_number` VARCHAR(8),
@@ -14,8 +35,7 @@ CREATE TABLE `students` (
 CREATE TABLE `students_data` (
   `roll_number` varchar(8) NOT NULL,
   `current_cpi` float DEFAULT NULL,
-  `department` varchar(8) DEFAULT NULL,
-  `course` varchar(8) DEFAULT NULL,
+  `db_id` varchar(6),
   `profile_pic` varchar(256) DEFAULT NULL,
   `resume_url` varchar(256) DEFAULT NULL,
   `resume_file` varchar(256) DEFAULT NULL,
@@ -59,27 +79,6 @@ CREATE TABLE recruiters_data (
   hr_designation_3 VARCHAR(32),
   PRIMARY KEY (company_id),
   FOREIGN KEY (company_id) REFERENCES recruiters(company_id)
-);
-
-CREATE TABLE `degree` (
- `degree_id` varchar(6),
- `degree_name` varchar(128) NOT NULL,
- PRIMARY KEY (`degree_id`)
-);
-
-CREATE TABLE `branch` (
- `branch_id` varchar(6),
- `branch_name` varchar(128) NOT NULL,
- PRIMARY KEY (`branch_id`)
-);
-
-CREATE TABLE `degree_branch` (
- `db_id` varchar(6),
- `degree_id` varchar(6),
- `branch_id` varchar(6),
- PRIMARY KEY (`db_id`),
- FOREIGN KEY (`degree_id`) REFERENCES `degree`(`degree_id`),
- FOREIGN KEY (`branch_id`) REFERENCES `branch`(`branch_id`)
 );
 
 CREATE TABLE `jobs` (

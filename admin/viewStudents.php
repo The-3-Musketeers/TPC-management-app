@@ -22,7 +22,19 @@
                         "</tr>" .
                       "</thead>";
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-    $query = "SELECT roll_number, current_cpi, mobile_number FROM students_data WHERE course='$course' AND department='$dept' ORDER BY roll_number ASC";
+
+    // Fetch db_id
+    $course=mysqli_real_escape_string($dbc,trim($course));
+    $department=mysqli_real_escape_string($dbc,trim($dept));
+    $fetch_db_id = "SELECT DB.db_id AS db_id FROM degree_branch AS DB,"
+                  ." degree AS D, branch AS B WHERE D.degree_id = DB.degree_id AND B.branch_id = DB.branch_id"
+                  ." AND D.degree_name='{$course}' AND b.branch_name='{$department}'";
+
+    $fetch_db_id_query = mysqli_query($dbc,$fetch_db_id);
+    $db_id_row = mysqli_fetch_assoc($fetch_db_id_query);
+    $db_id = $db_id_row['db_id'];
+
+    $query = "SELECT roll_number, current_cpi, mobile_number FROM students_data WHERE db_id='$db_id' ORDER BY roll_number ASC";
     $data = mysqli_query($dbc, $query);
     if(mysqli_num_rows($data) != 0){
       $html_content .= "<tbody>";

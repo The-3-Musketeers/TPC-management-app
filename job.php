@@ -19,13 +19,23 @@
     $is_stud_eligible = TRUE;
     if($_SESSION['user_role'] == 'student'){
       // Fetch general details
-      $student_query = "SELECT current_cpi, department, course, job_offers FROM students_data WHERE roll_number='". $_SESSION['roll_number'] ."'";
+      $student_query = "SELECT current_cpi, db_id, job_offers FROM students_data WHERE roll_number='". $_SESSION['roll_number'] ."'";
       $data = mysqli_query($dbc, $student_query);
       if(mysqli_num_rows($data) == 1){
         $row = mysqli_fetch_array($data);
         $student_cpi = $row['current_cpi'];
-        $student_course = $row['course'];
-        $student_department = $row['department'];
+
+        $db_id = $row['db_id'];
+        if($db_id != null){
+          $fetch_degree_branch = "SELECT D.degree_name AS d_name, B.branch_name AS b_name FROM degree_branch AS DB,"
+                                ." degree AS D, branch AS B WHERE D.degree_id = DB.degree_id AND B.branch_id = DB.branch_id"
+                                ." AND db_id='{$db_id}'";
+
+          $fetch_degree_branch_query = mysqli_query($dbc,$fetch_degree_branch);
+          $degree_branch = mysqli_fetch_assoc($fetch_degree_branch_query);
+          $student_department = $degree_branch['b_name'];
+          $student_course = $degree_branch['d_name'];
+        }
       }
     }
 

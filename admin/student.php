@@ -73,8 +73,21 @@
     $student_name = $row1["username"];
     $webmail_id = $row1["webmail_id"];
     $current_cpi = $row2["current_cpi"];
-    $department = $row2["department"];
-    $course = $row2["course"];
+
+    $db_id = $row2['db_id'];
+    $department = "";
+    $course = "";
+    if($db_id != null){
+      $fetch_degree_branch = "SELECT D.degree_name AS d_name, B.branch_name AS b_name FROM degree_branch AS DB,"
+                            ." degree AS D, branch AS B WHERE D.degree_id = DB.degree_id AND B.branch_id = DB.branch_id"
+                            ." AND db_id='{$db_id}'";
+
+      $fetch_degree_branch_query = mysqli_query($dbc,$fetch_degree_branch);
+      $degree_branch = mysqli_fetch_assoc($fetch_degree_branch_query);
+      $department = $degree_branch['b_name'];
+      $course = $degree_branch['d_name'];
+    }
+
     $resume_url = $row2["resume_url"];
     $mobile_number = $row2["mobile_number"];
     $job_offers = $row2["job_offers"];
