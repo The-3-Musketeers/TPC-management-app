@@ -74,13 +74,22 @@
         $query = "SELECT * FROM recruiters_data WHERE company_category_id='$id'";
         $data = mysqli_query($dbc, $query);
         if(mysqli_num_rows($data) == 0){
-          $query = "DELETE FROM company_category WHERE name='$company_category'";
-          $data = mysqli_query($dbc, $query);
-          if(!$data){
-            die("QUERY FAILED ".mysqli_error($dbc));
+          $query_constraint = "SELECT * FROM company_constraints WHERE current_id='$id' OR can_apply_id='$id'";
+          $data_constraint = mysqli_query($dbc, $query_constraint);
+          if(mysqli_num_rows($data_constraint) == 0){
+            $query = "DELETE FROM company_category WHERE name='$company_category'";
+            $data = mysqli_query($dbc, $query);
+            if(!$data){
+              die("QUERY FAILED ".mysqli_error($dbc));
+            }else{
+              echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+                    'Category deleted successfully.' .
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+                    '<span aria-hidden="true">&times;</span></button></div></div>';
+            }
           }else{
-            echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
-                  'Category deleted successfully.' .
+            echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+                  'Please delete constaint of category ' . $company_category . ' before deleting it.' .
                   '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
                   '<span aria-hidden="true">&times;</span></button></div></div>';
           }
