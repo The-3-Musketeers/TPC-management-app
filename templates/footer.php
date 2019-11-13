@@ -1,5 +1,9 @@
 <?php
   $url = $_SERVER['REQUEST_URI'];
+
+  $isHome = FALSE;
+  if($url == "/TPC-management-app/") $isHome = TRUE;
+  
   $url = explode("/", $url);
   if(sizeof($url)>2){
     $folderName = $url[sizeof($url)-2];
@@ -8,7 +12,7 @@
   }
   $fileName = $url[sizeof($url)-1];
 ?>
-<?php if($fileName == "index.php" || $fileName == "login.php"){ ?>
+<?php if($fileName == "index.php" || $fileName == "login.php" || $isHome){ ?>
   <!-- Footer -->
   <script src="/TPC-management-app/scripts/footer.js"></script>
 <?php } ?>
