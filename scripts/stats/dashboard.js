@@ -49,70 +49,42 @@ $(document).ready(function(){
 
 
   // Students stats
-  var data=[
-   {
-      "course":"btech",
-      "branch":"CSE",
-      "placed":"51",
-      "remaining":"4"
-   },
-   {
-      "course":"btech",
-      "branch":"EE",
-      "placed":"48",
-      "remaining":"7"
-   },
-   {
-      "course":"btech",
-      "branch":"ME",
-      "placed":"40",
-      "remaining":"15"
-   },
-   {
-      "course":"btech",
-      "branch":"CH",
-      "placed":"18",
-      "remaining":"11"
-   },
-   {
-      "course":"btech",
-      "branch":"CE",
-      "placed":"15",
-      "remaining":"15"
-   }
-  ];
-  var btech_labels = [];
-  var btech_placed = [];
-  var btech_remaining = [];
+  $.post("./stats/placementStats.php",
+    function (placementData){
+        var btech_labels = [];
+        var btech_placed = [];
+        var btech_remaining = [];
 
-  for(var i in data) {
-    if(data[i].course=="btech"){
-      btech_labels.push(data[i].branch);
-      btech_placed.push(data[i].placed);
-      btech_remaining.push(data[i].remaining);
-    }
-  }
+        for(var i in placementData) {
+          if(placementData[i].course=="btech"){
+            btech_labels.push(placementData[i].branch);
+            btech_placed.push(placementData[i].placed);
+            btech_remaining.push(placementData[i].remaining);
+          }
+        }
 
-  var chartdata = {
-    labels: btech_labels,
-    datasets : [
-      {
-        label: 'Placed',
-        backgroundColor: '#00c3c0',
-        data: btech_placed
-      },
-      {
-        label: 'Remaining',
-        backgroundColor: '#2d94ed',
-        data: btech_remaining
-      }
-    ]
-  };
+        var chartdata = {
+          labels: btech_labels,
+          datasets : [
+            {
+              label: 'Placed',
+              backgroundColor: '#00c3c0',
+              data: btech_placed
+            },
+            {
+              label: 'Remaining',
+              backgroundColor: '#2d94ed',
+              data: btech_remaining
+            }
+          ]
+        };
 
-  var ctx2 = $("#students");
+        var ctx2 = $("#students");
 
-  var barGraph = new Chart(ctx2, {
-    type: 'bar',
-    data: chartdata
-  });
+        var barGraph = new Chart(ctx2, {
+          type: 'bar',
+          data: chartdata
+        });
+    });
+  
 });
