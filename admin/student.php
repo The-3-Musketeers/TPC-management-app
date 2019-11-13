@@ -43,6 +43,20 @@
           '<span aria-hidden="true">&times;</span></button></div></div>';
   }
 
+  if(isset($_POST['submit_final_offer'])){
+    $final_accepted_offer = mysqli_real_escape_string($dbc,trim($_POST['final_offer']));
+    $query = "UPDATE students_data SET final_accepted_offer='$final_accepted_offer' WHERE roll_number='$roll_number'";
+    $res = mysqli_query($dbc,$query);
+    if(!res){
+      die("QUERY FAILED ".mysqli_error($dbc));
+    }
+    // Alert Success : Final Accepted offer updated
+    echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+            'Final accepted offer updated' .
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+          '<span aria-hidden="true">&times;</span></button></div></div>';
+  }
+
   if(isset($_POST['reset'])){
     $new_password = mysqli_real_escape_string($dbc,trim($_POST['new_password']));
     $verify_password = mysqli_real_escape_string($dbc,trim($_POST['verify_password']));
@@ -67,6 +81,12 @@
   }
 
   if(mysqli_num_rows($data1) == "1" && mysqli_num_rows($data2) == "1"){
+
+    $query1 = "SELECT * FROM students WHERE roll_number='". $roll_number ."'";
+    $data1 = mysqli_query($dbc, $query1);
+    $query2 = "SELECT * FROM students_data WHERE roll_number='". $roll_number ."'";
+    $data2 = mysqli_query($dbc, $query2);
+
     $row1 = mysqli_fetch_assoc($data1);
     $row2 = mysqli_fetch_assoc($data2);
 
@@ -91,6 +111,22 @@
     $resume_url = $row2["resume_url"];
     $mobile_number = $row2["mobile_number"];
     $job_offers = $row2["job_offers"];
+    $final_accepted_offer = $row2["final_accepted_offer"];
+    if($final_accepted_offer){
+      if($final_accepted_offer == "null"){
+        $final_accepted_offer_company = "None";
+      }else if($final_accepted_offer == "other") {
+        $final_accepted_offer_company = "Other";
+      } else {
+        $query = "SELECT company_name FROM recruiters_data WHERE company_id ='$final_accepted_offer'";
+        $data = mysqli_query($dbc,$query);
+        $row = mysqli_fetch_assoc($data);
+        $company_name = $row["company_name"];
+        $final_accepted_offer_company = $final_accepted_offer . ' - ' .$company_name;
+      }
+    }else{
+      $final_accepted_offer_company = "Select option";
+    }
     ?>
     <div class="container" style="max-width: 80%; padding: 20px;">
       <div class="card">
@@ -123,6 +159,34 @@
               <small>Please enter company category of the job offer received by student. If multiple offers are received, write the categories separated by comma. Ex: <code>A1,B2</code> or <code>B2</code> or <code>B1,B2</code> etc.</small>
             </form>
           </div>
+          <br/>
+          <form action="<?php echo $_SERVER['PHP_SELF'] . "?roll=" . $roll_number; ?>" method="post" enctype="multipart/form-data">
+            <div class="form-group" style="margin-bottom:0">
+              <label for="roll-number" style="margin-bottom:0"><h5>Final Accepted Offer:</h5></label>
+              <div style="display:flex">
+                <?php
+                  $query = "SELECT DISTINCT company_id,company_name FROM jobs ORDER BY company_id";
+                  $data = mysqli_query($dbc,$query);
+                  echo '<select class="form-control" style="width:30%;" id="final_accepeted_offer" name="final_offer">';
+                  echo '<option value='. $final_accepted_offer .'selected>'. $final_accepted_offer_company .'</option>';
+                  while($row = mysqli_fetch_assoc($data)){
+                    if($row["company_id"] != $final_accepted_offer){
+                      echo '<option value="' . $row['company_id'] .'">' . $row['company_id'] . ' - ' . $row['company_name'] . '</option>';
+                    }
+                  }
+                  if($final_accepted_offer != "null"){
+                    echo '<option value="null">None</option>';
+                  }
+                  if($final_accepted_offer != "other"){
+                    echo '<option value="other">Other</option>';
+                  }
+                  echo '</select>';
+                ?>
+                <button type="submit" name="submit_final_offer" class="btn btn-primary" style="margin-left:10px">Submit</button>
+              </div>
+            </div>
+          </form>
+          <br/>
           <div style="display:flex;">
             <form action="<?php echo $_SERVER['PHP_SELF'] . "?roll=" . $roll_number; ?>" method="post" enctype="multipart/form-data">
               <div class="form-group" style="margin-bottom:0">
