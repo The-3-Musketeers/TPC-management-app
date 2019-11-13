@@ -141,3 +141,9 @@ INSERT INTO students (roll_number,username, user_role, password, join_date) VALU
 
 INSERT INTO `company_category` (`id`, `name`) VALUES ('Bdtl61', 'A1'), ('Hiakm6', 'B2'), ('KnAtiB', 'B1');
 INSERT INTO `company_constraints` (`current_id`, `can_apply_id`, `num`) VALUES ('Hiakm6', 'Bdtl61', 2), ('Hiakm6', 'KnAtiB', 2), ('KnAtiB', 'Bdtl61', 2);
+
+/* Add current categories */
+
+INSERT INTO `degree` VALUES ('1', 'btech'), ('2', 'mtech');
+INSERT INTO `branch` VALUES ('1', 'CS'), ('2', 'EE'), ('3', 'ME');
+INSERT INTO `degree_branch` VALUES ('1', '1', '1'), ('2', '1', '2'), ('3', '2', '1'), ('4', '2', '2');
