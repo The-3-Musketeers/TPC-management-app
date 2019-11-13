@@ -45,6 +45,7 @@ CREATE TABLE `students_data` (
   `gmail_Id` varchar(255) DEFAULT NULL,
   `emergency_number` varchar(16) DEFAULT NULL,
   `year_of_enroll` year(4) NOT NULL,
+  `final_accepted_offer` varchar(8) DEFAULT NULL,
   PRIMARY KEY (`roll_number`),
   FOREIGN KEY (`roll_number`) REFERENCES students (`roll_number`)
 );
@@ -131,6 +132,24 @@ CREATE TABLE `applications` (
   `applied_on` DATETIME,
   PRIMARY KEY (`application_id`),
   FOREIGN KEY (`job_id`) REFERENCES jobs (`job_id`)
+);
+
+CREATE TABLE archive_students_data (
+  roll_number VARCHAR(8),
+  username VARCHAR(64) NOT NULL,
+  db_id VARCHAR(6) NOT NULL,
+  mobile_number VARCHAR(16) DEFAULT NULL,
+  gmail_Id VARCHAR(255) DEFAULT NULL,
+  year_of_enroll year(4) NOT NULL,
+  company_id VARCHAR(8) DEFAULT NULL,
+  PRIMARY KEY(roll_number)
+);
+
+CREATE TABLE archive_company_visit_year (
+  company_id VARCHAR(8) NOT NULL,
+  year_visited year(4) NOT NULL,
+  company_category VARCHAR(8) NOT NULL,
+  PRIMARY KEY(company_id,year_visited)
 );
 
 /* Add admin to students table */

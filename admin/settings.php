@@ -266,6 +266,64 @@
               '<span aria-hidden="true">&times;</span></button></div></div>';
     }
   }
+
+  if(isset($_POST['archiveData'])){
+    $admin_passw = mysqli_real_escape_string($dbc, trim($_POST['admin-passw']));
+    $query = "SELECT * FROM students WHERE roll_number='admin' AND password='$admin_passw'";
+    $data = mysqli_query($dbc,$query);
+    if(mysqli_num_rows($data) == 1){
+      $current_year = date("Y");
+      $year = $current_year - 4;
+      $query = "SELECT students.roll_number,username,mobile_number,gmail_Id,year_of_enroll,db_id,final_accepted_offer FROM students_data INNER JOIN students ON students_data.roll_number=students.roll_number WHERE year_of_enroll=$year";
+      $res = mysqli_query($dbc,$query);
+
+      while ($row = mysqli_fetch_assoc($res)) {
+        $roll_number = $row['roll_number'];
+        $username = $row['username'];
+        $mobile_number = $row['mobile_number'];
+        $gmail_Id = $row['gmail_Id'];
+        $year_of_enroll = $row['year_of_enroll'];
+        $db_id = $row['db_id'];
+        $company_id = $row['final_accepted_offer'];
+        $query = "INSERT into archive_students_data VALUES ('$roll_number','$username','$db_id','$mobile_number','$gmail_Id',$year_of_enroll,'$company_id')";
+        $res=mysqli_query($dbc,$query);
+        if(!$res){
+          die("QUERY FAILED ".mysqli_error($dbc));
+        }
+      }
+
+      $query = "SELECT DISTINCT jobs.company_id,jobs.company_name,name FROM jobs INNER JOIN recruiters_data ON jobs.company_id=recruiters_data.company_id INNER JOIN company_category ON recruiters_data.company_category_id=company_category.id";
+      $res = mysqli_query($dbc,$query);
+      while ($row = mysqli_fetch_assoc($res)) {
+        $company_id = $row['company_id'];
+        $company_name = $row['company_name'];
+        $company_category_name = $row['name'];
+        $query = "INSERT INTO archive_company_visit_year VALUES ('$company_id',$current_year-1,'$company_category_name')";
+        mysqli_query($dbc,$query);
+      }
+
+      $query = "DELETE students,students_data FROM students INNER JOIN students_data ON students.roll_number=students_data.roll_number WHERE year_of_enroll=$year";
+      mysqli_query($dbc,$query);
+      $query = "DELETE FROM jobs_db";
+      mysqli_query($dbc,$query);
+      $query = "DELETE FROM applications";
+      mysqli_query($dbc,$query);
+      $query = "DELETE FROM jobs";
+      mysqli_query($dbc,$query);
+
+      echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+              'Archive Successfull' .
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+              '<span aria-hidden="true">&times;</span></button></div></div>';
+
+    }else{
+      echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+              'Incorrect Admin Password' .
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+              '<span aria-hidden="true">&times;</span></button></div></div>';
+    }
+
+  }
 ?>
 
 <div class="container">
@@ -407,6 +465,27 @@
       </small></p>
     </div>
   </div>
+  <br/>
+  <div class="card">
+    <div class="card-header">
+      <strong>Archive</strong>
+    </div>
+    <div class="card-body">
+      <form class="form-inline" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+        <div class="form-group mb-2" style="margin-right:10px;">
+          <input type="password" class="form-control" name="admin-passw" placeholder="Admin Password">
+        </div>
+        <button type="submit" class="btn btn-danger mb-2" name="archiveData">Archive Data</button>
+      </form>
+      <hr>
+      <p><small><strong>Note:</strong>
+          <br/>To archive data, enter admin password and click on <b>Archive Data</b> button.
+          <br>Clicking on <b>Archive Data</b> will archive students and company data.  Preferably archive shall be done once a year after the current placement session is over.<br/>
+          <b>Once current session is archived, the action cannot be reversed and the database will be ready for the new session.</b>
+      </small></p>
+    </div>
+  </div>
+  <br/>
 </div>
 
 <?php require_once('../templates/footer.php');?>
