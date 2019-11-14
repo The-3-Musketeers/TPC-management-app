@@ -11,7 +11,9 @@
   require_once('../templates/header.php');
   require_once('../templates/navbar.php');
 
-  function GenerateTable($dept, $course){
+  $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+
+  function GenerateTable($db_id){
     $html_content = "<table class='table'>" .
                       "<thead class='thead-light'>" .
                         "<tr>" .
@@ -21,22 +23,14 @@
                           "<th scope='col'>Mobile No.</th>" .
                         "</tr>" .
                       "</thead>";
+
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-
-    // Fetch db_id
-    $course=mysqli_real_escape_string($dbc,trim($course));
-    $department=mysqli_real_escape_string($dbc,trim($dept));
-    $fetch_db_id = "SELECT DB.db_id AS db_id FROM degree_branch AS DB,"
-                  ." degree AS D, branch AS B WHERE D.degree_id = DB.degree_id AND B.branch_id = DB.branch_id"
-                  ." AND D.degree_name='{$course}' AND b.branch_name='{$department}'";
-
-    $fetch_db_id_query = mysqli_query($dbc,$fetch_db_id);
-    $db_id_row = mysqli_fetch_assoc($fetch_db_id_query);
-    $db_id = $db_id_row['db_id'];
-
     $query = "SELECT roll_number, current_cpi, mobile_number FROM students_data WHERE db_id='$db_id' ORDER BY roll_number ASC";
     $data = mysqli_query($dbc, $query);
-    if(mysqli_num_rows($data) != 0){
+    if(!$data){
+      die("ERROR: QUERY FAILED ".mysqli_error($dbc));
+    }
+    if(mysqli_num_rows($data) > 0){
       $html_content .= "<tbody>";
       $curr = 1;
       while($row = mysqli_fetch_array($data)){
@@ -69,158 +63,72 @@
 
 <div class="container">
   <ul class="nav nav-tabs" id="studentTabs" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link active" id="btech-tab" data-toggle="tab" href="#btech" role="tab" aria-selected="true">BTech</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" id="mtech-tab" data-toggle="tab" href="#mtech" role="tab" aria-selected="false">MTech</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" id="msc-tab" data-toggle="tab" href="#msc" role="tab" aria-selected="false">MSc</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" id="phd-tab" data-toggle="tab" href="#phd" role="tab" aria-selected="false">PHD</a>
-    </li>
+    <?php
+    $query_degree = "SELECT * FROM degree";
+    $data_degree = mysqli_query($dbc, $query_degree);
+    $first_entry = TRUE;
+    while($row = mysqli_fetch_assoc($data_degree)){
+      $curr_degree_id = $row['degree_id'];
+      $curr_degree_name = $row['degree_name'];
+      if($first_entry){
+        echo "<li class='nav-item'>
+                <a class='nav-link active' id='$curr_degree_id-tab' data-toggle='tab' href='#$curr_degree_id' role='tab' aria-selected='true'>$curr_degree_name</a>
+              </li>";
+        $first_entry = FALSE;
+      }else{
+        echo "<li class='nav-item'>
+                <a class='nav-link' id='$curr_degree_id-tab' data-toggle='tab' href='#$curr_degree_id' role='tab' aria-selected='false'>$curr_degree_name</a>
+              </li>";
+      }
+    }
+    ?>
   </ul>
   <div class="tab-content" id="studentsTabContent">
-    <div class="tab-pane fade show active" id="btech" role="tabpanel" aria-labelledby="btech-tab">
-      <div class="accordion" id="accordionBtech">
-        <?php
-          $branches = ["CS"=>"Computer Science and Engineering",
-                        "EE"=>"Electrical Engineering",
-                        "ME"=>"Mechanical Engineering",
-                        "CE"=>"Civil and Environmental Engineering",
-                        "CB"=>"Chemical and Biochemical Engineering"
-                          ];
-          $first = TRUE;
-          foreach($branches as $code => $name){
-            $table_content = GenerateTable($code, "Btech");
-            $html_content = "<div class='card'>" .
-                              "<div class='card-header' id='heading-$code'>" .
-                              "<h2 class='mb-0'>";
-            if($first){
-              $html_content .= "<button class='btn btn-link' type='button' data-toggle='collapse' data-target='#collapse$code' aria-expanded='true' aria-controls='collapse$code'>$name</button></h2></div>" .
-              "<div id='collapse$code' class='collapse show' aria-labelledby='heading-$code' data-parent='#accordionBtech'>" .
-              "<div class='card-body'>";
-              $first = FALSE;
-            }else{
-              $html_content .= "<button class='btn btn-link collapsed' type='button' data-toggle='collapse' data-target='#collapse$code' aria-expanded='false' aria-controls='collapse$code'>$name</button></h2></div>" .
-              "<div id='collapse$code' class='collapse' aria-labelledby='heading-$code' data-parent='#accordionBtech'>" .
-              "<div class='card-body'>";
-            }
-            $html_content .= $table_content;
-            $html_content .= "</div></div></div>";
-            echo $html_content;
-          }
-        ?>
-      </div>
-    </div>
+    <?php
+      $query_degree = "SELECT degree_id FROM degree";
+      $data_degree = mysqli_query($dbc, $query_degree);
+      $first_entry = TRUE;
+      while($row = mysqli_fetch_assoc($data_degree)){
+        $curr_degree_id = $row['degree_id'];
+        if($first_entry){
+          echo "<div class='tab-pane fade show active' id='$curr_degree_id' role='tabpanel' aria-labelledby='$curr_degree_id-tab'>
+          <div class='accordion' id='accordion$curr_degree_id'>";
+          $first_entry = FALSE;
+        }else{
+          echo "<div class='tab-pane fade' id='$curr_degree_id' role='tabpanel' aria-labelledby='$curr_degree_id-tab'>
+          <div class='accordion' id='accordion$curr_degree_id'>";
+        }
+        $query_get_branches = "SELECT db_id, branch.branch_id, branch.branch_name FROM degree_branch, branch WHERE degree_branch.branch_id=branch.branch_id AND degree_id='$curr_degree_id'";
+        $data_get_branches = mysqli_query($dbc, $query_get_branches);
 
-    <div class="tab-pane fade" id="mtech" role="tabpanel" aria-labelledby="mtech-tab">
-      <div class="accordion" id="accordionMtech">
-        <?php
-          $branches = ["mech"=>"Mechatronics",
-                        "mnc"=>"Mathematics & Computing",
-                        "nano"=>"Nano Science & Technology",
-                        "cse"=>"Computer Science & Engineering",
-                        "comm"=>"Communication System Engineering",
-                        "me"=>"Mechanical Engineering",
-                        "ce"=>"Civil & Infrastructure Engineering",
-                        "mse"=>"Materials Science & Engineering",
-                        "vlsi"=>"VLSI & Embedded Systems",
-                          ];
-          $first = TRUE;
-          foreach($branches as $code => $name){
-            $table_content = GenerateTable($code, "Mtech");
-            $html_content = "<div class='card'>" .
-                              "<div class='card-header' id='heading-$code'>" .
-                              "<h2 class='mb-0'>";
-            if($first){
-              $html_content .= "<button class='btn btn-link' type='button' data-toggle='collapse' data-target='#collapse$code' aria-expanded='true' aria-controls='collapse$code'>$name</button></h2></div>" .
-              "<div id='collapse$code' class='collapse show' aria-labelledby='heading-$code' data-parent='#accordionMtech'>" .
+        $first = TRUE;
+        while($row_branches = mysqli_fetch_assoc($data_get_branches)){
+          $branch_id = $row_branches['branch_id'];
+          $branch_name = $row_branches['branch_name'];
+          $db_id = $row_branches['db_id'];
+          $table_content = GenerateTable($db_id);
+          
+          $html_content = "<div class='card'>" .
+                            "<div class='card-header' id='heading-$branch_id'>" .
+                            "<h2 class='mb-0'>";
+          if($first){
+            $html_content .= "<button class='btn btn-link' type='button' data-toggle='collapse' data-target='#collapse$branch_id' aria-expanded='true' aria-controls='collapse$branch_id'>$branch_name</button></h2></div>" .
+              "<div id='collapse$branch_id' class='collapse show' aria-labelledby='heading-$branch_id' data-parent='#accordion$curr_degree_id'>" .
               "<div class='card-body'>";
-              $first = FALSE;
-            }else{
-              $html_content .= "<button class='btn btn-link collapsed' type='button' data-toggle='collapse' data-target='#collapse$code' aria-expanded='false' aria-controls='collapse$code'>$name</button></h2></div>" .
-              "<div id='collapse$code' class='collapse' aria-labelledby='heading-$code' data-parent='#accordionMtech'>" .
+            $first = FALSE;
+          }else{
+            $html_content .= "<button class='btn btn-link collapsed' type='button' data-toggle='collapse' data-target='#collapse$branch_id' aria-expanded='false' aria-controls='collapse$branch_id'>$branch_name</button></h2></div>" .
+              "<div id='collapse$branch_id' class='collapse' aria-labelledby='heading-$branch_id' data-parent='#accordion$curr_degree_id'>" .
               "<div class='card-body'>";
-            }
-            $html_content .= $table_content;
-            $html_content .= "</div></div></div>";
-            echo $html_content;
           }
-        ?>
-      </div>
-    </div>
-
-    <div class="tab-pane fade" id="msc" role="tabpanel" aria-labelledby="msc-tab">
-      <div class="accordion" id="accordionMSC">
-        <?php
-          $branches = ["math"=>"Mathematics",
-                        "phy"=>"Physics",
-                        "chem"=>"Chemistry"
-                          ];
-          $first = TRUE;
-          foreach($branches as $code => $name){
-            $table_content = GenerateTable($code, "Msc");
-            $html_content = "<div class='card'>" .
-                              "<div class='card-header' id='heading-$code'>" .
-                              "<h2 class='mb-0'>";
-            if($first){
-              $html_content .= "<button class='btn btn-link' type='button' data-toggle='collapse' data-target='#collapse$code' aria-expanded='true' aria-controls='collapse$code'>$name</button></h2></div>" .
-              "<div id='collapse$code' class='collapse show' aria-labelledby='heading-$code' data-parent='#accordionMSC'>" .
-              "<div class='card-body'>";
-              $first = FALSE;
-            }else{
-              $html_content .= "<button class='btn btn-link collapsed' type='button' data-toggle='collapse' data-target='#collapse$code' aria-expanded='false' aria-controls='collapse$code'>$name</button></h2></div>" .
-              "<div id='collapse$code' class='collapse' aria-labelledby='heading-$code' data-parent='#accordionMSC'>" .
-              "<div class='card-body'>";
-            }
-            $html_content .= $table_content;
-            $html_content .= "</div></div></div>";
-            echo $html_content;
-          }
-        ?>
-      </div>
-    </div>
-
-    <div class="tab-pane fade" id="phd" role="tabpanel" aria-labelledby="phd-tab">
-      <div class="accordion" id="accordionPHD">
-        <?php
-          $branches = ["cse_phd"=>"Computer Science & Engineering",
-                        "ee_phd"=>"Electrical Engineering",
-                        "me_phd"=>"Mechanical Engineering",
-                        "ce_phd"=>"Civil & Environment Engineering",
-                        "cb_phd"=>"Chemical & Biochemical Engineering",
-                        "mse_phd"=>"Material Science & Engineering",
-                        "math_phd"=>"Mathematics",
-                        "phy_phd"=>"Physics",
-                        "chem_phd"=>"Chemistry",
-                        "humanities_phd"=>"Humanities and Social Sciences",
-                          ];
-          $first = TRUE;
-          foreach($branches as $code => $name){
-            $table_content = GenerateTable($code, "PHD");
-            $html_content = "<div class='card'>" .
-                              "<div class='card-header' id='heading-$code'>" .
-                              "<h2 class='mb-0'>";
-            if($first){
-              $html_content .= "<button class='btn btn-link' type='button' data-toggle='collapse' data-target='#collapse$code' aria-expanded='true' aria-controls='collapse$code'>$name</button></h2></div>" .
-              "<div id='collapse$code' class='collapse show' aria-labelledby='heading-$code' data-parent='#accordionPHD'>" .
-              "<div class='card-body'>";
-              $first = FALSE;
-            }else{
-              $html_content .= "<button class='btn btn-link collapsed' type='button' data-toggle='collapse' data-target='#collapse$code' aria-expanded='false' aria-controls='collapse$code'>$name</button></h2></div>" .
-              "<div id='collapse$code' class='collapse' aria-labelledby='heading-$code' data-parent='#accordionPHD'>" .
-              "<div class='card-body'>";
-            }
-            $html_content .= $table_content;
-            $html_content .= "</div></div></div>";
-            echo $html_content;
-          }
-        ?>
-      </div>
-    </div>
+          $html_content .= $table_content;
+          $html_content .= "</div></div></div>";
+          echo $html_content;
+        }
+        echo "</div>
+        </div>";
+      } 
+    ?>
   </div>
 
 </div>
