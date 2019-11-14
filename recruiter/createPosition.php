@@ -146,31 +146,31 @@
   <div class="form-group row">
   <label class="col-sm-2 col-form-label">Degree<span class="red">*</span></label>
   <div class="col-sm-10">
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="checkbox" id="btech" value="btech" name="course[]" checked>
-      <label class="form-check-label" for="btech">BTech</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="checkbox" id="mtech" name="course[]" value="mtech">
-      <label class="form-check-label" for="mtech">MTech</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="checkbox" id="msc" value="msc" name="course[]">
-      <label class="form-check-label" for="msc">Msc</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="checkbox" id="phd" name="course[]" value="phd">
-      <label class="form-check-label" for="phd">PHD</label>
-    </div>
+    <?php 
+      $query = "SELECT degree_name FROM degree";
+      $data = mysqli_query($dbc,$query);
+      while($row = mysqli_fetch_assoc($data)){
+        $degree_name = $row['degree_name'];
+        echo "<div class='form-check form-check-inline course'>
+                <input class='form-check-input' type='checkbox' id='$degree_name' value='$degree_name' name='course[]'>
+                <label class='form-check-label' for='$degree_name'>$degree_name</label>
+              </div>";
+      }
+    ?>
   </div>  
   </div>
   <div class="form-group row">
   <label class="col-sm-2 col-form-label">Branch<span class="red">*</span></label>
   <div class="col-sm-10">
-    <div id="btech_branch"></div>
-    <div id="mtech_branch"></div>
-    <div id="msc_branch"></div>
-    <div id="phd_branch"></div>
+    <?php 
+      $query = "SELECT degree_name FROM degree";
+      $data = mysqli_query($dbc,$query);
+      while($row = mysqli_fetch_assoc($data)){
+        $degree_name = $row['degree_name'];
+        $degree_name .= "_branch";
+        echo "<div id='$degree_name'></div>";
+      }
+    ?>
   </div>  
   </div>
   <div class="form-group row">

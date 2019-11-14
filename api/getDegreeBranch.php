@@ -17,10 +17,7 @@ if(!$placedResult){
 $data = array();
 
 while($row = mysqli_fetch_array($placedResult)){
-	$entity = array();
-	$entity['degree'] = $row['degree_name'];
-	$entity['branch'] = $row['branch_name'];
-	$data[] = $entity;
+	$data[$row['degree_name']][]=$row['branch_name'];
 }
 
 mysqli_close($dbc);
