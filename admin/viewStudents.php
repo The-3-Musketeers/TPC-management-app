@@ -64,7 +64,7 @@
 <div class="container">
   <ul class="nav nav-tabs" id="studentTabs" role="tablist">
     <?php
-    $query_degree = "SELECT * FROM degree";
+    $query_degree = "SELECT * FROM degree ORDER BY degree_name ASC";
     $data_degree = mysqli_query($dbc, $query_degree);
     $first_entry = TRUE;
     while($row = mysqli_fetch_assoc($data_degree)){
