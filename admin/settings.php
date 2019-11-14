@@ -278,7 +278,7 @@
 
   if(isset($_POST['archiveData'])){
     $admin_passw = mysqli_real_escape_string($dbc, trim($_POST['admin-passw']));
-    $query = "SELECT * FROM students WHERE roll_number='admin' AND password='$admin_passw'";
+    $query = "SELECT * FROM students WHERE user_role='admin' AND password='$admin_passw'";
     $data = mysqli_query($dbc,$query);
     if(mysqli_num_rows($data) == 1){
       $current_year = date("Y");
