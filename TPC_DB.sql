@@ -161,8 +161,44 @@ INSERT INTO students (roll_number,username, user_role, password, join_date) VALU
 INSERT INTO `company_category` (`id`, `name`) VALUES ('Bdtl61', 'A1'), ('Hiakm6', 'B2'), ('KnAtiB', 'B1');
 INSERT INTO `company_constraints` (`current_id`, `can_apply_id`, `num`) VALUES ('Hiakm6', 'Bdtl61', 2), ('Hiakm6', 'KnAtiB', 2), ('KnAtiB', 'Bdtl61', 2);
 
-/* Add current categories */
+/* Add current degree and branch data for testing */
+INSERT INTO `branch` (`branch_id`, `branch_name`) VALUES
+('1', 'CS'),
+('2', 'EE'),
+('3', 'ME'),
+('4', 'CH');
 
-INSERT INTO `degree` VALUES ('abc1', 'btech'), ('abc2', 'mtech'), ('abc3', 'phd');
-INSERT INTO `branch` VALUES ('def1', 'CS'), ('def2', 'EE'), ('def3', 'ME');
-INSERT INTO `degree_branch` VALUES ('xyz1', 'abc1', 'def1'), ('xyz2', 'abc1', 'def2'), ('xyz5', 'abc1', 'def3'), ('xyz3', 'abc2', 'def1'), ('xyz4', 'abc2', 'def2');
+INSERT INTO `degree` (`degree_id`, `degree_name`) VALUES
+('1', 'btech'),
+('2', 'mtech');
+
+INSERT INTO `degree_branch` (`db_id`, `degree_id`, `branch_id`) VALUES
+('1', '1', '1'),
+('2', '1', '2'),
+('3', '1', '3'),
+('4', '1', '4');
+
+/* Dummy student_data for testing */
+INSERT INTO `students` (`roll_number`, `password`, `user_role`, `username`) VALUES
+('1', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '1'),
+('2', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '2'),
+('3', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '3'),
+('4', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '4'),
+('5', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '5'),
+('6', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '6'),
+('7', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '7'),
+('8', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '8'),
+('9', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '9'),
+('10', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '10');
+
+INSERT INTO `students_data` (`roll_number`, `current_cpi`, `db_id`, `profile_pic`, `resume_url`, `resume_file`, `mobile_number`, `final_accepted_offer`, `job_offers`, `skype_Id`, `gmail_Id`, `emergency_number`, `year_of_enroll`) VALUES
+('1', 7, '1', NULL, NULL, NULL, NULL, 'a1', 'Bdtl61', NULL, 'a3@b.com', '32552', 2017),
+('2', NULL, '1', NULL, NULL, NULL, NULL, 'b1', 'KnAtiB', NULL, NULL, NULL, 2017),
+('3', NULL, '1', NULL, NULL, NULL, NULL, '', 'KnAtiB', NULL, NULL, NULL, 2017),
+('4', NULL, '2', NULL, NULL, NULL, NULL, 'b2', 'Hiakm6', NULL, NULL, NULL, 2017),
+('5', NULL, '3', NULL, NULL, NULL, NULL, 'a1', 'Bdtl61', NULL, NULL, NULL, 2017),
+('6', NULL, '3', NULL, NULL, NULL, NULL, '', '', NULL, NULL, NULL, 2017),
+('7', NULL, '4', NULL, NULL, NULL, NULL, 'b2', 'Hiakm6', NULL, NULL, NULL, 2017),
+('8', NULL, '4', NULL, NULL, NULL, NULL, 'b2', '', NULL, NULL, NULL, 2017),
+('9', NULL, '4', NULL, NULL, NULL, NULL, '', 'Hiakm6', NULL, NULL, NULL, 2017),
+('10', NULL, '4', NULL, NULL, NULL, NULL, '', '', NULL, NULL, NULL, 2017);
