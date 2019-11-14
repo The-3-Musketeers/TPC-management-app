@@ -466,25 +466,25 @@
             die("QUERY FAILED ".mysqli_error($dbc));
           }else{
             echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
-                  'Company constraint added successfully.' .
+                  'Relation added successfully.' .
                   '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
                   '<span aria-hidden="true">&times;</span></button></div></div>';
           }
         }else{
           echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
-              'Company constraint already exists. Please use change constraint option in order to change it.' .
+              'This relation already exists.' .
               '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
               '<span aria-hidden="true">&times;</span></button></div></div>';
         }
       }else{
         echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
-              'Company category does not exist. Please add the category before adding constraint on it.' .
+              'Degree or branch does not exist. Please make sure both degree and branch exist.' .
               '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
               '<span aria-hidden="true">&times;</span></button></div></div>';
       }
     }else{
       echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
-              'Please enter all three fields.' .
+              'Please enter both degree and branch.' .
               '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
               '<span aria-hidden="true">&times;</span></button></div></div>';
     }
