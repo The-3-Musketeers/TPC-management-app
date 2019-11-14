@@ -1,53 +1,4 @@
 $(document).ready(function(){
-  const company_categories = [
-    "A1",
-    "B1",
-    "B2"
-  ];
-
-  var company_data = {
-    datasets: [{
-      label: 'Companies',
-      data: [20, 15, 8],
-      backgroundColor: [
-            "#ff4281",
-            "#00c3c0",
-            "#2d94ed"
-          ]
-    }],
-    labels: company_categories
-  };
-
-  var ctx1 = $("#company-category");
-
-  //options
-  var company_options = {
-    responsive: true,
-    title: {
-      display: true,
-      position: "top",
-      text: "Category Wise distribution",
-      fontSize: 18,
-      fontColor: "#111"
-    },
-    legend: {
-      display: true,
-      position: "left",
-      labels: {
-        fontColor: "#333",
-        fontSize: 16
-      }
-    }
-  };
-
-  // Create pie charts
-  var companyPieChart = new Chart(ctx1,{
-      type: 'pie',
-      data: company_data,
-      options: company_options
-  });
-
-
   // Students stats
   $.post("./stats/placementStats.php",
     function (placementData){
@@ -85,6 +36,59 @@ $(document).ready(function(){
           type: 'bar',
           data: chartdata
         });
+    });
+
+    // Company stats
+    $.post("./stats/companyCategoryStats.php",
+    function (companyData){
+      var company_categories = [];
+      var data = [];
+      for(var i in companyData) {
+        company_categories.push(companyData[i].category_name);
+        data.push(companyData[i].count);
+      }
+    
+      var company_data = {
+        datasets: [{
+          label: 'Companies',
+          data: data,
+          backgroundColor: [
+                "#ff4281",
+                "#00c3c0",
+                "#2d94ed"
+              ]
+        }],
+        labels: company_categories
+      };
+    
+      var ctx1 = $("#company-category");
+    
+      //options
+      var company_options = {
+        responsive: true,
+        title: {
+          display: true,
+          position: "top",
+          text: "Category Wise distribution",
+          fontSize: 18,
+          fontColor: "#111"
+        },
+        legend: {
+          display: true,
+          position: "left",
+          labels: {
+            fontColor: "#333",
+            fontSize: 16
+          }
+        }
+      };
+    
+      // Create pie charts
+      var companyPieChart = new Chart(ctx1,{
+          type: 'pie',
+          data: company_data,
+          options: company_options
+      });
     });
   
 });
