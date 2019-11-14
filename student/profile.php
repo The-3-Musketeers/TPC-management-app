@@ -168,31 +168,13 @@ else{
     <select name="course" id="course">
         <?php
         echo "<option value='{$course}'>{$course}</option>";
-        if($course=='Btech'){
-        	echo '<option value="Mtech">Mtech</option>';
-        	echo '<option value="Msc">Msc</option>';
-         	echo '<option value="PHD">PHD</option>';
-        }
-        else if($course=='Mtech'){
-         	echo '<option value="Btech">Btech</option>';
-         	echo '<option value="Msc">Msc</option>';
-         	echo '<option value="PHD">PHD</option>';
-        }
-        else if($course=='Msc'){
-            echo '<option value="Btech">Btech</option>';
-            echo '<option value="Mtech">Mtech</option>';
-            echo '<option value="PHD">PHD</option>';
-        }
-        else if($course=='PHD'){
-            echo '<option value="Btech">Btech</option>';
-            echo '<option value="Mtech">Mtech</option>';
-            echo '<option value="Msc">Msc</option>';
-        }
-        else{
-            echo '<option value="Btech">Btech</option>';
-            echo '<option value="Mtech">Mtech</option>';
-            echo '<option value="Msc">Msc</option>';
-            echo '<option value="PHD">PHD</option>';
+        $query = "SELECT degree_name FROM degree";
+        $data = mysqli_query($dbc,$query);
+        while($row = mysqli_fetch_assoc($data)){
+            $degree_name=$row['degree_name'];
+            if($course != $degree_name){
+                echo "<option value='$degree_name'>$degree_name</option>";
+            }
         }
         ?>
     </select>
