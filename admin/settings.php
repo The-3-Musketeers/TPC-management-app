@@ -20,6 +20,13 @@
     // of length 6
     return substr(str_shuffle($str_result), 0, 6); 
   } 
+  function generateNonNumericID() { 
+    // String of all alphanumeric characters
+    $str_result = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'; 
+    // Shufle the $str_result and returns substring
+    // of length 6
+    return substr(str_shuffle($str_result), 0, 6); 
+  } 
 
   if(isset($_POST['addNewCategory'])){
     $company_category = strtoupper(mysqli_real_escape_string($dbc, trim($_POST['company-category'])));
@@ -31,7 +38,7 @@
         $id = generateID();
         $query_collision = "SELECT * FROM company_category WHERE id='$id'";
         $data_collision = mysqli_query($dbc, $query_collision);
-        while(mysqli_num_rows($data) > 0){
+        while(mysqli_num_rows($data_collision) > 0){
           $id = generateID();
           $query_collision = "SELECT * FROM company_category WHERE id='$id'";
           $data_collision = mysqli_query($dbc, $query_collision);
@@ -333,6 +340,156 @@
     }
 
   }
+
+  if(isset($_POST['addDegree'])){
+    $degree_name = mysqli_real_escape_string($dbc, trim($_POST['new-degree']));
+    if(!empty($degree_name)){
+      // Check if degree_name is duplicate
+      $query = "SELECT degree_name FROM degree";
+      $data = mysqli_query($dbc, $query);
+      $isNotDuplicate = TRUE;
+      while($row = mysqli_fetch_assoc($data)){
+        $d_name = $row['degree_name'];
+        if(strtolower($degree_name) == strtolower($d_name)){
+          $isNotDuplicate = FALSE;
+          break;
+        }
+      }
+      if($isNotDuplicate){
+        $id = generateNonNumericID();
+        $query_collision = "SELECT * FROM degree WHERE degree_id='$id'";
+        $data_collision = mysqli_query($dbc, $query_collision);
+        while(mysqli_num_rows($data_collision) > 0){
+          $id = generateNonNumericID();
+          $query_collision = "SELECT * FROM degree WHERE degree_id='$id'";
+          $data_collision = mysqli_query($dbc, $query_collision);
+        }
+        $query = "INSERT INTO degree VALUES ('$id', '$degree_name')";
+        $data = mysqli_query($dbc, $query);
+        if(!$data){
+          die("QUERY FAILED ".mysqli_error($dbc));
+        }else{
+          echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+                'Degree added successfully' .
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+                '<span aria-hidden="true">&times;</span></button></div></div>';
+        }
+      }else{
+        echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+              'This degree already exists.' .
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+              '<span aria-hidden="true">&times;</span></button></div></div>';
+      }
+    }else{
+      echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+              'Please enter a degree name.' .
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+              '<span aria-hidden="true">&times;</span></button></div></div>';
+    }
+  }
+
+  if(isset($_POST['addBranch'])){
+    $branch_name = mysqli_real_escape_string($dbc, trim($_POST['new-branch']));
+    if(!empty($branch_name)){
+      // Check if branch_name is duplicate
+      $query = "SELECT branch_name FROM branch";
+      $data = mysqli_query($dbc, $query);
+      $isNotDuplicate = TRUE;
+      while($row = mysqli_fetch_assoc($data)){
+        $b_name = $row['branch_name'];
+        if(strtolower($branch_name) == strtolower($b_name)){
+          $isNotDuplicate = FALSE;
+          break;
+        }
+      }
+      if($isNotDuplicate){
+        $id = generateNonNumericID();
+        $query_collision = "SELECT * FROM branch WHERE branch_id='$id'";
+        $data_collision = mysqli_query($dbc, $query_collision);
+        while(mysqli_num_rows($data_collision) > 0){
+          $id = generateNonNumericID();
+          $query_collision = "SELECT * FROM branch WHERE branch_id='$id'";
+          $data_collision = mysqli_query($dbc, $query_collision);
+        }
+        $query = "INSERT INTO branch VALUES ('$id', '$branch_name')";
+        $data = mysqli_query($dbc, $query);
+        if(!$data){
+          die("QUERY FAILED ".mysqli_error($dbc));
+        }else{
+          echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+                'Branch added successfully' .
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+                '<span aria-hidden="true">&times;</span></button></div></div>';
+        }
+      }else{
+        echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+              'This branch already exists.' .
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+              '<span aria-hidden="true">&times;</span></button></div></div>';
+      }
+    }else{
+      echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+              'Please enter a branch name.' .
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+              '<span aria-hidden="true">&times;</span></button></div></div>';
+    }
+  }
+
+  if(isset($_POST['addDegreeBranchRelation'])){
+    $degree_name = mysqli_real_escape_string($dbc, trim($_POST['degree-name']));
+    $branch_name = mysqli_real_escape_string($dbc, trim($_POST['branch-name']));
+    if(!empty($degree_name) && !empty($branch_name)){
+      $query_d = "SELECT * FROM degree WHERE degree_name='$degree_name'";
+      $data_d = mysqli_query($dbc, $query_d);
+      $query_b = "SELECT * FROM branch WHERE branch_name='$branch_name'";
+      $data_b = mysqli_query($dbc, $query_b);
+      if(mysqli_num_rows($data_d) > 0 && mysqli_num_rows($data_b) > 0){
+        $row_d = mysqli_fetch_assoc($data_d);
+        $row_b = mysqli_fetch_assoc($data_b);
+        $degree_id = $row_d['degree_id'];
+        $branch_id = $row_b['branch_id'];
+        $query_duplicate = "SELECT * FROM degree_branch WHERE degree_id='$degree_id' AND branch_id='$branch_id'";
+        $data_duplicate = mysqli_query($dbc, $query_duplicate);
+        if(mysqli_num_rows($data_duplicate) == 0){
+          $id = generateNonNumericID();
+          $query_collision = "SELECT * FROM degree_branch WHERE db_id='$id'";
+          $data_collision = mysqli_query($dbc, $query_collision);
+          while(mysqli_num_rows($data_collision) > 0){
+            $id = generateNonNumericID();
+            $query_collision = "SELECT * FROM degree_branch WHERE db_id='$id'";
+            $data_collision = mysqli_query($dbc, $query_collision);
+          }
+          echo $query;
+          $query = "INSERT INTO degree_branch VALUES ('$id', '$degree_id', '$branch_id')";
+          $data = mysqli_query($dbc, $query);
+          if(!$data){
+            die("QUERY FAILED ".mysqli_error($dbc));
+          }else{
+            echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+                  'Company constraint added successfully.' .
+                  '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+                  '<span aria-hidden="true">&times;</span></button></div></div>';
+          }
+        }else{
+          echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+              'Company constraint already exists. Please use change constraint option in order to change it.' .
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+              '<span aria-hidden="true">&times;</span></button></div></div>';
+        }
+      }else{
+        echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+              'Company category does not exist. Please add the category before adding constraint on it.' .
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+              '<span aria-hidden="true">&times;</span></button></div></div>';
+      }
+    }else{
+      echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+              'Please enter all three fields.' .
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+              '<span aria-hidden="true">&times;</span></button></div></div>';
+    }
+  }
+
 ?>
 
 <div class="container">
@@ -475,6 +632,92 @@
     </div>
   </div>
   <br/>
+  <div class="card">
+    <div class="card-header">
+      <strong>Degrees and Branches</strong>
+    </div>
+    <div class="card-body">
+      <div style="display: flex;">
+        <div class="card" style="width: 60%;">
+          <div class="card-header">
+            Current Degrees
+          </div>
+          <ul class="list-group list-group-flush">
+            <?php
+              $query = "SELECT * FROM degree ORDER BY degree_name ASC";
+              $data = mysqli_query($dbc, $query);
+              while($row = mysqli_fetch_assoc($data)){
+                $deg_name = $row['degree_name'];
+                echo "<li class='list-group-item'>$deg_name</li>";
+              }
+            ?>
+          </ul>
+        </div>
+        <div class="card" style="width: 60%;">
+          <div class="card-header">
+            Current Branches
+          </div>
+          <ul class="list-group list-group-flush">
+            <?php
+              $query = "SELECT * FROM branch ORDER BY branch_name ASC";
+              $data = mysqli_query($dbc, $query);
+              while($row = mysqli_fetch_assoc($data)){
+                $branch_name = $row['branch_name'];
+                echo "<li class='list-group-item'>$branch_name</li>";
+              }
+            ?>
+          </ul>
+        </div>
+      </div>
+      <br>
+      <div class="card" style="width: 60%;">
+        <div class="card-header">
+          Degrees Branches Relations
+        </div>
+        <ul class="list-group list-group-flush">
+          <?php
+            $query = "SELECT degree_name, branch_name FROM degree_branch, degree, branch WHERE degree_branch.degree_id=degree.degree_id AND degree_branch.branch_id=branch.branch_id";
+            $data = mysqli_query($dbc, $query);
+            while($row = mysqli_fetch_assoc($data)){
+              $branch_name = $row['branch_name'];
+              $degree_name = $row['degree_name'];
+              echo "<li class='list-group-item'>$degree_name - $branch_name</li>";
+            }
+          ?>
+        </ul>
+      </div>
+      <br>
+      <form class="form-inline" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+        <div class="form-group mb-2">
+          <label>Add new degree: </label>
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+          <input type="text" class="form-control" name="new-degree" placeholder="New degree name">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2" name="addDegree">Add</button>
+      </form>
+      <form class="form-inline" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+        <div class="form-group mb-2">
+          <label>Add new branch: </label>
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+          <input type="text" class="form-control" name="new-branch" placeholder="New branch name">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2" name="addBranch">Add</button>
+      </form>
+      <form class="form-inline" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+        <div class="form-group mb-2">
+          <label>Add new degree branch relation: </label>
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+          <input type="text" class="form-control" name="degree-name" placeholder="Enter degree name">
+          <input type="text" class="form-control" name="branch-name" placeholder="Enter branch name">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2" name="addDegreeBranchRelation">Add</button>
+      </form>
+    </div>
+  </div>
+  <br>
   <div class="card">
     <div class="card-header">
       <strong>Archive</strong>
