@@ -48,6 +48,14 @@
       $company_id=$row['company_id'];
       $job_position=$row['job_position'];
       
+      // Get all db_id
+      $db_id_query = "SELECT db_id FROM jobs_db WHERE job_id = '$job_id'";
+      $db_id_data = mysqli_query($dbc,$db_id_query);
+      $db_id_row=mysqli_fetch_assoc($db_id_data);
+      $db_id_array = $db_id_row['db_id'];
+      while($db_id_row=mysqli_fetch_assoc($db_id_data)){
+        $db_id_array = $db_id_array . ', ' . $db_id_row['db_id'];
+      }
       // Get all eligible degrees
       $degree_query = "SELECT DISTINCT degree.degree_name AS degree_name FROM degree, degree_branch, jobs_db "
                       ."WHERE jobs_db.job_id = '$job_id' AND jobs_db.db_id = degree_branch.db_id "
@@ -97,7 +105,7 @@
           $row = mysqli_fetch_array($data);
           $stud_job_offers = $row['job_offers'];
           $stud_job_offers_arr = explode(",", $stud_job_offers);
-          if(sizeof($stud_job_offers_arr) > 0){
+          if(sizeof($stud_job_offers_arr) > 0 && strstr($stud_job_offers, ',') != ""){
             // check of which company category offer is and in how many more companies can student apply
             $num_times_can_apply = -1; // to the company category of job opened
             $num_times_already_applied = 0; // to the company category of job opened
@@ -128,37 +136,26 @@
           if($is_stud_eligible){
             $degree_arr = explode(", ", $degree);
             $branch_arr = explode(", ", $branch);
-            $Degree_match = FALSE;
-            foreach ($degree_arr as $indiv_degree) {
-              if(strtolower($indiv_degree) == strtolower($student_degree)){
-                $degree_match = TRUE;
+            $db_id_arr = explode(",",$db_id_array);
+            $db_id_match = FALSE;
+            foreach ($db_id_arr as $indiv_db_id) {
+              if(strval(trim($indiv_db_id)) == strval(trim($db_id))){
+                $db_id_match = TRUE;
                 break;
               }
             }
-            if($degree_match){
-              $dept_match = FALSE;
-              foreach ($branch_arr as $indiv_branch) {
-                if(strtolower($indiv_branch) == strtolower($student_department)){
-                  $dept_match = TRUE;
-                  break;
-                }
+            if($db_id_match){
+              $cpi_above = FALSE;
+              if(floatval($student_cpi) >= floatval($min_cpi)){
+                $cpi_above = TRUE;
               }
-              if($dept_match){
-                $cpi_above = FALSE;
-                if(floatval($student_cpi) >= floatval($min_cpi)){
-                  $cpi_above = TRUE;
-                }
-                if(!$cpi_above){
-                  $is_stud_eligible = FALSE;
-                  $button_message = "Your CPI doesn't meet eligibility criteria. Please contact TPC if you think this is an error.";
-                }
-              } else {
+              if(!$cpi_above){
                 $is_stud_eligible = FALSE;
-                $button_message = "This job is not available for $student_department. Please contact TPC if you think this is an error.";
+                $button_message = "Your CPI doesn't meet eligibility criteria. Please contact TPC if you think this is an error.";
               }
             } else {
               $is_stud_eligible = FALSE;
-              $button_message = "This job is not available for $student_course. Please contact TPC if you think this is an error.";
+              $button_message = "This job is not available for $student_course and $student_department. Please contact TPC if you think this is an error.";
             }
           }
         }
