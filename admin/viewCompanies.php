@@ -86,14 +86,14 @@
 ?>
 
 <div class="container">
-  <form action="<?php echo $_SERVER['PHP_SELF'] . '?search=""';?>" method="post">
+  <!-- <form action="<?php //echo $_SERVER['PHP_SELF'] . '?search=""';?>" method="post">
     <div class="input-group mb-3">
-      <input type="text" class="form-control" name="keyword" placeholder="Type Keyword" value="<?php if(isset($_SESSION["keyword"])) echo $_SESSION["keyword"] ?>">
+      <input type="text" class="form-control" name="keyword" placeholder="Type Keyword" value="<?php //if(isset($_SESSION["keyword"])) echo $_SESSION["keyword"] ?>">
       <div class="input-group-append">
         <button name="search" class="btn btn-primary" type="submit">Search</button>
       </div>
     </div>
-  </form>
+  </form> -->
   <?php
     // Search Bar
     if(isset($_POST['search']) || isset($_SESSION['keyword'])){
