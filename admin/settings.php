@@ -156,15 +156,24 @@
         $row = mysqli_fetch_assoc($data);
         $curr_id = $row['id1'];
         $can_to_id = $row['id2'];
-        $query = "INSERT INTO company_constraints VALUES ('$curr_id', '$can_to_id', $num_times)";
-        $data = mysqli_query($dbc, $query);
-        if(!$data){
-          die("QUERY FAILED ".mysqli_error($dbc));
+        $query_duplicate = "SELECT * FROM company_constraints WHERE current_id='$curr_id' AND can_apply_id='$can_to_id'";
+        $data_duplicate = mysqli_query($dbc, $query_duplicate);
+        if(mysqli_num_rows($data_duplicate) == 0){
+          $query = "INSERT INTO company_constraints VALUES ('$curr_id', '$can_to_id', $num_times)";
+          $data = mysqli_query($dbc, $query);
+          if(!$data){
+            die("QUERY FAILED ".mysqli_error($dbc));
+          }else{
+            echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+                  'Company constraint added successfully.' .
+                  '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+                  '<span aria-hidden="true">&times;</span></button></div></div>';
+          }
         }else{
-          echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
-                'Company constraint added successfully.' .
-                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
-                '<span aria-hidden="true">&times;</span></button></div></div>';
+          echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+              'Company constraint already exists. Please use change constraint option in order to change it.' .
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+              '<span aria-hidden="true">&times;</span></button></div></div>';
         }
       }else{
         echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .

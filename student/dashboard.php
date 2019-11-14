@@ -10,7 +10,11 @@
     $page_title = 'Student Dashboard';
     require_once('../templates/header.php');
     require_once('../templates/navbar.php');
-    // echo '<p>You are logged in as ' . $_SESSION['username'] . '</p>';
+
+    echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+            'You are logged in as ' . $_SESSION['username'] . '.' .
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+            '<span aria-hidden="true">&times;</span></button></div></div>';
     ?>
 
 <?php require_once('../templates/footer.php');?>
