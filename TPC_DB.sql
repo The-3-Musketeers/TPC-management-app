@@ -163,6 +163,6 @@ INSERT INTO `company_constraints` (`current_id`, `can_apply_id`, `num`) VALUES (
 
 /* Add current categories */
 
-INSERT INTO `degree` VALUES ('1', 'btech'), ('2', 'mtech');
-INSERT INTO `branch` VALUES ('1', 'CS'), ('2', 'EE'), ('3', 'ME');
-INSERT INTO `degree_branch` VALUES ('1', '1', '1'), ('2', '1', '2'), ('3', '2', '1'), ('4', '2', '2');
+INSERT INTO `degree` VALUES ('abc1', 'btech'), ('abc2', 'mtech'), ('abc3', 'phd');
+INSERT INTO `branch` VALUES ('def1', 'CS'), ('def2', 'EE'), ('def3', 'ME');
+INSERT INTO `degree_branch` VALUES ('xyz1', 'abc1', 'def1'), ('xyz2', 'abc1', 'def2'), ('xyz5', 'abc1', 'def3'), ('xyz3', 'abc2', 'def1'), ('xyz4', 'abc2', 'def2');
