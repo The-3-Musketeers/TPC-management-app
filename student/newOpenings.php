@@ -43,7 +43,7 @@ if($num!=0){
       $company_cat_query = "SELECT company_category_id FROM recruiters_data WHERE company_id='" . $company_id . "'";
       $company_cat_data = mysqli_query($dbc, $company_cat_query);
       $company_cat_row = mysqli_fetch_assoc($company_cat_data);
-      $company_category_id = $company_cat_row['company_category'];
+      $company_category_id = $company_cat_row['company_category_id'];
       // fetch company category name from id
       $query_cat = "SELECT name FROM company_category WHERE id='$company_category_id'";
       $data_cat = mysqli_query($dbc, $query_cat);

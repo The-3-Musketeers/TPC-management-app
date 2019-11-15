@@ -136,7 +136,7 @@
         }else{
           $home_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/../admin/dashboard.php';
         }
-        header('Location: ' . $home_url);
+        @header('Location: ' . $home_url);
       }
     ?>
 <!-- Footer -->

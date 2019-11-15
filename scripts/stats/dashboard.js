@@ -7,7 +7,7 @@ $(document).ready(function(){
         var btech_remaining = [];
 
         for(var i in placementData) {
-          if(placementData[i].course=="btech"){
+          if(placementData[i].course=="Btech"){
             btech_labels.push(placementData[i].branch);
             btech_placed.push(placementData[i].placed);
             btech_remaining.push(placementData[i].remaining);

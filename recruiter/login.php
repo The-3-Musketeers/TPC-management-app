@@ -98,7 +98,7 @@
       } else {
         echo('<p class="login">You are logged in as '. $_SESSION['company_name'] .'.</p>');
         $home_url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/dashboard.php';
-        header('Location: ' . $home_url);
+        @header('Location: ' . $home_url);
       }
     ?>
 <!-- Footer -->

@@ -102,26 +102,30 @@
           // Fetch student's current job offers' details
           $student_query = "SELECT job_offers FROM students_data WHERE roll_number='". $_SESSION['roll_number'] ."'";
           $data = mysqli_query($dbc, $student_query);
-          $row = mysqli_fetch_array($data);
-          $stud_job_offers = $row['job_offers'];
+          $row1 = mysqli_fetch_array($data);
+          $stud_job_offers = $row1['job_offers'];
           $stud_job_offers_arr = explode(",", $stud_job_offers);
           if(sizeof($stud_job_offers_arr) > 0 && strstr($stud_job_offers, ',') != ""){
             // check of which company category offer is and in how many more companies can student apply
             $num_times_can_apply = -1; // to the company category of job opened
             $num_times_already_applied = 0; // to the company category of job opened
-            foreach($stud_job_offers_arr as $cat_id){
-              if($cat_id == $company_cat_id){
+            
+            $query_count_app = "SELECT recruiters_data.company_category_id FROM applications, jobs, recruiters_data WHERE applications.student_roll_number='" . $_SESSION['roll_number'] . "' AND applications.job_id=jobs.job_id AND jobs.company_id=recruiters_data.company_id";
+            $data_count_app = mysqli_query($dbc, $query_count_app);
+            while($row_count_app = mysqli_fetch_assoc($data_count_app)){
+              if($row_count_app['company_category_id'] == $company_cat_id){
                 $num_times_already_applied += 1;
-              }else{
-                $query_num = "SELECT num FROM company_constraints WHERE current_id='$cat_id' AND can_apply_id='$company_cat_id'";
-                $data_num = mysqli_query($dbc, $query_num);
-                $row_num = mysqli_fetch_array($data_num);
-                if(mysqli_num_rows($data_num) > 0){
-                  if($num_times_can_apply == -1){
-                    $num_times_can_apply = $row_num['num'];
-                  }else{
-                    $num_times_can_apply = min($num_times_can_apply, $row_num['num']);
-                  }
+              }
+            }
+            foreach($stud_job_offers_arr as $cat_id){
+              $query_num = "SELECT num FROM company_constraints WHERE current_id='$cat_id' AND can_apply_id='$company_cat_id'";
+              $data_num = mysqli_query($dbc, $query_num);
+              $row_num = mysqli_fetch_array($data_num);
+              if(mysqli_num_rows($data_num) > 0){
+                if($num_times_can_apply == -1){
+                  $num_times_can_apply = $row_num['num'];
+                }else{
+                  $num_times_can_apply = min($num_times_can_apply, $row_num['num']);
                 }
               }
             }
