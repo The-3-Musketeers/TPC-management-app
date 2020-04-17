@@ -8,7 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Set the page to the width of the device and set the zoon level -->
     <meta name="viewport" content="width = device-width, initial-scale = 1">
-
+    <!-- favicon -->
+    <link rel='icon' href='/TPC-management-app/pictures/iitp_logo.png' type='image/x-icon'/ >
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/TPC-management-app/css/footer.css">
     <link rel="stylesheet" href="/TPC-management-app/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
