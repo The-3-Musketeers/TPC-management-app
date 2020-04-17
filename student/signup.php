@@ -13,7 +13,15 @@
     //Connect to the database
     $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
-    if(isset($_POST['submit'])){
+    // Fetching Settings
+    $settings_id = 'RegA1l';
+    $set_query = "SELECT * FROM settings WHERE id='$settings_id'";
+    $set_data = mysqli_query($dbc, $set_query);
+    $set_row = mysqli_fetch_array($set_data);
+    $set_val = $set_row["value"];
+
+    // Submit allowed only if registrations are open
+    if(isset($_POST['submit']) && $set_val == 1){
       // Grab the sign in data from the post
       $roll_number = mysqli_real_escape_string($dbc, trim($_POST['roll-number']));
       $username = mysqli_real_escape_string($dbc, trim($_POST['username']));
@@ -146,7 +154,11 @@
       </div>
       <div class="form-group row">
         <div class="col-sm-10">
-          <button type="submit" class="btn btn-primary" name="submit">Sign Up</button>
+          <button type="submit" class="btn btn-primary" name="submit" <?php if($set_val == 0){echo 'disabled';} ?> >
+          Sign Up</button>
+          <?php if($set_val == 0){
+            echo '<p style="color: red">Registrations are closed. Please contact admin to register.</p>';
+          } ?>
         </div>
       </div>
     </form>

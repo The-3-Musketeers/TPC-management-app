@@ -490,9 +490,70 @@
     }
   }
 
+  if(isset($_POST['changeRegistrationStatus'])){
+    $sett_val = mysqli_real_escape_string($dbc, trim($_POST['settings-value']));
+    $settings_id = 'RegA1l';
+    $set_query = "UPDATE settings SET value='$sett_val' WHERE id='$settings_id'";
+    $set_data = mysqli_query($dbc, $set_query);
+    if(!$set_data){
+      die("QUERY FAILED ".mysqli_error($dbc));
+    }else{
+      if($sett_val == 0){
+        echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+                'Registrations closed successfully.' .
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+                '<span aria-hidden="true">&times;</span></button></div></div>';
+      }else if($sett_val == 1){
+        echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+                'Registrations opened successfully.' .
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+                '<span aria-hidden="true">&times;</span></button></div></div>';
+      }
+    }
+  }
+
 ?>
 
 <div class="container">
+  <div class="card">
+    <div class="card-header">
+      <strong>Settings</strong>
+    </div>
+    <div class="card-body">
+      <form class="form-inline" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+        <?php
+            $settings_id = 'RegA1l';
+            $set_query = "SELECT * FROM settings WHERE id='$settings_id'";
+            $set_data = mysqli_query($dbc, $set_query);
+            $set_row = mysqli_fetch_array($set_data);
+            $set_name = $set_row["name"];
+            $set_val = $set_row["value"];
+            
+          ?>
+        <div class="form-group mb-2">
+          <label><?php echo $set_name; ?>: </label>
+        </div>
+          <?php
+            echo '<div class="form-group mx-sm-3 mb-2">';
+            if($set_val == 0){ // Registrations closed
+              echo '<span class="badge badge-secondary">CLOSED</span>';
+              echo '<input type="text" class="form-control" name="settings-value" value="1" style="display: none">';
+              echo '</div>';
+              echo '<button type="submit" class="btn btn-primary mb-2" name="changeRegistrationStatus">Open Registrations</button>';
+            }else if($set_val == 1){ // Registrations open
+              echo '<span class="badge badge-success">OPEN</span>';
+              echo '<input type="text" class="form-control" name="settings-value" value="0" style="display: none">';
+              echo '</div>';
+              echo '<button type="submit" class="btn btn-primary mb-2" name="changeRegistrationStatus">Close Registrations</button>';
+            }else{
+              echo '<span class="badge badge-secondary">ERROR</span>';
+              echo '</div>';
+            }
+          ?>
+      </form>
+    </div>
+  </div>
+  <br>
   <div class="card">
     <div class="card-header">
       <strong>Company Categories</strong>
