@@ -34,30 +34,42 @@
           $query = "SELECT * FROM students WHERE roll_number = '$roll_number'";
           $dataR = mysqli_query($dbc, $query);
           if(mysqli_num_rows($data) == 0 && mysqli_num_rows($dataR) == 0){
-            // webmail_ID and roll_number is available
-            $query = "INSERT INTO students (roll_number, username, user_role, webmail_id, password, join_date) VALUES ".
-              "('$roll_number', '$username', 'student', '$webmail_ID', SHA('$password'), NOW())";
-            mysqli_query($dbc, $query);
+            // Check if roll_number matches pattern ####XX##
+            if(strlen($roll_number) == 8 &&
+              is_numeric(substr($roll_number, 0, 4)) &&
+              !is_numeric(substr($roll_number, 4, 2)) && 
+              is_numeric(substr($roll_number, 6, 2))){
 
-            // Finding enrollment year
-            if(date('m') > 5){
-              $year_of_roll = $year_of_roll-1;
-            }
+              // webmail_ID and roll_number is available
+              $query = "INSERT INTO students (roll_number, username, user_role, webmail_id, password, join_date) VALUES ".
+                "('$roll_number', '$username', 'student', '$webmail_ID', SHA('$password'), NOW())";
+              mysqli_query($dbc, $query);
 
-              //Insert into students_data
-              $query = "INSERT INTO students_data (roll_number,year_of_enroll) VALUES ".
-              "('$roll_number',YEAR(DATE_SUB(CURDATE(),INTERVAL $year_of_roll YEAR)))";
-            $insert_in_student_data=mysqli_query($dbc, $query);
-            if(!$insert_in_student_data){
-              die("QUERY FAILED ".mysqli_error($dbc));
+              // Finding enrollment year
+              if(date('m') > 5){
+                $year_of_roll = $year_of_roll-1;
+              }
+
+                //Insert into students_data
+                $query = "INSERT INTO students_data (roll_number,year_of_enroll) VALUES ".
+                "('$roll_number',YEAR(DATE_SUB(CURDATE(),INTERVAL $year_of_roll YEAR)))";
+              $insert_in_student_data=mysqli_query($dbc, $query);
+              if(!$insert_in_student_data){
+                die("QUERY FAILED ".mysqli_error($dbc));
+              }
+              //Confirm success with the user
+              echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+                  'You have been registered successfully. You can now log in <a href="login.php">here</a>.' .
+                  '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+                  '<span aria-hidden="true">&times;</span></button></div></div>';
+              mysqli_close($dbc);
+              exit();
+            }else{
+              echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+              'Roll number format invalid. Please try again.' .
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+              '<span aria-hidden="true">&times;</span></button></div></div>';
             }
-            //Confirm success with the user
-            echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
-                'You have been registered successfully. You can now log in <a href="login.php">here</a>.' .
-                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
-                '<span aria-hidden="true">&times;</span></button></div></div>';
-            mysqli_close($dbc);
-            exit();
           }else{
             // Webmail ID or Roll number already exists
             if(mysqli_num_rows($data) != 0){
