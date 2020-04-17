@@ -13,64 +13,95 @@
   //Connect to the database
   $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
-    if(isset($_POST['submit'])){
-      // Grab the sign in data from the post
-      $company_id = mysqli_real_escape_string($dbc, trim($_POST['company-id']));
-      $company_name = mysqli_real_escape_string($dbc, trim($_POST['company-name']));
-      $hr_name_1 = mysqli_real_escape_string($dbc, trim($_POST['hr-name-1']));
-      $hr_designation_1 = mysqli_real_escape_string($dbc, trim($_POST['hr-designation-1']));
-      $hr_email_1 = mysqli_real_escape_string($dbc, trim($_POST['hr-email-1']));
-      $password = mysqli_real_escape_string($dbc, trim($_POST['pwd']));
-      $verify_password = mysqli_real_escape_string($dbc, trim($_POST['confirm-pwd']));
-      $captcha = mysqli_real_escape_string($dbc, trim($_POST['captcha']));
-      // verify Captcha
-      if(SHA1($captcha) == $_SESSION['passphrase']){
-        if(!empty($company_id) && !empty($company_name) &&
-          !empty($hr_name_1) && !empty($hr_designation_1) && !empty($hr_email_1) &&
-          !empty($password) && !empty($verify_password) &&
-          ($verify_password == $password)){
-          // Check if company_id is available
-          $query = "SELECT * FROM recruiters WHERE company_id = '$company_id'";
-          $data = mysqli_query($dbc, $query);
-          if(mysqli_num_rows($data) == 0){
-            // company_id is available
-            // inserting to recruiters table
-            $query = "INSERT INTO recruiters (company_id, join_date, password) VALUES ".
-              "('$company_id', NOW(), SHA('$password'))";
-            mysqli_query($dbc, $query);
-            // inserting to recruiters_data table
-            $query = "INSERT INTO recruiters_data (company_id, company_name, company_status, hr_name_1, hr_designation_1, hr_email_1) VALUES ".
-              "('$company_id', '$company_name', 'pending', '$hr_name_1', '$hr_designation_1', '$hr_email_1')";
-            mysqli_query($dbc, $query);
+  function titleCase($string, $delimiters = array(" ", "-", ".", "'", "O'", "Mc"), $exceptions = array("and", "to", "of", "das", "dos", "I", "II", "III", "IV", "V", "VI"))
+  {
+    /*
+     * Exceptions in lower case are words you don't want converted
+     * Exceptions all in upper case are any words you don't want converted to title case
+     *   but should be converted to upper case, e.g.:
+     *   king henry viii or king henry Viii should be King Henry VIII
+     */
+    $string = mb_convert_case($string, MB_CASE_TITLE, "UTF-8");
+    foreach ($delimiters as $dlnr => $delimiter) {
+        $words = explode($delimiter, $string);
+        $newwords = array();
+        foreach ($words as $wordnr => $word) {
+            if (in_array(mb_strtoupper($word, "UTF-8"), $exceptions)) {
+                // check exceptions list for any words that should be in upper case
+                $word = mb_strtoupper($word, "UTF-8");
+            } elseif (in_array(mb_strtolower($word, "UTF-8"), $exceptions)) {
+                // check exceptions list for any words that should be in upper case
+                $word = mb_strtolower($word, "UTF-8");
+            } elseif (!in_array($word, $exceptions)) {
+                // convert to uppercase (non-utf8 only)
+                $word = ucfirst($word);
+            }
+            array_push($newwords, $word);
+        }
+        $string = join($delimiter, $newwords);
+    }//foreach
+    return $string;
+  }
 
-            //Confirm success with the recruiter
-            echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
-                'You have been registered successfully. You can now log in <a href="./login.php">here</a>.' .
-                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
-                '<span aria-hidden="true">&times;</span></button></div></div>';
-            mysqli_close($dbc);
-            exit();
-          }else{
-            // company_id already exists
-            if(mysqli_num_rows($data) != 0){
-              echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
-              'This webmail ID is taken. If you are already registered you can <a href="login.php">Login here</a>' .
+  if(isset($_POST['submit'])){
+    // Grab the sign in data from the post
+    $company_id = mysqli_real_escape_string($dbc, trim($_POST['company-id']));
+    $company_name = mysqli_real_escape_string($dbc, trim($_POST['company-name']));
+    $company_name = titleCase($company_name);
+    $hr_name_1 = mysqli_real_escape_string($dbc, trim($_POST['hr-name-1']));
+    $hr_designation_1 = mysqli_real_escape_string($dbc, trim($_POST['hr-designation-1']));
+    $hr_email_1 = mysqli_real_escape_string($dbc, trim($_POST['hr-email-1']));
+    $password = mysqli_real_escape_string($dbc, trim($_POST['pwd']));
+    $verify_password = mysqli_real_escape_string($dbc, trim($_POST['confirm-pwd']));
+    $captcha = mysqli_real_escape_string($dbc, trim($_POST['captcha']));
+    // verify Captcha
+    if(SHA1($captcha) == $_SESSION['passphrase']){
+      if(!empty($company_id) && !empty($company_name) &&
+        !empty($hr_name_1) && !empty($hr_designation_1) && !empty($hr_email_1) &&
+        !empty($password) && !empty($verify_password) &&
+        ($verify_password == $password)){
+        // Check if company_id is available
+        $query = "SELECT * FROM recruiters WHERE company_id = '$company_id'";
+        $data = mysqli_query($dbc, $query);
+        if(mysqli_num_rows($data) == 0){
+          // company_id is available
+          // inserting to recruiters table
+          $query = "INSERT INTO recruiters (company_id, join_date, password) VALUES ".
+            "('$company_id', NOW(), SHA('$password'))";
+          mysqli_query($dbc, $query);
+          // inserting to recruiters_data table
+          $query = "INSERT INTO recruiters_data (company_id, company_name, company_status, hr_name_1, hr_designation_1, hr_email_1) VALUES ".
+            "('$company_id', '$company_name', 'pending', '$hr_name_1', '$hr_designation_1', '$hr_email_1')";
+          mysqli_query($dbc, $query);
+
+          //Confirm success with the recruiter
+          echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+              'You have been registered successfully. You can now log in <a href="./login.php">here</a>.' .
               '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
               '<span aria-hidden="true">&times;</span></button></div></div>';
-              $company_id = "";
-            }
-          }
+          mysqli_close($dbc);
+          exit();
         }else{
-          echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
-          'Please enter all fields and make sure to enter same password twice&#33;<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
-          '<span aria-hidden="true">&times;</span></button></div></div>';
+          // company_id already exists
+          if(mysqli_num_rows($data) != 0){
+            echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+            'This webmail ID is taken. If you are already registered you can <a href="login.php">Login here</a>' .
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+            '<span aria-hidden="true">&times;</span></button></div></div>';
+            $company_id = "";
+          }
         }
-      } else{
+      }else{
         echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
-        'Incorrect Captcha&#33; Please try again.<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+        'Please enter all fields and make sure to enter same password twice&#33;<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
         '<span aria-hidden="true">&times;</span></button></div></div>';
       }
+    } else{
+      echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+      'Incorrect Captcha&#33; Please try again.<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+      '<span aria-hidden="true">&times;</span></button></div></div>';
     }
+  }
 
   mysqli_close($dbc);
   ?>
