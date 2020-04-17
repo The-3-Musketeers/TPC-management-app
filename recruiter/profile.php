@@ -16,6 +16,36 @@
     require_once('../templates/header.php');
     require_once('../templates/navbar.php');
 
+    function titleCase($string, $delimiters = array(" ", "-", ".", "'", "O'", "Mc"), $exceptions = array("and", "to", "of", "das", "dos", "I", "II", "III", "IV", "V", "VI"))
+    {
+        /*
+        * Exceptions in lower case are words you don't want converted
+        * Exceptions all in upper case are any words you don't want converted to title case
+        *   but should be converted to upper case, e.g.:
+        *   king henry viii or king henry Viii should be King Henry VIII
+        */
+        $string = mb_convert_case($string, MB_CASE_TITLE, "UTF-8");
+        foreach ($delimiters as $dlnr => $delimiter) {
+            $words = explode($delimiter, $string);
+            $newwords = array();
+            foreach ($words as $wordnr => $word) {
+                if (in_array(mb_strtoupper($word, "UTF-8"), $exceptions)) {
+                    // check exceptions list for any words that should be in upper case
+                    $word = mb_strtoupper($word, "UTF-8");
+                } elseif (in_array(mb_strtolower($word, "UTF-8"), $exceptions)) {
+                    // check exceptions list for any words that should be in upper case
+                    $word = mb_strtolower($word, "UTF-8");
+                } elseif (!in_array($word, $exceptions)) {
+                    // convert to uppercase (non-utf8 only)
+                    $word = ucfirst($word);
+                }
+                array_push($newwords, $word);
+            }
+            $string = join($delimiter, $newwords);
+        }//foreach
+        return $string;
+    }
+
     //Fetching info from student_data table
     $company_name;$company_desc;$company_type;$turnover;$scr_rounds;$company_url;$hr_name_1;$hr_email_1;$company_img;
     function display(){
@@ -60,6 +90,7 @@
 if(isset($_POST['update'])){
 
     $company_name = mysqli_real_escape_string($dbc,trim($_POST['company_name']));
+    $company_name = titleCase($company_name);
     $company_type = mysqli_real_escape_string($dbc,trim($_POST['company_type']));
     $turnover = mysqli_real_escape_string($dbc,trim($_POST['turnover']));
     $scr_rounds = mysqli_real_escape_string($dbc,trim($_POST['scr_rounds']));
