@@ -85,6 +85,7 @@
             <button type="submit" class="btn btn-primary" name="submit">Log in</button>
           </div>
         </div>
+        <!--
         <div class="form-group row">
             <div class="col-sm-10">
             <div>
@@ -92,6 +93,7 @@
             </div>
             </div>
         </div>
+      -->
     </form>
     </div>
     <?php

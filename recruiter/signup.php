@@ -5,8 +5,12 @@
   // Database connection variables
   require_once('../connectVars.php');
 
+  // TEMPORARY CHANGE TO ADD RECRUITER FROM ADMIN PANEL
+  require_once('../templates/auth.php');
+  checkUserRole('admin', $auth_error);
+
   // Insert the page header and navbar
-  $page_title = 'Recruiter Signup';
+  $page_title = 'Add Company';
   require_once('../templates/header.php');
   require_once('../templates/navbar.php');
 
@@ -73,23 +77,29 @@
           $query = "INSERT INTO recruiters_data (company_id, company_name, company_status, hr_name_1, hr_designation_1, hr_email_1) VALUES ".
             "('$company_id', '$company_name', 'pending', '$hr_name_1', '$hr_designation_1', '$hr_email_1')";
           mysqli_query($dbc, $query);
-
           //Confirm success with the recruiter
           echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
-              'You have been registered successfully. You can now log in <a href="./login.php">here</a>.' .
-              '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
-              '<span aria-hidden="true">&times;</span></button></div></div>';
-          mysqli_close($dbc);
-          exit();
+                'Registered successfully.' .
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+                '<span aria-hidden="true">&times;</span></button></div></div>';
+          $company_id = "";
+          $company_name = "";
+          $hr_name_1 = "";
+          $hr_designation_1 = "";
+          $hr_email_1 = "";
+            /*echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+                'You have been registered successfully. You can now log in <a href="./login.php">here</a>.' .
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+                '<span aria-hidden="true">&times;</span></button></div></div>';
+            mysqli_close($dbc);*/
+            // exit();
         }else{
           // company_id already exists
-          if(mysqli_num_rows($data) != 0){
-            echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+          echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
             'This webmail ID is taken. If you are already registered you can <a href="login.php">Login here</a>' .
             '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
             '<span aria-hidden="true">&times;</span></button></div></div>';
-            $company_id = "";
-          }
+          $company_id = "";
         }
       }else{
         echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
@@ -159,7 +169,7 @@
       </div>
       <div class="form-group row">
         <div class="col-sm-10">
-          <button type="submit" class="btn btn-primary" name="submit">Sign Up</button>
+          <button type="submit" class="btn btn-primary" name="submit">Add</button>
         </div>
       </div>
     </form>
