@@ -12,26 +12,27 @@ if($num!=0){
     $job_id=$jobs_row['job_id'];
     $job_position=$jobs_row['job_position'];
 
-    // Get all eligible degrees
-    $degree_query = "SELECT DISTINCT degree.degree_name AS degree_name FROM degree, degree_branch, jobs_db "
-                    ."WHERE jobs_db.job_id = '$job_id' AND jobs_db.db_id = degree_branch.db_id "
-                    ."AND degree_branch.degree_id = degree.degree_id";
+    // Get all eligible degree and branch pairs
+    $degree_query = "SELECT DISTINCT degree.degree_name AS degree_name, degree_branch.degree_id AS degree_id FROM degree, degree_branch, jobs_db "
+                      ."WHERE jobs_db.job_id = '$job_id' AND jobs_db.db_id = degree_branch.db_id "
+                      ."AND degree_branch.degree_id = degree.degree_id";
     $get_all_degree=mysqli_query($dbc,$degree_query);
-    $degree_row=mysqli_fetch_assoc($get_all_degree);
-    $degree = $degree_row['degree_name'];
+    $degreeBranch="";
     while($degree_row=mysqli_fetch_assoc($get_all_degree)){
-      $degree = $degree . ', ' . $degree_row['degree_name'];
-    }
-
-    // Get all eligible branches
-    $branch_query = "SELECT DISTINCT branch.branch_name AS branch_name FROM branch, degree_branch, jobs_db "
-                    ."WHERE jobs_db.job_id = '$job_id' AND jobs_db.db_id = degree_branch.db_id "
-                    ."AND branch.branch_id = degree_branch.branch_id";
-    $get_all_branch=mysqli_query($dbc,$branch_query);
-    $branch_row=mysqli_fetch_assoc($get_all_branch);
-    $branch = $branch_row['branch_name'];
-    while($branch_row=mysqli_fetch_assoc($get_all_branch)){
-      $branch = $branch . ', ' . $branch_row['branch_name'];
+			$d_id = $degree_row['degree_id'];
+			$degreeBranch .= '<b>' . $degree_row['degree_name']. '</b>' . "\n";
+			$branch_query = "SELECT branch.branch_name AS branch_name FROM branch, degree_branch "
+											."WHERE branch.branch_id = degree_branch.branch_id AND degree_branch.degree_id='$d_id'";
+			$get_all_branch=mysqli_query($dbc,$branch_query);
+			$cnt = 0;
+			while($branch_row=mysqli_fetch_assoc($get_all_branch)){
+					if($cnt == 0)
+						$degreeBranch .= $branch_row['branch_name'];
+					else
+						$degreeBranch .= ", " . $branch_row['branch_name'];
+					$cnt++;
+			}
+			$degreeBranch .= "\n";
     }
 
     $min_cpi=$jobs_row['min_cpi'];
@@ -68,8 +69,7 @@ if($num!=0){
         <thead>
             <tr>
             <th scope="col" class="text-muted">Test Date</th>
-            <th scope="col" class="text-muted">Degree</th>
-            <th scope="col" class="text-muted">Branch</th>
+            <th scope="col" class="text-muted" style="width:35%;">Degree-Branch</th>
             <th scope="col" class="text-muted">Minimum CPI</th>
             <th scope="col" class="text-muted">Openings</th>
             <th scope="col" class="text-muted">Apply By</th>
@@ -78,8 +78,7 @@ if($num!=0){
         <tbody>
             <tr>
             <td><?php echo $test_date; ?></td>
-            <td><?php echo $degree; ?></td>
-            <td><?php echo $branch; ?></td>
+            <td><?php echo nl2br($degreeBranch); ?></td>
             <td><?php echo $min_cpi; ?></td>
             <td><?php echo $no_of_opening; ?></td>
             <td><?php echo $apply_by; ?></td>

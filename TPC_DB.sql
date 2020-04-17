@@ -175,14 +175,14 @@ INSERT INTO `company_constraints` (`current_id`, `can_apply_id`, `num`) VALUES (
 
 /* Add current degree and branch data for testing */
 INSERT INTO `branch` (`branch_id`, `branch_name`) VALUES
-('1', 'CS'),
-('2', 'EE'),
-('3', 'ME'),
-('4', 'CH');
+('1', 'Computer Science'),
+('2', 'Electrical Engineering'),
+('3', 'Mechanical Engineering'),
+('4', 'Chemical Engineering');
 
 INSERT INTO `degree` (`degree_id`, `degree_name`) VALUES
-('1', 'btech'),
-('2', 'mtech');
+('1', 'B.Tech'),
+('2', 'M.Tech');
 
 INSERT INTO `degree_branch` (`db_id`, `degree_id`, `branch_id`) VALUES
 ('1', '1', '1'),
