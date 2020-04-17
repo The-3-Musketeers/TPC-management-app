@@ -80,6 +80,35 @@
     }
   }
 
+  if(isset($_POST['block'])){
+    $query = "SELECT blocked FROM students WHERE roll_number='$roll_number'";
+    $data = mysqli_query($dbc, $query);
+    $row = mysqli_fetch_assoc($data);
+    $blocked = $row["blocked"];
+    $block_update_val=1;
+    if($blocked == 1){
+      $block_update_val=0;
+    }
+
+    $query = "UPDATE students SET blocked=$block_update_val WHERE roll_number='$roll_number'";
+    $update_query = mysqli_query($dbc, $query);
+    if(!$update_query){
+      die("QUERY FAILED ".mysqli_error($dbc));
+    }
+    // Alert Success: Block Status Changed
+    if($block_update_val == 1){
+      echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+        'Student Blocked' .
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+      '<span aria-hidden="true">&times;</span></button></div></div>';
+    }else{
+      echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+        'Student Unblocked' .
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+      '<span aria-hidden="true">&times;</span></button></div></div>';
+    }
+  }
+
   if(mysqli_num_rows($data1) == "1" && mysqli_num_rows($data2) == "1"){
 
     $query1 = "SELECT * FROM students WHERE roll_number='". $roll_number ."'";
@@ -93,6 +122,7 @@
     $student_name = $row1["username"];
     $webmail_id = $row1["webmail_id"];
     $current_cpi = $row2["current_cpi"];
+    $blocked = $row1["blocked"];
 
     $db_id = $row2['db_id'];
     $department = "";
@@ -196,6 +226,23 @@
                 <button type="submit" name="reset" class="btn btn-primary">Reset</button>
               </div>
             </form>
+          </div>
+          <br/>
+          <div style="display:block;">
+            <form action="<?php echo $_SERVER['PHP_SELF'] . "?roll=" . $roll_number; ?>" method="post" enctype="multipart/form-data">
+              <div class="form-group" style="margin-bottom:0;">
+                <h5>Block/Unblock Student</h5>
+                <button type="submit" name="block" class="btn btn-danger">
+                <?php 
+                  if($blocked == 0) 
+                    echo "Block";
+                  else
+                    echo "Unblock";
+                ?>
+              </button>
+              </div>
+            </form>
+            <small>Once a student is blocked he/she will not be able to apply for any further jobs irrespective of the constraints.</small>
           </div>
         </div>
       </div>

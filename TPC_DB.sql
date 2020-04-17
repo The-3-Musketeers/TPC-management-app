@@ -29,6 +29,7 @@ CREATE TABLE `students` (
   `webmail_id` VARCHAR(32),
   `password` VARCHAR(40),
   `access_token` VARCHAR(64),
+  `blocked` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`roll_number`)
 );
 
