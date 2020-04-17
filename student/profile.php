@@ -49,6 +49,7 @@
 
     //Fetching info from student_data table
     $cpi;$department;$course;$resume_url;$profile_pic_url;$resume_file;$mobile_number;$skype;$gmail;$emergency_number;
+    $secondary_mobile_number;$secondary_email;
     function display(){
         $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
         global $roll_number;
@@ -58,7 +59,8 @@
             die("QUERY FAILED ".mysqli_error($dbc));
         }
 
-        global $cpi,$skype,$gmail,$emergency_number,$department,$course,$resume_url,$profile_pic_url;
+        global $cpi,$department,$course,$resume_url,$profile_pic_url,$resume_file,$mobile_number,$skype,$gmail,$emergency_number;
+        global $secondary_mobile_number,$secondary_email;
         $row=mysqli_fetch_assoc($select_from_student_data_query);
         $cpi=$row['current_cpi'];
         
@@ -77,10 +79,12 @@
 
         $skype = $row['skype_Id'];
         $gmail = $row['gmail_Id'];
+        $secondary_email = $row['secondary_email_Id'];
         $emergency_number = $row['emergency_number'];
         $resume_url = $row['resume_url'];
         $resume_file = $row['resume_file'];
         $mobile_number = $row['mobile_number'];
+        $secondary_mobile_number = $row['secondary_mobile_number'];
 
         if($db_id == null){
             $course = "Select your course";
@@ -120,8 +124,10 @@ $db_id = $db_id_row['db_id'];
 $cpi=mysqli_real_escape_string($dbc,trim($_POST['cpi']));
 $resume_url=mysqli_real_escape_string($dbc,trim($_POST['resume']));
 $mobile_number=mysqli_real_escape_string($dbc,trim($_POST['mobile_number']));
+$secondary_mobile_number=mysqli_real_escape_string($dbc,trim($_POST['secondary_mobile_number']));
 $skype=mysqli_real_escape_string($dbc,trim($_POST['skype']));
 $gmail=mysqli_real_escape_string($dbc,trim($_POST['gmail']));
+$secondary_email=mysqli_real_escape_string($dbc,trim($_POST['secondary_email']));
 $emergency_number=mysqli_real_escape_string($dbc,trim($_POST['emergency_number']));
 
 $profile_img_name=$_FILES['profile_img']['name'];
@@ -140,7 +146,7 @@ $resume_name=$_SESSION['roll_number'].".pdf";
 move_uploaded_file($resume_tmp_name,"../resume/$resume_name");
 }
 
-$query="UPDATE students_data SET db_id='$db_id', current_cpi=$cpi, skype_Id='$skype', gmail_Id='$gmail', emergency_number=$emergency_number ";
+$query="UPDATE students_data SET db_id='$db_id', current_cpi=$cpi, skype_Id='$skype', gmail_Id='$gmail', emergency_number=$emergency_number, secondary_email_Id='$secondary_email', secondary_mobile_number='$secondary_mobile_number' ";
 if($profile_img_name !== null && $profile_img_name !== ''){
 $query=$query.",profile_pic='$profile_img_name' ";
 }
@@ -230,12 +236,20 @@ else{
     <input type="email" class="form-control" id="" name="gmail" value="<?php echo $gmail; ?>" required>
   </div>
   <div class="form-group">
-    <label for="emergency_number">Emergency Contact No.<span class="red">*</span></label>
-    <input type="number" class="form-control" id="" name="emergency_number" value="<?php echo $emergency_number; ?>" required>
+    <label for="secondary_email">Secondary Email Id</label>
+    <input type="email" class="form-control" id="" name="secondary_email" value="<?php echo $secondary_email; ?>">
   </div>
   <div class="form-group">
-    <label for="mobile_number">Mobile No.</label>
-    <input type="number" class="form-control" id="" name="mobile_number" value="<?php echo $mobile_number; ?>">
+    <label for="mobile_number">Mobile No.<span class="red">*</span></label>
+    <input type="number" class="form-control" id="" name="mobile_number" value="<?php echo $mobile_number; ?>" required>
+  </div>
+  <div class="form-group">
+    <label for="secondary_mobile_number">Secondary Mobile No.</label>
+    <input type="number" class="form-control" id="" name="secondary_mobile_number" value="<?php echo $secondary_mobile_number; ?>">
+  </div>
+  <div class="form-group">
+    <label for="emergency_number">Emergency Contact No.<span class="red">*</span></label>
+    <input type="number" class="form-control" id="" name="emergency_number" value="<?php echo $emergency_number; ?>" required>
   </div>
   <div class="form-group">
     <label for="resume">Resume</label>
@@ -247,6 +261,7 @@ else{
     </div>
     </div>
 </form>
+<br/>
 </div>
 
 <?php

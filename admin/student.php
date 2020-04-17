@@ -138,8 +138,12 @@
       $course = $degree_branch['d_name'];
     }
 
+    $skype = $row2["skype_Id"];
+    $gmail = $row2["gmail_Id"];
+    $secondary_email = $row2["secondary_email_Id"];
     $resume_url = $row2["resume_url"];
     $mobile_number = $row2["mobile_number"];
+    $secondary_mobile_number = $row2["secondary_mobile_number"];
     $job_offers = $row2["job_offers"];
     $final_accepted_offer = $row2["final_accepted_offer"];
     if($final_accepted_offer){
@@ -172,11 +176,15 @@
           <div style="display:flex;"><h5>CPI:</h5> <div style="padding-left: 5px;"><?php echo $current_cpi; ?></div></div>
           <div style="display:flex;"><h5>Course:</h5> <div style="padding-left: 5px;"><?php echo $course; ?></div></div>
           <div style="display:flex;"><h5>Department:</h5> <div style="padding-left: 5px;"><?php echo $department; ?></div></div>
+          <div style="display:flex;"><h5>Skype Id:</h5> <div style="padding-left: 5px;"><?php echo $skype; ?></div></div>
+          <div style="display:flex;"><h5>Gmail Id:</h5> <div style="padding-left: 5px;"><?php echo $gmail; ?></div></div>
+          <div style="display:flex;"><h5>Secondary Email Id:</h5> <div style="padding-left: 5px;"><?php echo $secondary_email; ?></div></div>
+          <div style="display:flex;"><h5>Mobile Number:</h5> <div style="padding-left: 5px;"><?php echo $mobile_number; ?></div></div>
+          <div style="display:flex;"><h5>Secondary Mobile Number:</h5> <div style="padding-left: 5px;"><?php echo $secondary_mobile_number; ?></div></div>
           <div style="display:flex;">
             <h5>Resume:</h5> <a href="<?php echo $resume_url;?>" target="_blank">
             <div style="padding-left: 5px;"><?php echo $resume_url; ?></a></div>
           </div>
-          <div style="display:flex;"><h5>Mobile Number:</h5> <div style="padding-left: 5px;"><?php echo $mobile_number; ?></div></div>
           <div style="display:flex;">
             <form action="<?php echo $_SERVER['PHP_SELF'] . "?roll=" . $roll_number; ?>" method="post" enctype="multipart/form-data">
               <div class="form-group" style="margin-bottom:0">
