@@ -152,6 +152,17 @@ CREATE TABLE archive_company_visit_year (
   PRIMARY KEY(company_id,year_visited)
 );
 
+CREATE TABLE settings (
+  id VARCHAR(6),
+  name VARCHAR(32),
+  value INT(4),
+  PRIMARY KEY (company_id)
+);
+
+/* Add the following settings (NOTE: DON'T CHANGE THE ID OF ANY SETTING) */ 
+
+INSERT INTO settings (id, name, value) VALUES ('RegA1l', 'Registration Status', 0);
+
 /* Add admin to students table */
 
 INSERT INTO students (roll_number,username, user_role, password, join_date) VALUES ('admin','admin', 'admin', 'admin', NOW());
@@ -179,26 +190,27 @@ INSERT INTO `degree_branch` (`db_id`, `degree_id`, `branch_id`) VALUES
 ('4', '1', '4');
 
 /* Dummy student_data for testing */
+/* Password for all students: 1234 */
 INSERT INTO `students` (`roll_number`, `password`, `user_role`, `username`) VALUES
-('1', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '1'),
-('2', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '2'),
-('3', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '3'),
-('4', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '4'),
-('5', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '5'),
-('6', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '6'),
-('7', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '7'),
-('8', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '8'),
-('9', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '9'),
-('10', '356a192b7913b04c54574d18c28d46e6395428ab', 'student', '10');
+('1701CS01', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'student', 'abc'),
+('1701CS02', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'student', 'def'),
+('1701CS03', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'student', 'ghi'),
+('1701CS04', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'student', 'adf'),
+('1701CS05', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'student', 'ert'),
+('1701CS06', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'student', 'qwe'),
+('1701CS07', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'student', 'nmo'),
+('1701CS08', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'student', 'sof'),
+('1701CS09', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'student', 'pol'),
+('1701CS10', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'student', 'jkn');
 
 INSERT INTO `students_data` (`roll_number`, `current_cpi`, `db_id`, `profile_pic`, `resume_url`, `resume_file`, `mobile_number`, `final_accepted_offer`, `job_offers`, `skype_Id`, `gmail_Id`, `emergency_number`, `year_of_enroll`) VALUES
-('1', 7, '1', NULL, NULL, NULL, NULL, 'a1', 'Bdtl61', NULL, 'a3@b.com', '32552', 2017),
-('2', NULL, '1', NULL, NULL, NULL, NULL, 'b1', 'KnAtiB', NULL, NULL, NULL, 2017),
-('3', NULL, '1', NULL, NULL, NULL, NULL, '', 'KnAtiB', NULL, NULL, NULL, 2017),
-('4', NULL, '2', NULL, NULL, NULL, NULL, 'b2', 'Hiakm6', NULL, NULL, NULL, 2017),
-('5', NULL, '3', NULL, NULL, NULL, NULL, 'a1', 'Bdtl61', NULL, NULL, NULL, 2017),
-('6', NULL, '3', NULL, NULL, NULL, NULL, '', '', NULL, NULL, NULL, 2017),
-('7', NULL, '4', NULL, NULL, NULL, NULL, 'b2', 'Hiakm6', NULL, NULL, NULL, 2017),
-('8', NULL, '4', NULL, NULL, NULL, NULL, 'b2', '', NULL, NULL, NULL, 2017),
-('9', NULL, '4', NULL, NULL, NULL, NULL, '', 'Hiakm6', NULL, NULL, NULL, 2017),
-('10', NULL, '4', NULL, NULL, NULL, NULL, '', '', NULL, NULL, NULL, 2017);
+('1701CS01', 7, '1', NULL, NULL, NULL, NULL, 'a1', 'Bdtl61', NULL, 'a3@b.com', '32552', 2017),
+('1701CS02', NULL, '1', NULL, NULL, NULL, NULL, 'b1', 'KnAtiB', NULL, NULL, NULL, 2017),
+('1701CS03', 4, '1', NULL, NULL, NULL, NULL, '', 'KnAtiB', NULL, NULL, NULL, 2017),
+('1701CS04', NULL, '2', NULL, NULL, NULL, NULL, 'b2', 'Hiakm6', NULL, NULL, NULL, 2017),
+('1701CS05', NULL, '3', NULL, NULL, NULL, NULL, 'a1', 'Bdtl61', NULL, NULL, NULL, 2017),
+('1701CS06', 8, '3', NULL, NULL, NULL, NULL, '', '', NULL, NULL, NULL, 2017),
+('1701CS07', NULL, '4', NULL, NULL, NULL, NULL, 'b2', 'Hiakm6', NULL, NULL, NULL, 2017),
+('1701CS08', NULL, '4', NULL, NULL, NULL, NULL, 'b2', '', NULL, NULL, NULL, 2017),
+('1701CS09', NULL, '4', NULL, NULL, NULL, NULL, '', 'Hiakm6', NULL, NULL, NULL, 2017),
+('1701CS10', 10, '4', NULL, NULL, NULL, NULL, '', '', NULL, NULL, NULL, 2017);
