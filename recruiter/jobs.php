@@ -5,9 +5,13 @@
 
     // Authenticate user
     require_once('../templates/auth.php');
-    checkUserRole('recruiter', $auth_error);
-
-    $page_title = 'Recruiter Dashboard';
+    if($_SESSION['user_role'] != "admin"){
+        checkUserRole('recruiter', $auth_error);
+        $page_title = 'Recruiter Dashboard';
+    }else{
+        $page_title = 'Jobs Created';
+        $_SESSION['company_id'] = $_POST['post_id'];
+    }
     require_once('../templates/header.php');
     require_once('../templates/navbar.php');
 

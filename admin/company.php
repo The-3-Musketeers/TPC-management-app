@@ -83,6 +83,17 @@
           </div>
         </div>
         <div class="card-body">
+          <div class="float-right" style="display: flex">
+            <form method="post" action="../recruiter/createPosition.php">
+            <input type="text" class="form-control" name="post_id" value="<?php echo $company_id; ?>" style="display: none">
+            <input type="text" class="form-control" name="post_name" value="<?php echo $company_name; ?>" style="display: none">
+            <button type="submit" class="btn btn-primary" name="shift">Create new job</button>
+            </form>
+            <form method="post" action="../recruiter/jobs.php" style="margin-left:5px">
+            <input type="text" class="form-control" name="post_id" value="<?php echo $company_id; ?>" style="display: none">
+            <button type="submit" class="btn btn-primary" name="shift">View jobs</button>
+            </form>
+          </div>
           <div style="display:flex;"><h5>ID:</h5> <div style="padding-left: 5px;"><?php echo $company_id; ?></div></div>
           <div style="display:flex;"><h5>Category:</h5> <div style="padding-left: 5px;"><?php echo $company_category; ?></div></div><br>
           <h5>1st HR Details:</h5>
@@ -106,8 +117,8 @@
             <form action="<?php echo $_SERVER['PHP_SELF'] . "?id=" . $company_id; ?>" method="post" enctype="multipart/form-data">
               <div class="form-group" style="margin-bottom:0">
                 <label for="password" style="margin-bottom:0"><h5>Reset Password</h5></label>
-                <input type="password" class="form-control" id="" name="new_password" placeholder="New Password" style="margin-bottom:10px" required>
-                <input type="password" class="form-control" id="" name="verify_password" placeholder="Verify Password" style="margin-bottom:10px" required>
+                <input type="password" class="form-control" id="pass" name="new_password" placeholder="New Password" style="margin-bottom:10px" required>
+                <input type="password" class="form-control" id="veriPass" name="verify_password" placeholder="Verify Password" style="margin-bottom:10px" required>
                 <button type="submit" name="reset" class="btn btn-primary">Reset</button>
               </div>
             </form>

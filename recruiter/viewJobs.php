@@ -1,8 +1,10 @@
 <?php
 // Authenticate user
 require_once('../templates/auth.php');
-checkUserRole('recruiter', $auth_error);
-$company_id=$_SESSION['company_id'];
+if($_SESSION['user_role'] != "admin"){
+    checkUserRole('recruiter', $auth_error);
+}
+$company_id = $_SESSION['company_id'];
 // Fetch data from jobs table
 $get_all_jobs_query="SELECT * FROM jobs WHERE company_id='$company_id'";
 $get_all_jobs=mysqli_query($dbc,$get_all_jobs_query);
@@ -62,7 +64,9 @@ if($num!=0){
           <h5 class="card-title" ><?php echo $job_position; ?></h5>
           <h6 class="card-subtitle mb-2 text-muted">Created on <?php echo $created_on;?></h6>
         </div>
-        <a class="btn btn-primary" style="float:right;margin-top:10px;" href="/TPC-management-app/recruiter/editJob.php?job_id=<?php echo $job_id?>">View Details</a>
+        <a href="/TPC-management-app/recruiter/editJob.php?job_id=<?php echo $job_id?>">
+        <button class="btn btn-primary" style="float:right;margin-top:10px;" <?php if($_SESSION['user_role'] == "admin"){ echo "disabled"; }?> >View Details
+        </button></a>
       </div>
       <div class="card-body table-responsive">
         <table class="table table-borderless">
