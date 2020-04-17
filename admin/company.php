@@ -27,6 +27,29 @@
     die("QUERY FAILED ".mysqli_error($dbc));
   }
 
+  if(isset($_POST['reset'])){
+    $new_password = mysqli_real_escape_string($dbc,trim($_POST['new_password']));
+    $verify_password = mysqli_real_escape_string($dbc,trim($_POST['verify_password']));
+    if($new_password != $verify_password){
+      // Alert Warning : Password does not match
+      echo '<div class="container"><div class="alert alert-warning alert-dismissible fade show" role="alert">' .
+            'Password does not match' .
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+          '<span aria-hidden="true">&times;</span></button></div></div>';
+    }else{
+    $query = "UPDATE recruiters SET password=SHA('$new_password') WHERE company_id='". $company_id ."'";
+    $update_query = mysqli_query($dbc, $query);
+    if(!$update_query){
+      die("QUERY FAILED ".mysqli_error($dbc));
+    }
+    // Alert Success : Password updated
+    echo '<div class="container"><div class="alert alert-success alert-dismissible fade show" role="alert">' .
+            'Password updated' .
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' .
+          '<span aria-hidden="true">&times;</span></button></div></div>';
+    }
+  }
+  
   if(mysqli_num_rows($data) == "1"){
     $row = mysqli_fetch_assoc($data);
     $company_name = $row["company_name"];
@@ -78,6 +101,17 @@
           <?php } ?>
           <h5>About:</h5>
           <p><?php echo $company_desc;?></p>
+          <br/>
+          <div style="display:flex;">
+            <form action="<?php echo $_SERVER['PHP_SELF'] . "?id=" . $company_id; ?>" method="post" enctype="multipart/form-data">
+              <div class="form-group" style="margin-bottom:0">
+                <label for="password" style="margin-bottom:0"><h5>Reset Password</h5></label>
+                <input type="password" class="form-control" id="" name="new_password" placeholder="New Password" style="margin-bottom:10px" required>
+                <input type="password" class="form-control" id="" name="verify_password" placeholder="Verify Password" style="margin-bottom:10px" required>
+                <button type="submit" name="reset" class="btn btn-primary">Reset</button>
+              </div>
+            </form>
+          </div>
         </div>
         <div class="card-footer text-muted">
           <div style="float:left;margin-bottom:4px;">
