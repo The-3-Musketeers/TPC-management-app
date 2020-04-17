@@ -82,8 +82,9 @@
             <?php
               if($_SESSION['user_role']=='student'){
               ?>
-                <a class="dropdown-item" href="/TPC-management-app/student/profile.php">Profile</a>
                 <a class="dropdown-item" href="/TPC-management-app/student/jobs.php">Jobs</a>
+                <a class="dropdown-item" href="/TPC-management-app/student/profile.php">Profile</a>
+                <a class="dropdown-item" href="/TPC-management-app/student/settings.php">Settings</a>
             <?php
               } else{
               ?>
