@@ -91,6 +91,15 @@
       // ************ ELIGIBITLY check starts here ************
 
       if($_SESSION['user_role'] == 'student' && $is_stud_eligible){
+        // Check if student is blocked by admin
+        $stud_blocked_query = "SELECT blocked FROM students WHERE roll_number='" . $_SESSION['roll_number'] . "'";
+        $data = mysqli_query($dbc, $stud_blocked_query);
+        $row = mysqli_fetch_assoc($data);
+        if($row["blocked"] == 1){
+          $is_stud_eligible = FALSE;
+          $button_message = "You have been blocked by TPC. Please contact TPC if you think this is an error.";
+        }
+
         // Check if student has already applied
         $stud_applications_query = "SELECT * FROM applications WHERE student_roll_number='" . $_SESSION['roll_number'] . "' AND job_id='" . $job_id . "'";
         $data = mysqli_query($dbc, $stud_applications_query);
