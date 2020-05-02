@@ -14,5 +14,6 @@
         <a href="#" id="link3"><span id="dev3">3</span></a>
     </div>
 </footer>
+
 <!-- Footer -->
 <?php require_once('templates/footer.php');?>
