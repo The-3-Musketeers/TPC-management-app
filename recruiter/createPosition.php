@@ -9,7 +9,9 @@
 
   // Authenticate user
   require_once('../templates/auth.php');
-  checkUserRole('recruiter', $auth_error);
+  if($_SESSION['user_role'] != "admin"){ // if not admin
+    checkUserRole('recruiter', $auth_error);
+  }
 
   //Connect to the database
   $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
@@ -38,8 +40,18 @@
     $ctc=mysqli_real_escape_string($dbc,trim($_POST['ctc']));
     $test_date=mysqli_real_escape_string($dbc,trim($_POST['test_date']));
     $job_desc=mysqli_real_escape_string($dbc,trim($_POST['job_desc']));
-    $company_id=$_SESSION['company_id'];
-    $company_name=$_SESSION['company_name'];
+    $company_id = "";
+    if($_SESSION['company_id']){
+      $company_id = $_SESSION['company_id'];
+    }else{
+      $company_id = $_POST['post_id'];
+    }
+    $company_name = "";
+    if($_SESSION['company_name']){
+      $company_name = $_SESSION['company_name'];
+    }else{
+      $company_name = $_POST['post_name'];
+    }
     $job_id=generate_job_id();
 
     if($degree!='' && $branch!=''){
@@ -99,7 +111,6 @@
       // fetch all db_id
       $query3 = "SELECT DB.db_id AS db_id FROM degree AS D, branch AS B, degree_branch  AS DB WHERE D.degree_id = DB.degree_id "
                 . "AND B.branch_id = DB.branch_id AND LOCATE(D.degree_name, '$degree') > 0 AND LOCATE(B.branch_name, '$branch') > 0";
-      
       $select_DB_query=mysqli_query($dbc,$query3);
       if(!$select_DB_query){
         die("QUERY FAILED ".mysqli_error($dbc));
@@ -201,6 +212,9 @@
     <label for="job_desc" class="col-sm-2 col-form-label">Job Description<span class="red">*</span></label>
     <textarea class="col-sm-10 form-control" id="job_desc" rows="3" name="job_desc" value="" required></textarea>
   </div>
+  <!-- FOR ADMIN PANEL (2 hidden input fields)-->
+  <input type="text" class="form-control" name="post_id" value="<?php echo $_POST['post_id']; ?>" style="display: none">
+  <input type="text" class="form-control" name="post_name" value="<?php echo $_POST['post_name']; ?>" style="display: none">
   <div class="form-group row">
     <div class="col-sm-2">
       <button type="submit" name="submit" class="btn btn-primary">Submit</button>
